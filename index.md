@@ -21,7 +21,9 @@ Syntax highlighted code block
 1. Three
 2. Four
 
-[A link to about page](about)
+[A link to about page](about.md)
+
+
 ## Header 4
 
 
