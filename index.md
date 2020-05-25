@@ -4,6 +4,8 @@ You can use the [editor on GitHub](https://github.com/sharyuwu/sharyuwu.github.i
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
+[A link to about page](/about)
+
 ### Markdown
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
@@ -21,7 +23,6 @@ Syntax highlighted code block
 1. Three
 2. Four
 
-[A link to about page](about.md)
 
 
 ## Header 4
