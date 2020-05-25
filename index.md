@@ -18,12 +18,11 @@ Syntax highlighted code block
 - Bulleted
 - List
 
-1. One
-2. Two
+1. Three
+2. Four
 
 ## Header 4
-* One
-* Two
+
 
 
 **Bold** and _Italic_ and `Code` text
