@@ -21,6 +21,7 @@ Syntax highlighted code block
 1. Three
 2. Four
 
+[A link to about page](about)
 ## Header 4
 
 
