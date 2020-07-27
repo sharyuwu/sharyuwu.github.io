@@ -12,7 +12,7 @@ BeeCollision [BeeCollision](/Deemo/beeCollision.html)
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
 ### Image
-Moon image [moon] (/image/picture-moon-png-10205.png)
+Moon image [moon](/image/picture-moon-png-10205.png)
 
 
 ### Jekyll Themes
