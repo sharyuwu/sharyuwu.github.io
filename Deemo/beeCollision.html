@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>BeeCollision</title>
+  <title>BeeInteractingFlower</title>
   <style>body { padding: 0; margin: 0; }</style>
 </head>
 
@@ -6912,8 +6912,8 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$BeeCollision$None = {$: 'None'};
-var $author$project$BeeCollision$Resize = F2(
+var $author$project$BeeInteractingFlower$None = {$: 'None'};
+var $author$project$BeeInteractingFlower$Resize = F2(
 	function (a, b) {
 		return {$: 'Resize', a: a, b: b};
 	});
@@ -11425,6 +11425,15 @@ var $author$project$Shape$beeSAB = function (time) {
 	};
 };
 var $avh4$elm_color$Color$blue = A4($avh4$elm_color$Color$RgbaSpace, 52 / 255, 101 / 255, 164 / 255, 1.0);
+var $author$project$BeeInteractingFlower$buildId = F2(
+	function (idName, objectList) {
+		return A2(
+			$elm$core$List$map,
+			function (object) {
+				return idName;
+			},
+			objectList);
+	});
 var $author$project$Shape$cubeSAB = F2(
 	function (colour, size) {
 		var cubeShape = A2(
@@ -11439,11 +11448,11 @@ var $author$project$Shape$cubeSAB = F2(
 				cubeShape)
 		};
 	});
-var $author$project$BeeCollision$Error = function (a) {
+var $author$project$BeeInteractingFlower$Error = function (a) {
 	return {$: 'Error', a: a};
 };
 var $elm_explorations$webgl$WebGL$Texture$LoadError = {$: 'LoadError'};
-var $author$project$BeeCollision$LoadTexture = function (a) {
+var $author$project$BeeInteractingFlower$LoadTexture = function (a) {
 	return {$: 'LoadTexture', a: a};
 };
 var $elm$core$Task$onError = _Scheduler_onError;
@@ -11516,23 +11525,24 @@ var $ianmackenzie$elm_3d_scene$Scene3d$Material$loadWith = F2(
 var $ianmackenzie$elm_3d_scene$Scene3d$Material$load = function (url) {
 	return A2($ianmackenzie$elm_3d_scene$Scene3d$Material$loadWith, $ianmackenzie$elm_3d_scene$Scene3d$Material$bilinearFiltering, url);
 };
-var $author$project$BeeCollision$textureBottom = 'SkyboxTextures/gradientSkyBottom.png';
-var $author$project$BeeCollision$textureSide1 = 'SkyboxTextures/gradientSkySide.png';
-var $author$project$BeeCollision$textureSide2 = 'SkyboxTextures/gradientSkySide.png';
-var $author$project$BeeCollision$textureSide3 = 'SkyboxTextures/gradientSkySide.png';
-var $author$project$BeeCollision$textureSide4 = 'SkyboxTextures/gradientSkySide.png';
-var $author$project$BeeCollision$textureTop = 'SkyboxTextures/gradientSkyTop.png';
-var $author$project$BeeCollision$textureListSkyBox = _List_fromArray(
-	[$author$project$BeeCollision$textureBottom, $author$project$BeeCollision$textureTop, $author$project$BeeCollision$textureSide1, $author$project$BeeCollision$textureSide2, $author$project$BeeCollision$textureSide3, $author$project$BeeCollision$textureSide4]);
-var $author$project$BeeCollision$fetchTextures = A2(
+var $author$project$BeeInteractingFlower$textureBottom = 'SkyboxTextures/gradientSkyBottom.png';
+var $author$project$BeeInteractingFlower$textureHitButton = 'OtherTextures/cButton.png';
+var $author$project$BeeInteractingFlower$textureSide1 = 'SkyboxTextures/gradientSkySide.png';
+var $author$project$BeeInteractingFlower$textureSide2 = 'SkyboxTextures/gradientSkySide.png';
+var $author$project$BeeInteractingFlower$textureSide3 = 'SkyboxTextures/gradientSkySide.png';
+var $author$project$BeeInteractingFlower$textureSide4 = 'SkyboxTextures/gradientSkySide.png';
+var $author$project$BeeInteractingFlower$textureTop = 'SkyboxTextures/gradientSkyTop.png';
+var $author$project$BeeInteractingFlower$textureListSkyBox = _List_fromArray(
+	[$author$project$BeeInteractingFlower$textureBottom, $author$project$BeeInteractingFlower$textureTop, $author$project$BeeInteractingFlower$textureSide1, $author$project$BeeInteractingFlower$textureSide2, $author$project$BeeInteractingFlower$textureSide3, $author$project$BeeInteractingFlower$textureSide4, $author$project$BeeInteractingFlower$textureHitButton]);
+var $author$project$BeeInteractingFlower$fetchTextures = A2(
 	$elm$core$Task$attempt,
 	function (result) {
 		if (result.$ === 'Ok') {
 			var texture = result.a;
-			return $author$project$BeeCollision$LoadTexture(texture);
+			return $author$project$BeeInteractingFlower$LoadTexture(texture);
 		} else {
 			var error = result.a;
-			return $author$project$BeeCollision$Error(error);
+			return $author$project$BeeInteractingFlower$Error(error);
 		}
 	},
 	A2(
@@ -11546,7 +11556,7 @@ var $author$project$BeeCollision$fetchTextures = A2(
 			}
 		},
 		$elm$core$Task$sequence(
-			A2($elm$core$List$map, $ianmackenzie$elm_3d_scene$Scene3d$Material$load, $author$project$BeeCollision$textureListSkyBox))));
+			A2($elm$core$List$map, $ianmackenzie$elm_3d_scene$Scene3d$Material$load, $author$project$BeeInteractingFlower$textureListSkyBox))));
 var $ianmackenzie$elm_geometry$Quantity$Extra$scaleAbout = F3(
 	function (_v0, scale, _v1) {
 		var x0 = _v0.a;
@@ -12019,11 +12029,11 @@ var $author$project$Shape$gardenSAB = function () {
 			[
 				_Utils_Tuple3(
 				0.7,
-				0.3,
+				0.8,
 				_Utils_Tuple2(100, -100)),
 				_Utils_Tuple3(
 				0.2,
-				0.5,
+				0.7,
 				_Utils_Tuple2(1400, 90)),
 				_Utils_Tuple3(
 				1,
@@ -12068,7 +12078,7 @@ var $author$project$Shape$sphereSAB = F2(
 				sphereShape)
 		};
 	});
-var $author$project$BeeCollision$init = function (_v0) {
+var $author$project$BeeInteractingFlower$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
 			azimuth: $ianmackenzie$elm_units$Angle$degrees(-90),
@@ -12076,11 +12086,14 @@ var $author$project$BeeCollision$init = function (_v0) {
 			beePos: $ianmackenzie$elm_geometry$Point3d$origin,
 			beeRot: $ianmackenzie$elm_units$Angle$degrees(0),
 			camPos: $ianmackenzie$elm_geometry$Point3d$origin,
-			dirFB: $author$project$BeeCollision$None,
-			dirLR: $author$project$BeeCollision$None,
-			dirUD: $author$project$BeeCollision$None,
+			dirFB: $author$project$BeeInteractingFlower$None,
+			dirLR: $author$project$BeeInteractingFlower$None,
+			dirUD: $author$project$BeeInteractingFlower$None,
 			elevation: $ianmackenzie$elm_units$Angle$degrees(30),
+			flyAround: false,
+			flyCountDown: 0,
 			height: $ianmackenzie$elm_units$Quantity$zero,
+			hit: {hitBBPos: $ianmackenzie$elm_geometry$Point3d$origin, showHitSign: false},
 			mapObjects: function () {
 				var t = $elm$core$Basics$pi;
 				var sphereShape = A2(
@@ -12099,6 +12112,12 @@ var $author$project$BeeCollision$init = function (_v0) {
 						_List_fromArray(
 							[cubeShape.boundedBox, sphereShape.boundedBox]),
 						_Utils_ap(gardenShape.boundedBox, forestShape.boundedBox)),
+					id: _Utils_ap(
+						_List_fromArray(
+							['Cube', 'Sphere']),
+						_Utils_ap(
+							A2($author$project$BeeInteractingFlower$buildId, 'Flower', gardenShape.boundedBox),
+							A2($author$project$BeeInteractingFlower$buildId, 'Tree', forestShape.boundedBox))),
 					shape: $ianmackenzie$elm_3d_scene$Scene3d$group(
 						_List_fromArray(
 							[cubeShape.shape, sphereShape.shape, forestShape.shape, gardenShape.shape]))
@@ -12120,47 +12139,47 @@ var $author$project$BeeCollision$init = function (_v0) {
 					function (_v1) {
 						var viewport = _v1.viewport;
 						return A2(
-							$author$project$BeeCollision$Resize,
+							$author$project$BeeInteractingFlower$Resize,
 							$ianmackenzie$elm_units$Pixels$pixels(viewport.width),
 							$ianmackenzie$elm_units$Pixels$pixels(viewport.height));
 					},
 					$elm$browser$Browser$Dom$getViewport),
-					$author$project$BeeCollision$fetchTextures
+					$author$project$BeeInteractingFlower$fetchTextures
 				])));
 };
-var $author$project$BeeCollision$MouseDown = {$: 'MouseDown'};
-var $author$project$BeeCollision$MouseUp = {$: 'MouseUp'};
-var $author$project$BeeCollision$Tick = function (a) {
+var $author$project$BeeInteractingFlower$MouseDown = {$: 'MouseDown'};
+var $author$project$BeeInteractingFlower$MouseUp = {$: 'MouseUp'};
+var $author$project$BeeInteractingFlower$Tick = function (a) {
 	return {$: 'Tick', a: a};
 };
-var $author$project$BeeCollision$VisibilityChange = function (a) {
+var $author$project$BeeInteractingFlower$VisibilityChange = function (a) {
 	return {$: 'VisibilityChange', a: a};
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $author$project$BeeCollision$KeyDown = function (a) {
+var $author$project$BeeInteractingFlower$KeyDown = function (a) {
 	return {$: 'KeyDown', a: a};
 };
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$string = _Json_decodeString;
-var $author$project$BeeCollision$keyDecoder = A2(
+var $author$project$BeeInteractingFlower$keyDecoder = A2(
 	$elm$json$Json$Decode$map,
-	$author$project$BeeCollision$KeyDown,
+	$author$project$BeeInteractingFlower$KeyDown,
 	A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string));
-var $author$project$BeeCollision$KeyUp = function (a) {
+var $author$project$BeeInteractingFlower$KeyUp = function (a) {
 	return {$: 'KeyUp', a: a};
 };
-var $author$project$BeeCollision$keyUpDecoder = A2(
+var $author$project$BeeInteractingFlower$keyUpDecoder = A2(
 	$elm$json$Json$Decode$map,
-	$author$project$BeeCollision$KeyUp,
+	$author$project$BeeInteractingFlower$KeyUp,
 	A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string));
-var $author$project$BeeCollision$MouseMove = F2(
+var $author$project$BeeInteractingFlower$MouseMove = F2(
 	function (a, b) {
 		return {$: 'MouseMove', a: a, b: b};
 	});
 var $elm$json$Json$Decode$float = _Json_decodeFloat;
-var $author$project$BeeCollision$mouseMoveDecoder = A3(
+var $author$project$BeeInteractingFlower$mouseMoveDecoder = A3(
 	$elm$json$Json$Decode$map2,
-	$author$project$BeeCollision$MouseMove,
+	$author$project$BeeInteractingFlower$MouseMove,
 	A2(
 		$elm$json$Json$Decode$field,
 		'movementX',
@@ -12613,7 +12632,7 @@ var $elm$browser$Browser$Events$onVisibilityChange = function (func) {
 var $ianmackenzie$elm_units$Duration$seconds = function (numSeconds) {
 	return $ianmackenzie$elm_units$Quantity$Quantity(numSeconds);
 };
-var $author$project$BeeCollision$subscriptions = function (model) {
+var $author$project$BeeInteractingFlower$subscriptions = function (model) {
 	return $elm$core$Platform$Sub$batch(
 		_List_fromArray(
 			[
@@ -12621,31 +12640,31 @@ var $author$project$BeeCollision$subscriptions = function (model) {
 				F2(
 					function (width, height) {
 						return A2(
-							$author$project$BeeCollision$Resize,
+							$author$project$BeeInteractingFlower$Resize,
 							$ianmackenzie$elm_units$Pixels$pixels(width),
 							$ianmackenzie$elm_units$Pixels$pixels(height));
 					})),
 				$elm$browser$Browser$Events$onAnimationFrameDelta(
-				A2($elm$core$Basics$composeR, $ianmackenzie$elm_units$Duration$seconds, $author$project$BeeCollision$Tick)),
-				$elm$browser$Browser$Events$onVisibilityChange($author$project$BeeCollision$VisibilityChange),
-				$elm$browser$Browser$Events$onKeyDown($author$project$BeeCollision$keyDecoder),
-				$elm$browser$Browser$Events$onKeyUp($author$project$BeeCollision$keyUpDecoder),
+				A2($elm$core$Basics$composeR, $ianmackenzie$elm_units$Duration$seconds, $author$project$BeeInteractingFlower$Tick)),
+				$elm$browser$Browser$Events$onVisibilityChange($author$project$BeeInteractingFlower$VisibilityChange),
+				$elm$browser$Browser$Events$onKeyDown($author$project$BeeInteractingFlower$keyDecoder),
+				$elm$browser$Browser$Events$onKeyUp($author$project$BeeInteractingFlower$keyUpDecoder),
 				model.orbiting ? $elm$core$Platform$Sub$batch(
 				_List_fromArray(
 					[
-						$elm$browser$Browser$Events$onMouseMove($author$project$BeeCollision$mouseMoveDecoder),
+						$elm$browser$Browser$Events$onMouseMove($author$project$BeeInteractingFlower$mouseMoveDecoder),
 						$elm$browser$Browser$Events$onMouseUp(
-						$elm$json$Json$Decode$succeed($author$project$BeeCollision$MouseUp))
+						$elm$json$Json$Decode$succeed($author$project$BeeInteractingFlower$MouseUp))
 					])) : $elm$browser$Browser$Events$onMouseDown(
-				$elm$json$Json$Decode$succeed($author$project$BeeCollision$MouseDown))
+				$elm$json$Json$Decode$succeed($author$project$BeeInteractingFlower$MouseDown))
 			]));
 };
-var $author$project$BeeCollision$Backward = {$: 'Backward'};
-var $author$project$BeeCollision$Down = {$: 'Down'};
-var $author$project$BeeCollision$Forward = {$: 'Forward'};
-var $author$project$BeeCollision$Left = {$: 'Left'};
-var $author$project$BeeCollision$Right = {$: 'Right'};
-var $author$project$BeeCollision$Up = {$: 'Up'};
+var $author$project$BeeInteractingFlower$Backward = {$: 'Backward'};
+var $author$project$BeeInteractingFlower$Down = {$: 'Down'};
+var $author$project$BeeInteractingFlower$Forward = {$: 'Forward'};
+var $author$project$BeeInteractingFlower$Left = {$: 'Left'};
+var $author$project$BeeInteractingFlower$Right = {$: 'Right'};
+var $author$project$BeeInteractingFlower$Up = {$: 'Up'};
 var $ianmackenzie$elm_units$Quantity$at = F2(
 	function (_v0, _v1) {
 		var rate = _v0.a;
@@ -12661,7 +12680,7 @@ var $ianmackenzie$elm_units$Quantity$clamp = F3(
 			A3($elm$core$Basics$clamp, lower, upper, value)) : $ianmackenzie$elm_units$Quantity$Quantity(
 			A3($elm$core$Basics$clamp, upper, lower, value));
 	});
-var $author$project$BeeCollision$directionConverter = F2(
+var $author$project$BeeInteractingFlower$directionConverter = F2(
 	function (model, dir) {
 		var upDir = A2(
 			$ianmackenzie$elm_geometry$Direction3d$xyZ,
@@ -12719,12 +12738,44 @@ var $author$project$BeeCollision$directionConverter = F2(
 				return downDir;
 		}
 	});
+var $ianmackenzie$elm_geometry$Point3d$distanceFrom = F2(
+	function (_v0, _v1) {
+		var p1 = _v0.a;
+		var p2 = _v1.a;
+		var deltaZ = p2.z - p1.z;
+		var deltaY = p2.y - p1.y;
+		var deltaX = p2.x - p1.x;
+		var largestComponent = A2(
+			$elm$core$Basics$max,
+			$elm$core$Basics$abs(deltaX),
+			A2(
+				$elm$core$Basics$max,
+				$elm$core$Basics$abs(deltaY),
+				$elm$core$Basics$abs(deltaZ)));
+		if (!largestComponent) {
+			return $ianmackenzie$elm_units$Quantity$zero;
+		} else {
+			var scaledZ = deltaZ / largestComponent;
+			var scaledY = deltaY / largestComponent;
+			var scaledX = deltaX / largestComponent;
+			var scaledLength = $elm$core$Basics$sqrt(((scaledX * scaledX) + (scaledY * scaledY)) + (scaledZ * scaledZ));
+			return $ianmackenzie$elm_units$Quantity$Quantity(scaledLength * largestComponent);
+		}
+	});
+var $author$project$BeeInteractingFlower$flyStop = 2;
 var $ianmackenzie$elm_units$Quantity$for = F2(
 	function (_v0, _v1) {
 		var independentValue = _v0.a;
 		var rate = _v1.a;
 		return $ianmackenzie$elm_units$Quantity$Quantity(rate * independentValue);
 	});
+var $ianmackenzie$elm_units$Quantity$greaterThan = F2(
+	function (_v0, _v1) {
+		var y = _v0.a;
+		var x = _v1.a;
+		return _Utils_cmp(x, y) > 0;
+	});
+var $author$project$BeeInteractingFlower$hitSignDisappear = $ianmackenzie$elm_units$Length$centimeters(100);
 var $ianmackenzie$elm_units$Duration$inSeconds = function (_v0) {
 	var numSeconds = _v0.a;
 	return numSeconds;
@@ -12751,6 +12802,7 @@ var $ianmackenzie$elm_geometry$BoundingBox3d$intersects = F2(
 			$ianmackenzie$elm_geometry$BoundingBox3d$minZ(other),
 			$ianmackenzie$elm_geometry$BoundingBox3d$maxZ(boundingBox))))));
 	});
+var $elm$core$List$map3 = _List_map3;
 var $ianmackenzie$elm_units$Duration$milliseconds = function (numMilliseconds) {
 	return $ianmackenzie$elm_units$Duration$seconds(0.001 * numMilliseconds);
 };
@@ -12912,39 +12964,44 @@ var $ianmackenzie$elm_geometry$Vector3d$scaleBy = F2(
 			{x: k * v.x, y: k * v.y, z: k * v.z});
 	});
 var $ianmackenzie$elm_units$Duration$second = $ianmackenzie$elm_units$Duration$seconds(1);
-var $author$project$BeeCollision$speed = 1;
-var $author$project$BeeCollision$toDirection = function (string) {
+var $author$project$BeeInteractingFlower$speed = 1;
+var $author$project$BeeInteractingFlower$FlyAround = {$: 'FlyAround'};
+var $author$project$BeeInteractingFlower$toDirection = function (string) {
 	switch (string) {
 		case 'ArrowLeft':
-			return $author$project$BeeCollision$Left;
+			return $author$project$BeeInteractingFlower$Left;
 		case 'a':
-			return $author$project$BeeCollision$Left;
+			return $author$project$BeeInteractingFlower$Left;
 		case 'A':
-			return $author$project$BeeCollision$Left;
+			return $author$project$BeeInteractingFlower$Left;
 		case 'ArrowRight':
-			return $author$project$BeeCollision$Right;
+			return $author$project$BeeInteractingFlower$Right;
 		case 'd':
-			return $author$project$BeeCollision$Right;
+			return $author$project$BeeInteractingFlower$Right;
 		case 'D':
-			return $author$project$BeeCollision$Right;
+			return $author$project$BeeInteractingFlower$Right;
 		case 'ArrowUp':
-			return $author$project$BeeCollision$Forward;
+			return $author$project$BeeInteractingFlower$Forward;
 		case 'w':
-			return $author$project$BeeCollision$Forward;
+			return $author$project$BeeInteractingFlower$Forward;
 		case 'W':
-			return $author$project$BeeCollision$Forward;
+			return $author$project$BeeInteractingFlower$Forward;
 		case 'ArrowDown':
-			return $author$project$BeeCollision$Backward;
+			return $author$project$BeeInteractingFlower$Backward;
 		case 's':
-			return $author$project$BeeCollision$Backward;
+			return $author$project$BeeInteractingFlower$Backward;
 		case 'S':
-			return $author$project$BeeCollision$Backward;
+			return $author$project$BeeInteractingFlower$Backward;
+		case 'c':
+			return $author$project$BeeInteractingFlower$FlyAround;
+		case 'C':
+			return $author$project$BeeInteractingFlower$FlyAround;
 		case ' ':
-			return $author$project$BeeCollision$Up;
+			return $author$project$BeeInteractingFlower$Up;
 		case 'Shift':
-			return $author$project$BeeCollision$Down;
+			return $author$project$BeeInteractingFlower$Down;
 		default:
-			return $author$project$BeeCollision$None;
+			return $author$project$BeeInteractingFlower$None;
 	}
 };
 var $ianmackenzie$elm_geometry$Point3d$translateIn = F3(
@@ -12962,7 +13019,7 @@ var $ianmackenzie$elm_geometry$Vector3d$withLength = F2(
 		return $ianmackenzie$elm_geometry$Geometry$Types$Vector3d(
 			{x: a * d.x, y: a * d.y, z: a * d.z});
 	});
-var $author$project$BeeCollision$update = F2(
+var $author$project$BeeInteractingFlower$update = F2(
 	function (message, model) {
 		switch (message.$) {
 			case 'Resize':
@@ -12984,6 +13041,7 @@ var $author$project$BeeCollision$update = F2(
 					A2($ianmackenzie$elm_units$Quantity$for, t, tickRate),
 					$ianmackenzie$elm_units$Duration$seconds(model.time));
 				var timeAsNum = $ianmackenzie$elm_units$Duration$inSeconds(updatedTime);
+				var newFlyCountDown = model.flyCountDown + 1;
 				var newBeeRot = A2(
 					$ianmackenzie$elm_units$Quantity$plus,
 					$ianmackenzie$elm_units$Angle$degrees(model.rotVelocity),
@@ -12997,22 +13055,22 @@ var $author$project$BeeCollision$update = F2(
 					A2($ianmackenzie$elm_geometry$Vector3d$scaleBy, 0.1, model.velocity),
 					A2(
 						$ianmackenzie$elm_geometry$Vector3d$plus,
-						(!_Utils_eq(model.dirUD, $author$project$BeeCollision$None)) ? ((_Utils_eq(model.dirUD, $author$project$BeeCollision$Down) && hitGround) ? $ianmackenzie$elm_geometry$Vector3d$zero : A2(
+						(!_Utils_eq(model.dirUD, $author$project$BeeInteractingFlower$None)) ? ((_Utils_eq(model.dirUD, $author$project$BeeInteractingFlower$Down) && hitGround) ? $ianmackenzie$elm_geometry$Vector3d$zero : A2(
 							$ianmackenzie$elm_geometry$Vector3d$withLength,
-							$ianmackenzie$elm_units$Length$centimeters($author$project$BeeCollision$speed),
-							A2($author$project$BeeCollision$directionConverter, model, model.dirUD))) : $ianmackenzie$elm_geometry$Vector3d$zero,
+							$ianmackenzie$elm_units$Length$centimeters($author$project$BeeInteractingFlower$speed),
+							A2($author$project$BeeInteractingFlower$directionConverter, model, model.dirUD))) : $ianmackenzie$elm_geometry$Vector3d$zero,
 						A2(
 							$ianmackenzie$elm_geometry$Vector3d$plus,
-							(!_Utils_eq(model.dirLR, $author$project$BeeCollision$None)) ? A2(
+							(!_Utils_eq(model.dirLR, $author$project$BeeInteractingFlower$None)) ? A2(
 								$ianmackenzie$elm_geometry$Vector3d$withLength,
-								$ianmackenzie$elm_units$Length$centimeters($author$project$BeeCollision$speed),
-								A2($author$project$BeeCollision$directionConverter, model, model.dirLR)) : $ianmackenzie$elm_geometry$Vector3d$zero,
+								$ianmackenzie$elm_units$Length$centimeters($author$project$BeeInteractingFlower$speed),
+								A2($author$project$BeeInteractingFlower$directionConverter, model, model.dirLR)) : $ianmackenzie$elm_geometry$Vector3d$zero,
 							A2(
 								$ianmackenzie$elm_geometry$Vector3d$plus,
-								(!_Utils_eq(model.dirFB, $author$project$BeeCollision$None)) ? A2(
+								(!_Utils_eq(model.dirFB, $author$project$BeeInteractingFlower$None)) ? A2(
 									$ianmackenzie$elm_geometry$Vector3d$withLength,
-									$ianmackenzie$elm_units$Length$centimeters($author$project$BeeCollision$speed),
-									A2($author$project$BeeCollision$directionConverter, model, model.dirFB)) : $ianmackenzie$elm_geometry$Vector3d$zero,
+									$ianmackenzie$elm_units$Length$centimeters($author$project$BeeInteractingFlower$speed),
+									A2($author$project$BeeInteractingFlower$directionConverter, model, model.dirFB)) : $ianmackenzie$elm_geometry$Vector3d$zero,
 								model.velocity))));
 				var goingDown = !A2(
 					$ianmackenzie$elm_units$Quantity$greaterThanOrEqualTo,
@@ -13057,36 +13115,73 @@ var $author$project$BeeCollision$update = F2(
 						$ianmackenzie$elm_geometry$BoundingBox3d$intersects(tryUpdateBeeBB.boundedBox),
 						model.mapObjects.boundedBox));
 				var newBeePos = ifCollided ? model.prePos : tryUpdateBeePos;
+				var getIdifCollided = A2(
+					$elm$core$List$filter,
+					function (_v2) {
+						var id = _v2.a;
+						var box = _v2.b;
+						var tf = _v2.c;
+						return tf ? true : false;
+					},
+					A4(
+						$elm$core$List$map3,
+						F3(
+							function (id, box, tf) {
+								return _Utils_Tuple3(id, box, tf);
+							}),
+						model.mapObjects.id,
+						model.mapObjects.boundedBox,
+						A2(
+							$elm$core$List$map,
+							$ianmackenzie$elm_geometry$BoundingBox3d$intersects(tryUpdateBeeBB.boundedBox),
+							model.mapObjects.boundedBox)));
+				var ifHitFlower = ifCollided ? A3(
+					$elm$core$List$foldr,
+					F2(
+						function (_v1, hitRecord) {
+							var id = _v1.a;
+							var box = _v1.b;
+							var tf = _v1.c;
+							return (id === 'Flower') ? {
+								hitBBPos: $ianmackenzie$elm_geometry$BoundingBox3d$centerPoint(box),
+								showHitSign: true
+							} : {hitBBPos: $ianmackenzie$elm_geometry$Point3d$origin, showHitSign: false};
+						}),
+					model.hit,
+					getIdifCollided) : (A2(
+					$ianmackenzie$elm_units$Quantity$greaterThan,
+					$author$project$BeeInteractingFlower$hitSignDisappear,
+					A2($ianmackenzie$elm_geometry$Point3d$distanceFrom, newBeePos, model.hit.hitBBPos)) ? {hitBBPos: $ianmackenzie$elm_geometry$Point3d$origin, showHitSign: false} : {hitBBPos: model.hit.hitBBPos, showHitSign: model.hit.showHitSign});
 				var collisionVelocity = A2(
 					$ianmackenzie$elm_geometry$Vector3d$minus,
 					A2($ianmackenzie$elm_geometry$Vector3d$scaleBy, 0.1, model.velocity),
 					A2(
 						$ianmackenzie$elm_geometry$Vector3d$minus,
-						(!_Utils_eq(model.dirUD, $author$project$BeeCollision$None)) ? ((_Utils_eq(model.dirUD, $author$project$BeeCollision$Down) && hitGround) ? $ianmackenzie$elm_geometry$Vector3d$zero : A2(
+						(!_Utils_eq(model.dirUD, $author$project$BeeInteractingFlower$None)) ? ((_Utils_eq(model.dirUD, $author$project$BeeInteractingFlower$Down) && hitGround) ? $ianmackenzie$elm_geometry$Vector3d$zero : A2(
 							$ianmackenzie$elm_geometry$Vector3d$scaleBy,
-							2,
+							3,
 							A2(
 								$ianmackenzie$elm_geometry$Vector3d$withLength,
-								$ianmackenzie$elm_units$Length$centimeters($author$project$BeeCollision$speed),
-								A2($author$project$BeeCollision$directionConverter, model, model.dirUD)))) : $ianmackenzie$elm_geometry$Vector3d$zero,
+								$ianmackenzie$elm_units$Length$centimeters($author$project$BeeInteractingFlower$speed),
+								A2($author$project$BeeInteractingFlower$directionConverter, model, model.dirUD)))) : $ianmackenzie$elm_geometry$Vector3d$zero,
 						A2(
 							$ianmackenzie$elm_geometry$Vector3d$minus,
-							(!_Utils_eq(model.dirLR, $author$project$BeeCollision$None)) ? A2(
+							(!_Utils_eq(model.dirLR, $author$project$BeeInteractingFlower$None)) ? A2(
 								$ianmackenzie$elm_geometry$Vector3d$scaleBy,
-								2,
+								3,
 								A2(
 									$ianmackenzie$elm_geometry$Vector3d$withLength,
-									$ianmackenzie$elm_units$Length$centimeters($author$project$BeeCollision$speed),
-									A2($author$project$BeeCollision$directionConverter, model, model.dirLR))) : $ianmackenzie$elm_geometry$Vector3d$zero,
+									$ianmackenzie$elm_units$Length$centimeters($author$project$BeeInteractingFlower$speed),
+									A2($author$project$BeeInteractingFlower$directionConverter, model, model.dirLR))) : $ianmackenzie$elm_geometry$Vector3d$zero,
 							A2(
 								$ianmackenzie$elm_geometry$Vector3d$minus,
-								(!_Utils_eq(model.dirFB, $author$project$BeeCollision$None)) ? A2(
+								(!_Utils_eq(model.dirFB, $author$project$BeeInteractingFlower$None)) ? A2(
 									$ianmackenzie$elm_geometry$Vector3d$scaleBy,
-									2,
+									3,
 									A2(
 										$ianmackenzie$elm_geometry$Vector3d$withLength,
-										$ianmackenzie$elm_units$Length$centimeters($author$project$BeeCollision$speed),
-										A2($author$project$BeeCollision$directionConverter, model, model.dirFB))) : $ianmackenzie$elm_geometry$Vector3d$zero,
+										$ianmackenzie$elm_units$Length$centimeters($author$project$BeeInteractingFlower$speed),
+										A2($author$project$BeeInteractingFlower$directionConverter, model, model.dirFB))) : $ianmackenzie$elm_geometry$Vector3d$zero,
 								$ianmackenzie$elm_geometry$Vector3d$zero))));
 				var newVelocity = ifCollided ? collisionVelocity : tryToUpdateVelocity;
 				return _Utils_Tuple2(
@@ -13100,6 +13195,8 @@ var $author$project$BeeCollision$update = F2(
 								$ianmackenzie$elm_geometry$Direction3d$z,
 								$ianmackenzie$elm_units$Length$centimeters(30),
 								newBeePos),
+							flyCountDown: newFlyCountDown,
+							hit: {hitBBPos: ifHitFlower.hitBBPos, showHitSign: ifHitFlower.showHitSign},
 							prePos: model.beePos,
 							time: timeAsNum,
 							velocity: newVelocity
@@ -13119,10 +13216,10 @@ var $author$project$BeeCollision$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 'VisibilityChange':
 				if (message.a.$ === 'Visible') {
-					var _v1 = message.a;
+					var _v3 = message.a;
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				} else {
-					var _v2 = message.a;
+					var _v4 = message.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -13159,87 +13256,115 @@ var $author$project$BeeCollision$update = F2(
 				}
 			case 'KeyDown':
 				var key = message.a;
-				var dir = $author$project$BeeCollision$toDirection(key);
+				var dir = $author$project$BeeInteractingFlower$toDirection(key);
 				switch (dir.$) {
 					case 'Left':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirLR: $author$project$BeeCollision$Left}),
+								{dirLR: $author$project$BeeInteractingFlower$Left, flyAround: false}),
 							$elm$core$Platform$Cmd$none);
 					case 'Right':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirLR: $author$project$BeeCollision$Right}),
+								{dirLR: $author$project$BeeInteractingFlower$Right, flyAround: false}),
 							$elm$core$Platform$Cmd$none);
 					case 'Forward':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirFB: $author$project$BeeCollision$Forward}),
+								{dirFB: $author$project$BeeInteractingFlower$Forward, flyAround: false}),
 							$elm$core$Platform$Cmd$none);
 					case 'Backward':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirFB: $author$project$BeeCollision$Backward}),
+								{dirFB: $author$project$BeeInteractingFlower$Backward, flyAround: false}),
 							$elm$core$Platform$Cmd$none);
 					case 'Up':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirUD: $author$project$BeeCollision$Up}),
+								{dirUD: $author$project$BeeInteractingFlower$Up, flyAround: false}),
 							$elm$core$Platform$Cmd$none);
 					case 'Down':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirUD: $author$project$BeeCollision$Down}),
+								{dirUD: $author$project$BeeInteractingFlower$Down, flyAround: false}),
+							$elm$core$Platform$Cmd$none);
+					case 'FlyAround':
+						return (model.hit.showHitSign && (!model.flyAround)) ? _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{
+									flyAround: true,
+									flyCountDown: 0,
+									hit: {hitBBPos: model.hit.hitBBPos, showHitSign: false}
+								}),
+							$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{flyAround: false}),
 							$elm$core$Platform$Cmd$none);
 					default:
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
 			case 'KeyUp':
 				var key = message.a;
-				var dir = $author$project$BeeCollision$toDirection(key);
+				var dir = $author$project$BeeInteractingFlower$toDirection(key);
 				switch (dir.$) {
 					case 'Left':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirLR: $author$project$BeeCollision$None}),
+								{dirLR: $author$project$BeeInteractingFlower$None}),
 							$elm$core$Platform$Cmd$none);
 					case 'Right':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirLR: $author$project$BeeCollision$None}),
+								{dirLR: $author$project$BeeInteractingFlower$None}),
 							$elm$core$Platform$Cmd$none);
 					case 'Forward':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirFB: $author$project$BeeCollision$None}),
+								{dirFB: $author$project$BeeInteractingFlower$None}),
 							$elm$core$Platform$Cmd$none);
 					case 'Backward':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirFB: $author$project$BeeCollision$None}),
+								{dirFB: $author$project$BeeInteractingFlower$None}),
 							$elm$core$Platform$Cmd$none);
 					case 'Up':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirUD: $author$project$BeeCollision$None}),
+								{dirUD: $author$project$BeeInteractingFlower$None}),
 							$elm$core$Platform$Cmd$none);
 					case 'Down':
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{dirUD: $author$project$BeeCollision$None}),
+								{dirUD: $author$project$BeeInteractingFlower$None}),
 							$elm$core$Platform$Cmd$none);
+					case 'FlyAround':
+						return (!model.flyAround) ? _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{flyAround: false}),
+							$elm$core$Platform$Cmd$none) : ((model.flyAround && (_Utils_cmp(model.flyCountDown, $author$project$BeeInteractingFlower$flyStop) > 0)) ? _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{flyAround: false}),
+							$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{flyAround: model.flyAround}),
+							$elm$core$Platform$Cmd$none));
 					default:
 						return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				}
@@ -14504,7 +14629,7 @@ var $ianmackenzie$elm_3d_scene$Scene3d$lineSegment = F2(
 	function (givenMaterial, givenLineSegment) {
 		return A2($ianmackenzie$elm_3d_scene$Scene3d$Entity$lineSegment, givenMaterial, givenLineSegment);
 	});
-var $author$project$BeeCollision$debugs = _List_fromArray(
+var $author$project$BeeInteractingFlower$debugs = _List_fromArray(
 	[
 		A2(
 		$ianmackenzie$elm_3d_scene$Scene3d$lineSegment,
@@ -14531,6 +14656,9 @@ var $author$project$BeeCollision$debugs = _List_fromArray(
 			$ianmackenzie$elm_units$Length$centimeters(0),
 			$ianmackenzie$elm_units$Length$centimeters(5000)))
 	]);
+var $elm$core$Basics$degrees = function (angleInDegrees) {
+	return (angleInDegrees * $elm$core$Basics$pi) / 180;
+};
 var $ianmackenzie$elm_3d_scene$Scene3d$Light$directional = F2(
 	function (_v0, light) {
 		var shadowFlag = _v0.a;
@@ -14553,6 +14681,27 @@ var $ianmackenzie$elm_3d_scene$Scene3d$Light$directional = F2(
 				z: -z
 			});
 	});
+var $elm$core$List$drop = F2(
+	function (n, list) {
+		drop:
+		while (true) {
+			if (n <= 0) {
+				return list;
+			} else {
+				if (!list.b) {
+					return list;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs;
+					n = $temp$n;
+					list = $temp$list;
+					continue drop;
+				}
+			}
+		}
+	});
 var $ianmackenzie$elm_3d_scene$Scene3d$Exposure = function (a) {
 	return {$: 'Exposure', a: a};
 };
@@ -14568,223 +14717,6 @@ var $ianmackenzie$elm_3d_scene$Scene3d$Light$fluorescent = $ianmackenzie$elm_3d_
 	{x: 0.37208, y: 0.37529});
 var $ianmackenzie$elm_3d_scene$Scene3d$HableFilmicToneMapping = {$: 'HableFilmicToneMapping'};
 var $ianmackenzie$elm_3d_scene$Scene3d$hableFilmicToneMapping = $ianmackenzie$elm_3d_scene$Scene3d$HableFilmicToneMapping;
-var $ianmackenzie$elm_3d_scene$Scene3d$Light$incandescent = $ianmackenzie$elm_3d_scene$Scene3d$Light$chromaticity(
-	{x: 0.44757, y: 0.40745});
-var $ianmackenzie$elm_units$Pixels$int = function (numPixels) {
-	return $ianmackenzie$elm_units$Quantity$Quantity(numPixels);
-};
-var $ianmackenzie$elm_units$Temperature$Temperature = function (a) {
-	return {$: 'Temperature', a: a};
-};
-var $ianmackenzie$elm_units$Temperature$kelvins = function (numKelvins) {
-	return $ianmackenzie$elm_units$Temperature$Temperature(numKelvins);
-};
-var $avh4$elm_color$Color$lightBlue = A4($avh4$elm_color$Color$RgbaSpace, 114 / 255, 159 / 255, 207 / 255, 1.0);
-var $ianmackenzie$elm_units$LuminousFlux$lumens = function (numLumens) {
-	return $ianmackenzie$elm_units$Quantity$Quantity(numLumens);
-};
-var $ianmackenzie$elm_units$Illuminance$lux = function (numLux) {
-	return $ianmackenzie$elm_units$Quantity$Quantity(numLux);
-};
-var $ianmackenzie$elm_3d_scene$Scene3d$Multisampling = {$: 'Multisampling'};
-var $ianmackenzie$elm_3d_scene$Scene3d$multisampling = $ianmackenzie$elm_3d_scene$Scene3d$Multisampling;
-var $ianmackenzie$elm_3d_camera$Camera3d$Types$Viewpoint3d = function (a) {
-	return {$: 'Viewpoint3d', a: a};
-};
-var $ianmackenzie$elm_geometry$Unsafe$Direction3d$unsafeCrossProduct = F2(
-	function (_v0, _v1) {
-		var d1 = _v0.a;
-		var d2 = _v1.a;
-		return $ianmackenzie$elm_geometry$Geometry$Types$Direction3d(
-			{x: (d1.y * d2.z) - (d1.z * d2.y), y: (d1.z * d2.x) - (d1.x * d2.z), z: (d1.x * d2.y) - (d1.y * d2.x)});
-	});
-var $ianmackenzie$elm_geometry$SketchPlane3d$xDirection = function (_v0) {
-	var properties = _v0.a;
-	return properties.xDirection;
-};
-var $ianmackenzie$elm_geometry$SketchPlane3d$yDirection = function (_v0) {
-	var properties = _v0.a;
-	return properties.yDirection;
-};
-var $ianmackenzie$elm_geometry$SketchPlane3d$normalDirection = function (sketchPlane) {
-	return A2(
-		$ianmackenzie$elm_geometry$Unsafe$Direction3d$unsafeCrossProduct,
-		$ianmackenzie$elm_geometry$SketchPlane3d$xDirection(sketchPlane),
-		$ianmackenzie$elm_geometry$SketchPlane3d$yDirection(sketchPlane));
-};
-var $ianmackenzie$elm_geometry$Frame3d$rotateAroundOwn = F3(
-	function (axis, angle, frame) {
-		return A3(
-			$ianmackenzie$elm_geometry$Frame3d$rotateAround,
-			axis(frame),
-			angle,
-			frame);
-	});
-var $ianmackenzie$elm_geometry$Frame3d$translateIn = F3(
-	function (direction, distance, frame) {
-		return A2(
-			$ianmackenzie$elm_geometry$Frame3d$translateBy,
-			A2($ianmackenzie$elm_geometry$Vector3d$withLength, distance, direction),
-			frame);
-	});
-var $ianmackenzie$elm_geometry$Frame3d$translateAlongOwn = F3(
-	function (axis, distance, frame) {
-		return A3(
-			$ianmackenzie$elm_geometry$Frame3d$translateIn,
-			$ianmackenzie$elm_geometry$Axis3d$direction(
-				axis(frame)),
-			distance,
-			frame);
-	});
-var $ianmackenzie$elm_geometry$Frame3d$xAxis = function (_v0) {
-	var frame = _v0.a;
-	return A2($ianmackenzie$elm_geometry$Axis3d$through, frame.originPoint, frame.xDirection);
-};
-var $ianmackenzie$elm_geometry$Frame3d$yAxis = function (_v0) {
-	var frame = _v0.a;
-	return A2($ianmackenzie$elm_geometry$Axis3d$through, frame.originPoint, frame.yDirection);
-};
-var $ianmackenzie$elm_geometry$Frame3d$zAxis = function (_v0) {
-	var frame = _v0.a;
-	return A2($ianmackenzie$elm_geometry$Axis3d$through, frame.originPoint, frame.zDirection);
-};
-var $ianmackenzie$elm_3d_camera$Viewpoint3d$orbit = function (_arguments) {
-	var initialFrame = $ianmackenzie$elm_geometry$Frame3d$unsafe(
-		{
-			originPoint: _arguments.focalPoint,
-			xDirection: $ianmackenzie$elm_geometry$SketchPlane3d$yDirection(_arguments.groundPlane),
-			yDirection: $ianmackenzie$elm_geometry$SketchPlane3d$normalDirection(_arguments.groundPlane),
-			zDirection: $ianmackenzie$elm_geometry$SketchPlane3d$xDirection(_arguments.groundPlane)
-		});
-	var finalFrame = A3(
-		$ianmackenzie$elm_geometry$Frame3d$translateAlongOwn,
-		$ianmackenzie$elm_geometry$Frame3d$zAxis,
-		_arguments.distance,
-		A3(
-			$ianmackenzie$elm_geometry$Frame3d$rotateAroundOwn,
-			$ianmackenzie$elm_geometry$Frame3d$xAxis,
-			$ianmackenzie$elm_units$Quantity$negate(_arguments.elevation),
-			A3($ianmackenzie$elm_geometry$Frame3d$rotateAroundOwn, $ianmackenzie$elm_geometry$Frame3d$yAxis, _arguments.azimuth, initialFrame)));
-	return $ianmackenzie$elm_3d_camera$Camera3d$Types$Viewpoint3d(finalFrame);
-};
-var $ianmackenzie$elm_3d_camera$Viewpoint3d$orbitZ = function (_v0) {
-	var focalPoint = _v0.focalPoint;
-	var azimuth = _v0.azimuth;
-	var elevation = _v0.elevation;
-	var distance = _v0.distance;
-	return $ianmackenzie$elm_3d_camera$Viewpoint3d$orbit(
-		{azimuth: azimuth, distance: distance, elevation: elevation, focalPoint: focalPoint, groundPlane: $ianmackenzie$elm_geometry$SketchPlane3d$xy});
-};
-var $ianmackenzie$elm_3d_camera$Camera3d$Types$Camera3d = function (a) {
-	return {$: 'Camera3d', a: a};
-};
-var $ianmackenzie$elm_3d_camera$Camera3d$Types$Perspective = function (a) {
-	return {$: 'Perspective', a: a};
-};
-var $elm$core$Basics$tan = _Basics_tan;
-var $ianmackenzie$elm_units$Angle$tan = function (_v0) {
-	var angle = _v0.a;
-	return $elm$core$Basics$tan(angle);
-};
-var $ianmackenzie$elm_3d_camera$Camera3d$perspective = function (_arguments) {
-	var halfFieldOfView = $ianmackenzie$elm_units$Quantity$half(
-		$ianmackenzie$elm_units$Quantity$abs(_arguments.verticalFieldOfView));
-	var frustumSlope = $ianmackenzie$elm_units$Angle$tan(halfFieldOfView);
-	return $ianmackenzie$elm_3d_camera$Camera3d$Types$Camera3d(
-		{
-			projection: $ianmackenzie$elm_3d_camera$Camera3d$Types$Perspective(frustumSlope),
-			viewpoint: _arguments.viewpoint
-		});
-};
-var $ianmackenzie$elm_geometry$Sphere3d$atPoint = F2(
-	function (givenCenterPoint, givenRadius) {
-		return A2($ianmackenzie$elm_geometry$Sphere3d$withRadius, givenRadius, givenCenterPoint);
-	});
-var $ianmackenzie$elm_3d_scene$Scene3d$Types$EmissiveMaterial = F3(
-	function (a, b, c) {
-		return {$: 'EmissiveMaterial', a: a, b: b, c: c};
-	});
-var $ianmackenzie$elm_units$Quantity$float = function (value) {
-	return $ianmackenzie$elm_units$Quantity$Quantity(value);
-};
-var $ianmackenzie$elm_3d_scene$Scene3d$Material$emissive = F2(
-	function (givenChromaticity, brightness) {
-		var baseColor = A2(
-			$ianmackenzie$elm_3d_scene$Scene3d$ColorConversions$chromaticityToLinearRgb,
-			$ianmackenzie$elm_units$Quantity$float(1),
-			givenChromaticity);
-		return A3(
-			$ianmackenzie$elm_3d_scene$Scene3d$Types$EmissiveMaterial,
-			$ianmackenzie$elm_3d_scene$Scene3d$Types$UseMeshUvs,
-			$ianmackenzie$elm_3d_scene$Scene3d$Types$Constant(baseColor),
-			brightness);
-	});
-var $ianmackenzie$elm_units$Length$millimeters = function (numMillimeters) {
-	return $ianmackenzie$elm_units$Length$meters(0.001 * numMillimeters);
-};
-var $ianmackenzie$elm_3d_scene$Scene3d$Light$point = F2(
-	function (_v0, light) {
-		var shadowFlag = _v0.a;
-		var _v1 = $ianmackenzie$elm_geometry$Point3d$unwrap(light.position);
-		var x = _v1.x;
-		var y = _v1.y;
-		var z = _v1.z;
-		var _v2 = A2($ianmackenzie$elm_3d_scene$Scene3d$ColorConversions$chromaticityToLinearRgb, light.intensity, light.chromaticity);
-		var rgb = _v2.a;
-		return $ianmackenzie$elm_3d_scene$Scene3d$Types$Light(
-			{
-				b: $elm_explorations$linear_algebra$Math$Vector3$getZ(rgb),
-				castsShadows: shadowFlag,
-				g: $elm_explorations$linear_algebra$Math$Vector3$getY(rgb),
-				parameter: 0,
-				r: $elm_explorations$linear_algebra$Math$Vector3$getX(rgb),
-				type_: 2,
-				x: x,
-				y: y,
-				z: z
-			});
-	});
-var $ianmackenzie$elm_units$SolidAngle$steradians = function (numSteradians) {
-	return $ianmackenzie$elm_units$Quantity$Quantity(numSteradians);
-};
-var $ianmackenzie$elm_units$SolidAngle$spats = function (numSpats) {
-	return $ianmackenzie$elm_units$SolidAngle$steradians((4 * $elm$core$Basics$pi) * numSpats);
-};
-var $ianmackenzie$elm_3d_scene$Scene3d$sphere = F2(
-	function (givenMaterial, givenSphere) {
-		return A4($ianmackenzie$elm_3d_scene$Scene3d$Entity$sphere, true, false, givenMaterial, givenSphere);
-	});
-var $ianmackenzie$elm_units$Quantity$squared = function (_v0) {
-	var value = _v0.a;
-	return $ianmackenzie$elm_units$Quantity$Quantity(value * value);
-};
-var $ianmackenzie$elm_geometry$Sphere3d$surfaceArea = function (sphere) {
-	return A2(
-		$ianmackenzie$elm_units$Quantity$multiplyBy,
-		4 * $elm$core$Basics$pi,
-		$ianmackenzie$elm_units$Quantity$squared(
-			$ianmackenzie$elm_geometry$Sphere3d$radius(sphere)));
-};
-var $author$project$BeeCollision$pointLight = function (properties) {
-	var lightsphere = A2(
-		$ianmackenzie$elm_geometry$Sphere3d$atPoint,
-		properties.position,
-		$ianmackenzie$elm_units$Length$millimeters(100));
-	var sphereLuminance = A2(
-		$ianmackenzie$elm_units$Quantity$per,
-		$ianmackenzie$elm_geometry$Sphere3d$surfaceArea(lightsphere),
-		A2(
-			$ianmackenzie$elm_units$Quantity$per,
-			$ianmackenzie$elm_units$SolidAngle$spats(0.5),
-			properties.intensity));
-	var sphereMaterial = A2($ianmackenzie$elm_3d_scene$Scene3d$Material$emissive, properties.chromaticity, sphereLuminance);
-	return _Utils_Tuple2(
-		A2(
-			$ianmackenzie$elm_3d_scene$Scene3d$Light$point,
-			$ianmackenzie$elm_3d_scene$Scene3d$Light$castsShadows(true),
-			properties),
-		A2($ianmackenzie$elm_3d_scene$Scene3d$sphere, sphereMaterial, lightsphere));
-};
 var $ianmackenzie$elm_geometry$BoundingBox3d$hullHelp = F7(
 	function (currentMinX, currentMaxX, currentMinY, currentMaxY, currentMinZ, currentMaxZ, points) {
 		hullHelp:
@@ -15240,6 +15172,293 @@ var $ianmackenzie$elm_3d_scene$Scene3d$quad = F5(
 	function (givenMaterial, p1, p2, p3, p4) {
 		return A7($ianmackenzie$elm_3d_scene$Scene3d$Entity$quad, true, false, givenMaterial, p1, p2, p3, p4);
 	});
+var $ianmackenzie$elm_3d_scene$Scene3d$Material$map = F2(
+	function (_function, texture) {
+		if (texture.$ === 'Constant') {
+			var value = texture.a;
+			return $ianmackenzie$elm_3d_scene$Scene3d$Types$Constant(
+				_function(value));
+		} else {
+			var properties = texture.a;
+			return $ianmackenzie$elm_3d_scene$Scene3d$Types$Texture(properties);
+		}
+	});
+var $ianmackenzie$elm_3d_scene$Scene3d$Material$texturedColor = function (colorTexture) {
+	return A2(
+		$ianmackenzie$elm_3d_scene$Scene3d$Types$UnlitMaterial,
+		$ianmackenzie$elm_3d_scene$Scene3d$Types$UseMeshUvs,
+		A2($ianmackenzie$elm_3d_scene$Scene3d$Material$map, $ianmackenzie$elm_3d_scene$Scene3d$Material$toVec3, colorTexture));
+};
+var $author$project$Shape$hitsign = function (textureList) {
+	if (textureList.b) {
+		var texture = textureList.a;
+		return A5(
+			$ianmackenzie$elm_3d_scene$Scene3d$quad,
+			$ianmackenzie$elm_3d_scene$Scene3d$Material$texturedColor(texture),
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				$ianmackenzie$elm_units$Length$centimeters(5),
+				$ianmackenzie$elm_units$Length$centimeters(0),
+				$ianmackenzie$elm_units$Length$centimeters(75)),
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				$ianmackenzie$elm_units$Length$centimeters(-5),
+				$ianmackenzie$elm_units$Length$centimeters(0),
+				$ianmackenzie$elm_units$Length$centimeters(75)),
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				$ianmackenzie$elm_units$Length$centimeters(-5),
+				$ianmackenzie$elm_units$Length$centimeters(0),
+				$ianmackenzie$elm_units$Length$centimeters(85)),
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				$ianmackenzie$elm_units$Length$centimeters(5),
+				$ianmackenzie$elm_units$Length$centimeters(0),
+				$ianmackenzie$elm_units$Length$centimeters(85)));
+	} else {
+		return A5(
+			$ianmackenzie$elm_3d_scene$Scene3d$quad,
+			$ianmackenzie$elm_3d_scene$Scene3d$Material$matte($avh4$elm_color$Color$blue),
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				$ianmackenzie$elm_units$Length$centimeters(10),
+				$ianmackenzie$elm_units$Length$centimeters(0),
+				$ianmackenzie$elm_units$Length$centimeters(75)),
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				$ianmackenzie$elm_units$Length$centimeters(-10),
+				$ianmackenzie$elm_units$Length$centimeters(0),
+				$ianmackenzie$elm_units$Length$centimeters(75)),
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				$ianmackenzie$elm_units$Length$centimeters(-10),
+				$ianmackenzie$elm_units$Length$centimeters(0),
+				$ianmackenzie$elm_units$Length$centimeters(95)),
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				$ianmackenzie$elm_units$Length$centimeters(10),
+				$ianmackenzie$elm_units$Length$centimeters(0),
+				$ianmackenzie$elm_units$Length$centimeters(95)));
+	}
+};
+var $ianmackenzie$elm_3d_scene$Scene3d$Light$incandescent = $ianmackenzie$elm_3d_scene$Scene3d$Light$chromaticity(
+	{x: 0.44757, y: 0.40745});
+var $ianmackenzie$elm_units$Pixels$int = function (numPixels) {
+	return $ianmackenzie$elm_units$Quantity$Quantity(numPixels);
+};
+var $ianmackenzie$elm_units$Temperature$Temperature = function (a) {
+	return {$: 'Temperature', a: a};
+};
+var $ianmackenzie$elm_units$Temperature$kelvins = function (numKelvins) {
+	return $ianmackenzie$elm_units$Temperature$Temperature(numKelvins);
+};
+var $avh4$elm_color$Color$lightBlue = A4($avh4$elm_color$Color$RgbaSpace, 114 / 255, 159 / 255, 207 / 255, 1.0);
+var $ianmackenzie$elm_units$LuminousFlux$lumens = function (numLumens) {
+	return $ianmackenzie$elm_units$Quantity$Quantity(numLumens);
+};
+var $ianmackenzie$elm_units$Illuminance$lux = function (numLux) {
+	return $ianmackenzie$elm_units$Quantity$Quantity(numLux);
+};
+var $ianmackenzie$elm_3d_scene$Scene3d$Multisampling = {$: 'Multisampling'};
+var $ianmackenzie$elm_3d_scene$Scene3d$multisampling = $ianmackenzie$elm_3d_scene$Scene3d$Multisampling;
+var $ianmackenzie$elm_3d_scene$Scene3d$nothing = $ianmackenzie$elm_3d_scene$Scene3d$Entity$empty;
+var $ianmackenzie$elm_3d_camera$Camera3d$Types$Viewpoint3d = function (a) {
+	return {$: 'Viewpoint3d', a: a};
+};
+var $ianmackenzie$elm_geometry$Unsafe$Direction3d$unsafeCrossProduct = F2(
+	function (_v0, _v1) {
+		var d1 = _v0.a;
+		var d2 = _v1.a;
+		return $ianmackenzie$elm_geometry$Geometry$Types$Direction3d(
+			{x: (d1.y * d2.z) - (d1.z * d2.y), y: (d1.z * d2.x) - (d1.x * d2.z), z: (d1.x * d2.y) - (d1.y * d2.x)});
+	});
+var $ianmackenzie$elm_geometry$SketchPlane3d$xDirection = function (_v0) {
+	var properties = _v0.a;
+	return properties.xDirection;
+};
+var $ianmackenzie$elm_geometry$SketchPlane3d$yDirection = function (_v0) {
+	var properties = _v0.a;
+	return properties.yDirection;
+};
+var $ianmackenzie$elm_geometry$SketchPlane3d$normalDirection = function (sketchPlane) {
+	return A2(
+		$ianmackenzie$elm_geometry$Unsafe$Direction3d$unsafeCrossProduct,
+		$ianmackenzie$elm_geometry$SketchPlane3d$xDirection(sketchPlane),
+		$ianmackenzie$elm_geometry$SketchPlane3d$yDirection(sketchPlane));
+};
+var $ianmackenzie$elm_geometry$Frame3d$rotateAroundOwn = F3(
+	function (axis, angle, frame) {
+		return A3(
+			$ianmackenzie$elm_geometry$Frame3d$rotateAround,
+			axis(frame),
+			angle,
+			frame);
+	});
+var $ianmackenzie$elm_geometry$Frame3d$translateIn = F3(
+	function (direction, distance, frame) {
+		return A2(
+			$ianmackenzie$elm_geometry$Frame3d$translateBy,
+			A2($ianmackenzie$elm_geometry$Vector3d$withLength, distance, direction),
+			frame);
+	});
+var $ianmackenzie$elm_geometry$Frame3d$translateAlongOwn = F3(
+	function (axis, distance, frame) {
+		return A3(
+			$ianmackenzie$elm_geometry$Frame3d$translateIn,
+			$ianmackenzie$elm_geometry$Axis3d$direction(
+				axis(frame)),
+			distance,
+			frame);
+	});
+var $ianmackenzie$elm_geometry$Frame3d$xAxis = function (_v0) {
+	var frame = _v0.a;
+	return A2($ianmackenzie$elm_geometry$Axis3d$through, frame.originPoint, frame.xDirection);
+};
+var $ianmackenzie$elm_geometry$Frame3d$yAxis = function (_v0) {
+	var frame = _v0.a;
+	return A2($ianmackenzie$elm_geometry$Axis3d$through, frame.originPoint, frame.yDirection);
+};
+var $ianmackenzie$elm_geometry$Frame3d$zAxis = function (_v0) {
+	var frame = _v0.a;
+	return A2($ianmackenzie$elm_geometry$Axis3d$through, frame.originPoint, frame.zDirection);
+};
+var $ianmackenzie$elm_3d_camera$Viewpoint3d$orbit = function (_arguments) {
+	var initialFrame = $ianmackenzie$elm_geometry$Frame3d$unsafe(
+		{
+			originPoint: _arguments.focalPoint,
+			xDirection: $ianmackenzie$elm_geometry$SketchPlane3d$yDirection(_arguments.groundPlane),
+			yDirection: $ianmackenzie$elm_geometry$SketchPlane3d$normalDirection(_arguments.groundPlane),
+			zDirection: $ianmackenzie$elm_geometry$SketchPlane3d$xDirection(_arguments.groundPlane)
+		});
+	var finalFrame = A3(
+		$ianmackenzie$elm_geometry$Frame3d$translateAlongOwn,
+		$ianmackenzie$elm_geometry$Frame3d$zAxis,
+		_arguments.distance,
+		A3(
+			$ianmackenzie$elm_geometry$Frame3d$rotateAroundOwn,
+			$ianmackenzie$elm_geometry$Frame3d$xAxis,
+			$ianmackenzie$elm_units$Quantity$negate(_arguments.elevation),
+			A3($ianmackenzie$elm_geometry$Frame3d$rotateAroundOwn, $ianmackenzie$elm_geometry$Frame3d$yAxis, _arguments.azimuth, initialFrame)));
+	return $ianmackenzie$elm_3d_camera$Camera3d$Types$Viewpoint3d(finalFrame);
+};
+var $ianmackenzie$elm_3d_camera$Viewpoint3d$orbitZ = function (_v0) {
+	var focalPoint = _v0.focalPoint;
+	var azimuth = _v0.azimuth;
+	var elevation = _v0.elevation;
+	var distance = _v0.distance;
+	return $ianmackenzie$elm_3d_camera$Viewpoint3d$orbit(
+		{azimuth: azimuth, distance: distance, elevation: elevation, focalPoint: focalPoint, groundPlane: $ianmackenzie$elm_geometry$SketchPlane3d$xy});
+};
+var $ianmackenzie$elm_3d_camera$Camera3d$Types$Camera3d = function (a) {
+	return {$: 'Camera3d', a: a};
+};
+var $ianmackenzie$elm_3d_camera$Camera3d$Types$Perspective = function (a) {
+	return {$: 'Perspective', a: a};
+};
+var $elm$core$Basics$tan = _Basics_tan;
+var $ianmackenzie$elm_units$Angle$tan = function (_v0) {
+	var angle = _v0.a;
+	return $elm$core$Basics$tan(angle);
+};
+var $ianmackenzie$elm_3d_camera$Camera3d$perspective = function (_arguments) {
+	var halfFieldOfView = $ianmackenzie$elm_units$Quantity$half(
+		$ianmackenzie$elm_units$Quantity$abs(_arguments.verticalFieldOfView));
+	var frustumSlope = $ianmackenzie$elm_units$Angle$tan(halfFieldOfView);
+	return $ianmackenzie$elm_3d_camera$Camera3d$Types$Camera3d(
+		{
+			projection: $ianmackenzie$elm_3d_camera$Camera3d$Types$Perspective(frustumSlope),
+			viewpoint: _arguments.viewpoint
+		});
+};
+var $ianmackenzie$elm_geometry$Sphere3d$atPoint = F2(
+	function (givenCenterPoint, givenRadius) {
+		return A2($ianmackenzie$elm_geometry$Sphere3d$withRadius, givenRadius, givenCenterPoint);
+	});
+var $ianmackenzie$elm_3d_scene$Scene3d$Types$EmissiveMaterial = F3(
+	function (a, b, c) {
+		return {$: 'EmissiveMaterial', a: a, b: b, c: c};
+	});
+var $ianmackenzie$elm_units$Quantity$float = function (value) {
+	return $ianmackenzie$elm_units$Quantity$Quantity(value);
+};
+var $ianmackenzie$elm_3d_scene$Scene3d$Material$emissive = F2(
+	function (givenChromaticity, brightness) {
+		var baseColor = A2(
+			$ianmackenzie$elm_3d_scene$Scene3d$ColorConversions$chromaticityToLinearRgb,
+			$ianmackenzie$elm_units$Quantity$float(1),
+			givenChromaticity);
+		return A3(
+			$ianmackenzie$elm_3d_scene$Scene3d$Types$EmissiveMaterial,
+			$ianmackenzie$elm_3d_scene$Scene3d$Types$UseMeshUvs,
+			$ianmackenzie$elm_3d_scene$Scene3d$Types$Constant(baseColor),
+			brightness);
+	});
+var $ianmackenzie$elm_units$Length$millimeters = function (numMillimeters) {
+	return $ianmackenzie$elm_units$Length$meters(0.001 * numMillimeters);
+};
+var $ianmackenzie$elm_3d_scene$Scene3d$Light$point = F2(
+	function (_v0, light) {
+		var shadowFlag = _v0.a;
+		var _v1 = $ianmackenzie$elm_geometry$Point3d$unwrap(light.position);
+		var x = _v1.x;
+		var y = _v1.y;
+		var z = _v1.z;
+		var _v2 = A2($ianmackenzie$elm_3d_scene$Scene3d$ColorConversions$chromaticityToLinearRgb, light.intensity, light.chromaticity);
+		var rgb = _v2.a;
+		return $ianmackenzie$elm_3d_scene$Scene3d$Types$Light(
+			{
+				b: $elm_explorations$linear_algebra$Math$Vector3$getZ(rgb),
+				castsShadows: shadowFlag,
+				g: $elm_explorations$linear_algebra$Math$Vector3$getY(rgb),
+				parameter: 0,
+				r: $elm_explorations$linear_algebra$Math$Vector3$getX(rgb),
+				type_: 2,
+				x: x,
+				y: y,
+				z: z
+			});
+	});
+var $ianmackenzie$elm_units$SolidAngle$steradians = function (numSteradians) {
+	return $ianmackenzie$elm_units$Quantity$Quantity(numSteradians);
+};
+var $ianmackenzie$elm_units$SolidAngle$spats = function (numSpats) {
+	return $ianmackenzie$elm_units$SolidAngle$steradians((4 * $elm$core$Basics$pi) * numSpats);
+};
+var $ianmackenzie$elm_3d_scene$Scene3d$sphere = F2(
+	function (givenMaterial, givenSphere) {
+		return A4($ianmackenzie$elm_3d_scene$Scene3d$Entity$sphere, true, false, givenMaterial, givenSphere);
+	});
+var $ianmackenzie$elm_units$Quantity$squared = function (_v0) {
+	var value = _v0.a;
+	return $ianmackenzie$elm_units$Quantity$Quantity(value * value);
+};
+var $ianmackenzie$elm_geometry$Sphere3d$surfaceArea = function (sphere) {
+	return A2(
+		$ianmackenzie$elm_units$Quantity$multiplyBy,
+		4 * $elm$core$Basics$pi,
+		$ianmackenzie$elm_units$Quantity$squared(
+			$ianmackenzie$elm_geometry$Sphere3d$radius(sphere)));
+};
+var $author$project$BeeInteractingFlower$pointLight = function (properties) {
+	var lightsphere = A2(
+		$ianmackenzie$elm_geometry$Sphere3d$atPoint,
+		properties.position,
+		$ianmackenzie$elm_units$Length$millimeters(100));
+	var sphereLuminance = A2(
+		$ianmackenzie$elm_units$Quantity$per,
+		$ianmackenzie$elm_geometry$Sphere3d$surfaceArea(lightsphere),
+		A2(
+			$ianmackenzie$elm_units$Quantity$per,
+			$ianmackenzie$elm_units$SolidAngle$spats(0.5),
+			properties.intensity));
+	var sphereMaterial = A2($ianmackenzie$elm_3d_scene$Scene3d$Material$emissive, properties.chromaticity, sphereLuminance);
+	return _Utils_Tuple2(
+		A2(
+			$ianmackenzie$elm_3d_scene$Scene3d$Light$point,
+			$ianmackenzie$elm_3d_scene$Scene3d$Light$castsShadows(true),
+			properties),
+		A2($ianmackenzie$elm_3d_scene$Scene3d$sphere, sphereMaterial, lightsphere));
+};
 var $elm$core$List$repeatHelp = F3(
 	function (result, n, value) {
 		repeatHelp:
@@ -15261,23 +15480,6 @@ var $elm$core$List$repeat = F2(
 	function (n, value) {
 		return A3($elm$core$List$repeatHelp, _List_Nil, n, value);
 	});
-var $ianmackenzie$elm_3d_scene$Scene3d$Material$map = F2(
-	function (_function, texture) {
-		if (texture.$ === 'Constant') {
-			var value = texture.a;
-			return $ianmackenzie$elm_3d_scene$Scene3d$Types$Constant(
-				_function(value));
-		} else {
-			var properties = texture.a;
-			return $ianmackenzie$elm_3d_scene$Scene3d$Types$Texture(properties);
-		}
-	});
-var $ianmackenzie$elm_3d_scene$Scene3d$Material$texturedColor = function (colorTexture) {
-	return A2(
-		$ianmackenzie$elm_3d_scene$Scene3d$Types$UnlitMaterial,
-		$ianmackenzie$elm_3d_scene$Scene3d$Types$UseMeshUvs,
-		A2($ianmackenzie$elm_3d_scene$Scene3d$Material$map, $ianmackenzie$elm_3d_scene$Scene3d$Material$toVec3, colorTexture));
-};
 var $avh4$elm_color$Color$white = A4($avh4$elm_color$Color$RgbaSpace, 255 / 255, 255 / 255, 255 / 255, 1.0);
 var $author$project$Skybox2$skybox = F2(
 	function (textureList, size) {
@@ -15356,12 +15558,6 @@ var $author$project$Skybox2$skybox = F2(
 					]));
 		}
 	});
-var $ianmackenzie$elm_units$Quantity$greaterThan = F2(
-	function (_v0, _v1) {
-		var y = _v0.a;
-		var x = _v1.a;
-		return _Utils_cmp(x, y) > 0;
-	});
 var $ianmackenzie$elm_units$Illuminance$inLux = function (_v0) {
 	var numLux = _v0.a;
 	return numLux;
@@ -15414,6 +15610,132 @@ var $ianmackenzie$elm_3d_scene$Scene3d$Light$soft = function (light) {
 		}
 	}
 };
+var $elm$core$List$takeReverse = F3(
+	function (n, list, kept) {
+		takeReverse:
+		while (true) {
+			if (n <= 0) {
+				return kept;
+			} else {
+				if (!list.b) {
+					return kept;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs,
+						$temp$kept = A2($elm$core$List$cons, x, kept);
+					n = $temp$n;
+					list = $temp$list;
+					kept = $temp$kept;
+					continue takeReverse;
+				}
+			}
+		}
+	});
+var $elm$core$List$takeTailRec = F2(
+	function (n, list) {
+		return $elm$core$List$reverse(
+			A3($elm$core$List$takeReverse, n, list, _List_Nil));
+	});
+var $elm$core$List$takeFast = F3(
+	function (ctr, n, list) {
+		if (n <= 0) {
+			return _List_Nil;
+		} else {
+			var _v0 = _Utils_Tuple2(n, list);
+			_v0$1:
+			while (true) {
+				_v0$5:
+				while (true) {
+					if (!_v0.b.b) {
+						return list;
+					} else {
+						if (_v0.b.b.b) {
+							switch (_v0.a) {
+								case 1:
+									break _v0$1;
+								case 2:
+									var _v2 = _v0.b;
+									var x = _v2.a;
+									var _v3 = _v2.b;
+									var y = _v3.a;
+									return _List_fromArray(
+										[x, y]);
+								case 3:
+									if (_v0.b.b.b.b) {
+										var _v4 = _v0.b;
+										var x = _v4.a;
+										var _v5 = _v4.b;
+										var y = _v5.a;
+										var _v6 = _v5.b;
+										var z = _v6.a;
+										return _List_fromArray(
+											[x, y, z]);
+									} else {
+										break _v0$5;
+									}
+								default:
+									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
+										var _v7 = _v0.b;
+										var x = _v7.a;
+										var _v8 = _v7.b;
+										var y = _v8.a;
+										var _v9 = _v8.b;
+										var z = _v9.a;
+										var _v10 = _v9.b;
+										var w = _v10.a;
+										var tl = _v10.b;
+										return (ctr > 1000) ? A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
+									} else {
+										break _v0$5;
+									}
+							}
+						} else {
+							if (_v0.a === 1) {
+								break _v0$1;
+							} else {
+								break _v0$5;
+							}
+						}
+					}
+				}
+				return list;
+			}
+			var _v1 = _v0.b;
+			var x = _v1.a;
+			return _List_fromArray(
+				[x]);
+		}
+	});
+var $elm$core$List$take = F2(
+	function (n, list) {
+		return A3($elm$core$List$takeFast, 0, n, list);
+	});
 var $ianmackenzie$elm_3d_scene$Scene3d$MultiplePasses = F2(
 	function (a, b) {
 		return {$: 'MultiplePasses', a: a, b: b};
@@ -15507,7 +15829,7 @@ var $ianmackenzie$elm_units$Pixels$toFloat = function (_v0) {
 	var numPixels = _v0.a;
 	return numPixels;
 };
-var $author$project$BeeCollision$view = function (model) {
+var $author$project$BeeInteractingFlower$view = function (model) {
 	var thirdLight = A2(
 		$ianmackenzie$elm_3d_scene$Scene3d$Light$directional,
 		$ianmackenzie$elm_3d_scene$Scene3d$Light$castsShadows(true),
@@ -15546,6 +15868,22 @@ var $author$project$BeeCollision$view = function (model) {
 		A3($ianmackenzie$elm_geometry$Point3d$centimeters, 9000, -9000, 0),
 		A3($ianmackenzie$elm_geometry$Point3d$centimeters, 9000, 9000, 0),
 		A3($ianmackenzie$elm_geometry$Point3d$centimeters, -9000, 9000, 0));
+	var hitsign = A2(
+		$ianmackenzie$elm_3d_scene$Scene3d$translateBy,
+		A2(
+			$ianmackenzie$elm_geometry$Vector3d$withLength,
+			$ianmackenzie$elm_units$Length$centimeters(
+				5 * $elm$core$Basics$sin(model.time)),
+			$ianmackenzie$elm_geometry$Direction3d$z),
+		A2(
+			$ianmackenzie$elm_3d_scene$Scene3d$translateBy,
+			A2($ianmackenzie$elm_geometry$Vector3d$from, $ianmackenzie$elm_geometry$Point3d$origin, model.beePos),
+			A3(
+				$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
+				$ianmackenzie$elm_geometry$Axis3d$z,
+				model.beeRot,
+				$author$project$Shape$hitsign(
+					A2($elm$core$List$drop, 6, texturesList)))));
 	var camera = $ianmackenzie$elm_3d_camera$Camera3d$perspective(
 		{
 			verticalFieldOfView: $ianmackenzie$elm_units$Angle$degrees(30),
@@ -15560,7 +15898,37 @@ var $author$project$BeeCollision$view = function (model) {
 					focalPoint: model.camPos
 				})
 		});
-	var beeShape = A2(
+	var beeShape = model.flyAround ? A2(
+		$author$project$Shape$translateBy,
+		A2(
+			$ianmackenzie$elm_geometry$Vector3d$from,
+			$ianmackenzie$elm_geometry$Point3d$origin,
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$centimeters,
+				40 * $elm$core$Basics$sin(
+					$elm$core$Basics$degrees(90 * model.time)),
+				40 * $elm$core$Basics$cos(
+					$elm$core$Basics$degrees(90 * model.time)),
+				0)),
+		A2(
+			$author$project$Shape$translateBy,
+			A3(
+				$ianmackenzie$elm_geometry$Vector3d$xyz,
+				$ianmackenzie$elm_geometry$Point3d$xCoordinate(model.hit.hitBBPos),
+				$ianmackenzie$elm_geometry$Point3d$yCoordinate(model.hit.hitBBPos),
+				$ianmackenzie$elm_geometry$Point3d$zCoordinate(model.hit.hitBBPos)),
+			A2(
+				$author$project$Shape$translateBy,
+				A2(
+					$ianmackenzie$elm_geometry$Vector3d$withLength,
+					$ianmackenzie$elm_units$Length$centimeters(
+						5 * $elm$core$Basics$sin(model.time)),
+					$ianmackenzie$elm_geometry$Direction3d$z),
+				A3(
+					$author$project$Shape$rotateAround,
+					$ianmackenzie$elm_geometry$Axis3d$z,
+					model.beeRot,
+					model.bee(model.time))))) : A2(
 		$author$project$Shape$translateBy,
 		A2(
 			$ianmackenzie$elm_geometry$Vector3d$withLength,
@@ -15575,7 +15943,7 @@ var $author$project$BeeCollision$view = function (model) {
 				$ianmackenzie$elm_geometry$Axis3d$z,
 				model.beeRot,
 				model.bee(model.time))));
-	var _v0 = $author$project$BeeCollision$pointLight(
+	var _v0 = $author$project$BeeInteractingFlower$pointLight(
 		{
 			chromaticity: $ianmackenzie$elm_3d_scene$Scene3d$Light$incandescent,
 			intensity: $ianmackenzie$elm_units$LuminousFlux$lumens(500),
@@ -15603,21 +15971,25 @@ var $author$project$BeeCollision$view = function (model) {
 						firstLightBall,
 						beeShape.shape,
 						model.mapObjects.shape,
-						A2($author$project$Skybox2$skybox, texturesList, 10000)
+						A2(
+						$author$project$Skybox2$skybox,
+						A2($elm$core$List$take, 6, texturesList),
+						10000),
+						model.hit.showHitSign ? hitsign : $ianmackenzie$elm_3d_scene$Scene3d$nothing
 					]),
-				$author$project$BeeCollision$debugs),
+				$author$project$BeeInteractingFlower$debugs),
 			exposure: $ianmackenzie$elm_3d_scene$Scene3d$exposureValue(6),
 			lights: A3($ianmackenzie$elm_3d_scene$Scene3d$threeLights, firstLight, thirdLight, softLighting),
 			toneMapping: $ianmackenzie$elm_3d_scene$Scene3d$hableFilmicToneMapping,
 			whiteBalance: $ianmackenzie$elm_3d_scene$Scene3d$Light$fluorescent
 		});
 };
-var $author$project$BeeCollision$main = $elm$browser$Browser$element(
-	{init: $author$project$BeeCollision$init, subscriptions: $author$project$BeeCollision$subscriptions, update: $author$project$BeeCollision$update, view: $author$project$BeeCollision$view});
-_Platform_export({'BeeCollision':{'init':$author$project$BeeCollision$main(
+var $author$project$BeeInteractingFlower$main = $elm$browser$Browser$element(
+	{init: $author$project$BeeInteractingFlower$init, subscriptions: $author$project$BeeInteractingFlower$subscriptions, update: $author$project$BeeInteractingFlower$update, view: $author$project$BeeInteractingFlower$view});
+_Platform_export({'BeeInteractingFlower':{'init':$author$project$BeeInteractingFlower$main(
 	$elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));
 
-  var app = Elm.BeeCollision.init({ node: document.getElementById("elm") });
+  var app = Elm.BeeInteractingFlower.init({ node: document.getElementById("elm") });
 }
 catch (e)
 {
