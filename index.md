@@ -24,6 +24,7 @@ For more details see [GitHub Flavored Markdown](https://guides.github.com/featur
 - Texture image [texture10](/image/texture10.jpg)
 - Texture image [texture11](/image/texture11.jpg)
 - Texture image [texture12](/image/texture12.jpg)
+
 ### Jekyll Themes
 
 Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/sharyuwu/sharyuwu.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
