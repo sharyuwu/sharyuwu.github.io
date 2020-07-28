@@ -28,7 +28,7 @@ Texture image [texture7](/image/texture7.jpg)
 
 Texture image [texture8](/image/texture8.png)
 
-Texture image [texture8](/image/texture9.png)
+Texture image [texture9](/image/texture9.png)
 
 ### Jekyll Themes
 
