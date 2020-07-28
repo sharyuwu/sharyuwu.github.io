@@ -12,16 +12,18 @@ BeeCollision [BeeCollision](/Deemo/beeCollision.html)
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
 ### Image
-Texture image [texture1](/image/texture1.png)
-Texture image [texture2](/image/texture2.jpg)
-Texture image [texture3](/image/texture3.jpg)
-Texture image [texture4](/image/texture4.jpg)
-Texture image [texture5](/image/texture5.jpg)
-Texture image [texture6](/image/texture6.jpg)
-Texture image [texture7](/image/texture7.jpg)
-Texture image [texture8](/image/texture8.png)
-Texture image [texture8](/image/texture9.png)
-
+- Texture image [texture1](/image/texture1.png)
+- Texture image [texture2](/image/texture2.jpg)
+- Texture image [texture3](/image/texture3.jpg)
+- Texture image [texture4](/image/texture4.png)
+- Texture image [texture5](/image/texture5.jpg)
+- Texture image [texture6](/image/texture6.jpg)
+- Texture image [texture7](/image/texture7.jpg)
+- Texture image [texture8](/image/texture8.png)
+- Texture image [texture9](/image/texture9.png)
+- Texture image [texture10](/image/texture10.jpg)
+- Texture image [texture11](/image/texture11.jpg)
+- Texture image [texture12](/image/texture12.jpg)
 ### Jekyll Themes
 
 Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/sharyuwu/sharyuwu.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
