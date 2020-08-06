@@ -7,8 +7,9 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 [A link to about page](/about)
 
 ### Deemo
-BeeCollision [BeeCollision](/Deemo/beeCollision.html)
-ShapeCreator [ShapeCreator](/Deemo/ShapeCreator.html)
+- BeeCollision [BeeCollision](/Deemo/beeCollision.html)
+- ShapeCreator [ShapeCreator](/Deemo/ShapeCreator.html)
+- ShapeCreator [ShapeCreator](/Deemo/ShapeCreator2.html)
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
