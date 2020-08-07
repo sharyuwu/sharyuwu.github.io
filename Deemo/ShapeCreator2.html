@@ -18844,14 +18844,17 @@ var $ianmackenzie$elm_3d_camera$Viewpoint3d$orbitZ = function (_v0) {
 	return $ianmackenzie$elm_3d_camera$Viewpoint3d$orbit(
 		{azimuth: azimuth, distance: distance, elevation: elevation, focalPoint: focalPoint, groundPlane: $ianmackenzie$elm_geometry$SketchPlane3d$xy});
 };
+var $author$project$Wrapper3D$relativeP = F2(
+	function (blockAmount, windowSize) {
+		return $author$project$Wrapper3D$unwrapQ(windowSize) / blockAmount;
+	});
+var $author$project$ShapeCreator$adjustHeight = function (model) {
+	return A2($author$project$Wrapper3D$relativeP, 600, model.height);
+};
 var $author$project$ShapeCreator$Reset = {$: 'Reset'};
 var $MacCASOutreach$graphicsvg$GraphicSVG$notifyTap = F2(
 	function (msg, shape) {
 		return A2($MacCASOutreach$graphicsvg$GraphicSVG$Tap, msg, shape);
-	});
-var $author$project$Wrapper3D$relativeP = F2(
-	function (blockAmount, windowSize) {
-		return $author$project$Wrapper3D$unwrapQ(windowSize) / blockAmount;
 	});
 var $MacCASOutreach$graphicsvg$GraphicSVG$RoundRect = F3(
 	function (a, b, c) {
@@ -18867,30 +18870,26 @@ var $author$project$ShapeCreator$angleDisplay = function (model) {
 			[
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					A2($author$project$Wrapper3D$relativeP, 2.6, model.height),
-					A2($author$project$Wrapper3D$relativeP, 2.4, model.height)),
+				_Utils_Tuple2(230, 250),
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$MacCASOutreach$graphicsvg$GraphicSVG$black,
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$size,
-						A2($author$project$Wrapper3D$relativeP, 50, model.height),
+						12,
 						$MacCASOutreach$graphicsvg$GraphicSVG$text(
 							'azimuth: ' + ($elm$core$String$fromInt(
 								$elm$core$Basics$round(
 									($author$project$Wrapper3D$unwrapQ(model.azimuth) * 180) / $elm$core$Basics$pi)) + 'º'))))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					A2($author$project$Wrapper3D$relativeP, 2.6, model.height),
-					A2($author$project$Wrapper3D$relativeP, 2.5, model.height)),
+				_Utils_Tuple2(230, 240),
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$MacCASOutreach$graphicsvg$GraphicSVG$black,
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$size,
-						A2($author$project$Wrapper3D$relativeP, 50, model.height),
+						12,
 						$MacCASOutreach$graphicsvg$GraphicSVG$text(
 							'elevation: ' + ($elm$core$String$fromInt(
 								$elm$core$Basics$round(
@@ -18900,20 +18899,14 @@ var $author$project$ShapeCreator$angleDisplay = function (model) {
 				$author$project$ShapeCreator$Reset,
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						A2($author$project$Wrapper3D$relativeP, 2.3, model.height),
-						A2($author$project$Wrapper3D$relativeP, 2.8, model.height)),
+					_Utils_Tuple2(260, 214),
 					$MacCASOutreach$graphicsvg$GraphicSVG$group(
 						_List_fromArray(
 							[
 								A2(
 								$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 								$MacCASOutreach$graphicsvg$GraphicSVG$green,
-								A3(
-									$MacCASOutreach$graphicsvg$GraphicSVG$roundedRect,
-									A2($author$project$Wrapper3D$relativeP, 10, model.height),
-									A2($author$project$Wrapper3D$relativeP, 15, model.height),
-									A2($author$project$Wrapper3D$relativeP, 60, model.height))),
+								A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 60, 40, 10)),
 								A2(
 								$MacCASOutreach$graphicsvg$GraphicSVG$move,
 								_Utils_Tuple2(0, 0),
@@ -18923,17 +18916,15 @@ var $author$project$ShapeCreator$angleDisplay = function (model) {
 									$MacCASOutreach$graphicsvg$GraphicSVG$centered(
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$size,
-											A2($author$project$Wrapper3D$relativeP, 37.5, model.height),
+											16,
 											$MacCASOutreach$graphicsvg$GraphicSVG$text('Reset')))))
 							]))))
 			]));
 };
-var $author$project$ShapeCreator$adjustHeight = function (model) {
-	return A2($author$project$Wrapper3D$relativeP, 600, model.height);
-};
-var $author$project$ShapeCreator$adjustWidth = function (model) {
-	return A2($author$project$Wrapper3D$relativeP, 1024, model.width);
-};
+var $MacCASOutreach$graphicsvg$GraphicSVG$scale = F2(
+	function (s, shape) {
+		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Scale, s, s, shape);
+	});
 var $author$project$ShapeCreator$Black = {$: 'Black'};
 var $author$project$ShapeCreator$Blue = {$: 'Blue'};
 var $author$project$ShapeCreator$BlueDown = {$: 'BlueDown'};
@@ -19455,9 +19446,7 @@ var $author$project$ShapeCreator$time3 = F5(
 				[
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						0,
-						A2($author$project$Wrapper3D$relativeP, 3.45, model.height)),
+					_Utils_Tuple2(0, 168),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						A4(
@@ -19472,32 +19461,22 @@ var $author$project$ShapeCreator$time3 = F5(
 	});
 var $author$project$ShapeCreator$titleColour = A3($MacCASOutreach$graphicsvg$GraphicSVG$rgb, 255, 112, 0);
 var $author$project$ShapeCreator$colours = function (model) {
-	var dropDownWords = $elm$core$Basics$round(
-		A2($author$project$Wrapper3D$relativeP, 60, model.height));
+	var mainRectWidth = 150;
+	var mainRectHeight = 364;
 	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
-				A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					0,
-					A2($author$project$Wrapper3D$relativeP, 35, model.height)),
 				A3(
-					$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
-					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
-					$MacCASOutreach$graphicsvg$GraphicSVG$lightGrey,
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-						A4($MacCASOutreach$graphicsvg$GraphicSVG$rgba, 255, 255, 255, 0.5),
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$rect,
-							A2($author$project$Wrapper3D$relativeP, 8.6, model.width),
-							A2($author$project$Wrapper3D$relativeP, 1.65, model.height))))),
+				$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+				$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
+				$MacCASOutreach$graphicsvg$GraphicSVG$lightGrey,
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					A4($MacCASOutreach$graphicsvg$GraphicSVG$rgba, 255, 255, 255, 0.5),
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, mainRectWidth, mainRectHeight))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					0,
-					A2($author$project$Wrapper3D$relativeP, 3.15, model.height)),
+				_Utils_Tuple2(0, mainRectHeight / 2),
 				A3(
 					$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
 					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
@@ -19505,21 +19484,16 @@ var $author$project$ShapeCreator$colours = function (model) {
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						$MacCASOutreach$graphicsvg$GraphicSVG$white,
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$rect,
-							A2($author$project$Wrapper3D$relativeP, 16, model.width),
-							A2($author$project$Wrapper3D$relativeP, 50, model.height))))),
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 100, 12)))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-A2($author$project$Wrapper3D$relativeP, 34.5, model.width),
-					A2($author$project$Wrapper3D$relativeP, 3.2, model.height)),
+				_Utils_Tuple2(-38, mainRectHeight / 2.05),
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$author$project$ShapeCreator$titleColour,
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$size,
-						A2($author$project$Wrapper3D$relativeP, 60, model.height),
+						10,
 						$MacCASOutreach$graphicsvg$GraphicSVG$italic(
 							$MacCASOutreach$graphicsvg$GraphicSVG$serif(
 								$MacCASOutreach$graphicsvg$GraphicSVG$text('3. Pick a Colour!')))))),
@@ -19535,13 +19509,11 @@ var $author$project$ShapeCreator$colours = function (model) {
 									$author$project$ShapeCreator$time3,
 									model,
 									ss,
-									A2($author$project$Wrapper3D$relativeP, 9, model.width),
+									140,
 									10,
 									A2(
 										$MacCASOutreach$graphicsvg$GraphicSVG$move,
-										_Utils_Tuple2(
-											-A2($author$project$Wrapper3D$relativeP, 18.9, model.width),
-											A2($author$project$Wrapper3D$relativeP, 3.5, model.height)),
+										_Utils_Tuple2(-65, 165),
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
 											$author$project$ShapeCreator$SetColour(ss),
@@ -19550,7 +19522,7 @@ var $author$project$ShapeCreator$colours = function (model) {
 												$MacCASOutreach$graphicsvg$GraphicSVG$black,
 												A2(
 													$MacCASOutreach$graphicsvg$GraphicSVG$size,
-													A2($author$project$Wrapper3D$relativeP, 60, model.height),
+													10,
 													$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
 														$MacCASOutreach$graphicsvg$GraphicSVG$text(
 															A2($author$project$ShapeCreator$clrString, model, ss)))))))));
@@ -19560,35 +19532,28 @@ var $author$project$ShapeCreator$colours = function (model) {
 					A2(
 						$elm$core$List$map,
 						function (x) {
-							return (-A2($author$project$Wrapper3D$relativeP, 60, model.height)) * x;
+							return (-10.2) * x;
 						},
-						A2($elm$core$List$range, 0, 40 * dropDownWords)))),
+						A2($elm$core$List$range, 0, 40)))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					0,
-					-A2($author$project$Wrapper3D$relativeP, 60, model.height)),
+				_Utils_Tuple2(0, -10),
 				A5(
 					$author$project$ShapeCreator$time3,
 					model,
 					$author$project$ShapeCreator$RGB,
-					A2($author$project$Wrapper3D$relativeP, 9, model.width),
-					A2($author$project$Wrapper3D$relativeP, 60, model.height),
+					140,
+					10,
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
 						$author$project$ShapeCreator$SetColour($author$project$ShapeCreator$RGB),
 						A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 							A4($MacCASOutreach$graphicsvg$GraphicSVG$rgba, 1, 1, 1, 0),
-							A2(
-								$MacCASOutreach$graphicsvg$GraphicSVG$rect,
-								A2($author$project$Wrapper3D$relativeP, 9, model.width),
-								A2($author$project$Wrapper3D$relativeP, 60, model.height)))))),
+							A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 140, 10))))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					A2($author$project$Wrapper3D$relativeP, 11.5, model.height),
-					-A2($author$project$Wrapper3D$relativeP, 5.2, model.height)),
+				_Utils_Tuple2(50, -130),
 				$MacCASOutreach$graphicsvg$GraphicSVG$group(
 					_List_fromArray(
 						[
@@ -19610,17 +19575,14 @@ var $author$project$ShapeCreator$colours = function (model) {
 										}),
 									A2(
 										$MacCASOutreach$graphicsvg$GraphicSVG$move,
-										_Utils_Tuple2(
-											-A2($author$project$Wrapper3D$relativeP, 6.3, model.height),
-											-A2($author$project$Wrapper3D$relativeP, 60, model.height)),
+										_Utils_Tuple2(-95, -10),
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
 											$elm$core$Basics$degrees(-30),
 											A2(
 												$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 												A3($MacCASOutreach$graphicsvg$GraphicSVG$rgb, 255, 10, 10),
-												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(
-													A2($author$project$Wrapper3D$relativeP, 75, model.height)))))))),
+												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(8))))))),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseUp,
 							$author$project$ShapeCreator$ButtonDown($author$project$ShapeCreator$None),
@@ -19639,17 +19601,14 @@ var $author$project$ShapeCreator$colours = function (model) {
 										}),
 									A2(
 										$MacCASOutreach$graphicsvg$GraphicSVG$move,
-										_Utils_Tuple2(
-											-A2($author$project$Wrapper3D$relativeP, 7.1, model.height),
-											-A2($author$project$Wrapper3D$relativeP, 66.6, model.height)),
+										_Utils_Tuple2(-84, -9),
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
 											$elm$core$Basics$degrees(30),
 											A2(
 												$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 												A3($MacCASOutreach$graphicsvg$GraphicSVG$rgb, 180, 140, 140),
-												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(
-													A2($author$project$Wrapper3D$relativeP, 75, model.height)))))))),
+												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(8))))))),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseUp,
 							$author$project$ShapeCreator$ButtonDown($author$project$ShapeCreator$None),
@@ -19668,17 +19627,14 @@ var $author$project$ShapeCreator$colours = function (model) {
 										}),
 									A2(
 										$MacCASOutreach$graphicsvg$GraphicSVG$move,
-										_Utils_Tuple2(
-											-A2($author$project$Wrapper3D$relativeP, 9.2, model.height),
-											-A2($author$project$Wrapper3D$relativeP, 60, model.height)),
+										_Utils_Tuple2(-65, -10),
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
 											$elm$core$Basics$degrees(-30),
 											A2(
 												$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 												A3($MacCASOutreach$graphicsvg$GraphicSVG$rgb, 10, 255, 10),
-												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(
-													A2($author$project$Wrapper3D$relativeP, 75, model.height)))))))),
+												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(8))))))),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseUp,
 							$author$project$ShapeCreator$ButtonDown($author$project$ShapeCreator$None),
@@ -19697,17 +19653,14 @@ var $author$project$ShapeCreator$colours = function (model) {
 										}),
 									A2(
 										$MacCASOutreach$graphicsvg$GraphicSVG$move,
-										_Utils_Tuple2(
-											-A2($author$project$Wrapper3D$relativeP, 11.1, model.height),
-											-A2($author$project$Wrapper3D$relativeP, 66.6, model.height)),
+										_Utils_Tuple2(-54, -9),
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
 											$elm$core$Basics$degrees(30),
 											A2(
 												$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 												A3($MacCASOutreach$graphicsvg$GraphicSVG$rgb, 140, 180, 140),
-												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(
-													A2($author$project$Wrapper3D$relativeP, 75, model.height)))))))),
+												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(8))))))),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseUp,
 							$author$project$ShapeCreator$ButtonDown($author$project$ShapeCreator$None),
@@ -19726,17 +19679,14 @@ var $author$project$ShapeCreator$colours = function (model) {
 										}),
 									A2(
 										$MacCASOutreach$graphicsvg$GraphicSVG$move,
-										_Utils_Tuple2(
-											-A2($author$project$Wrapper3D$relativeP, 17.14, model.height),
-											-A2($author$project$Wrapper3D$relativeP, 66.6, model.height)),
+										_Utils_Tuple2(-34.4, -9),
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
 											$elm$core$Basics$degrees(-30),
 											A2(
 												$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 												A3($MacCASOutreach$graphicsvg$GraphicSVG$rgb, 10, 10, 255),
-												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(
-													A2($author$project$Wrapper3D$relativeP, 75, model.height)))))))),
+												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(8))))))),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseUp,
 							$author$project$ShapeCreator$ButtonDown($author$project$ShapeCreator$None),
@@ -19755,22 +19705,17 @@ var $author$project$ShapeCreator$colours = function (model) {
 										}),
 									A2(
 										$MacCASOutreach$graphicsvg$GraphicSVG$move,
-										_Utils_Tuple2(
-											-A2($author$project$Wrapper3D$relativeP, 25, model.height),
-											-A2($author$project$Wrapper3D$relativeP, 66.6, model.height)),
+										_Utils_Tuple2(-24, -9),
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
 											$elm$core$Basics$degrees(30),
 											A2(
 												$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 												A3($MacCASOutreach$graphicsvg$GraphicSVG$rgb, 140, 140, 180),
-												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(
-													A2($author$project$Wrapper3D$relativeP, 75, model.height)))))))),
+												$MacCASOutreach$graphicsvg$GraphicSVG$triangle(8))))))),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$move,
-							_Utils_Tuple2(
-								-A2($author$project$Wrapper3D$relativeP, 6.6, model.height),
-								-A2($author$project$Wrapper3D$relativeP, 24, model.height)),
+							_Utils_Tuple2(-95, -25),
 							A2($author$project$ShapeCreator$code, model, 'lighter')),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
@@ -19793,9 +19738,7 @@ var $author$project$ShapeCreator$colours = function (model) {
 									A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 32, 10)))),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$move,
-							_Utils_Tuple2(
-								-A2($author$project$Wrapper3D$relativeP, 13.3, model.height),
-								-A2($author$project$Wrapper3D$relativeP, 24, model.height)),
+							_Utils_Tuple2(-38, -25),
 							A2($author$project$ShapeCreator$code, model, 'darker')),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
@@ -19818,9 +19761,7 @@ var $author$project$ShapeCreator$colours = function (model) {
 									A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 32, 10)))),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$move,
-							_Utils_Tuple2(
-								-A2($author$project$Wrapper3D$relativeP, 6, model.height),
-								-A2($author$project$Wrapper3D$relativeP, 15, model.height)),
+							_Utils_Tuple2(-100, -40),
 							A2($author$project$ShapeCreator$code, model, 'colourful')),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
@@ -19889,9 +19830,7 @@ var $author$project$ShapeCreator$colours = function (model) {
 									A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 40, 10)))),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$move,
-							_Utils_Tuple2(
-								-A2($author$project$Wrapper3D$relativeP, 13.6, model.height),
-								-A2($author$project$Wrapper3D$relativeP, 15, model.height)),
+							_Utils_Tuple2(-44, -40),
 							A2($author$project$ShapeCreator$code, model, 'colourless')),
 							A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
@@ -20015,13 +19954,9 @@ var $author$project$ShapeCreateAssets$listCode = function (list) {
 			list));
 	return '  ' + ('[' + (listSring + ']'));
 };
-var $MacCASOutreach$graphicsvg$GraphicSVG$scale = F2(
-	function (s, shape) {
-		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Scale, s, s, shape);
-	});
 var $author$project$ShapeCreator$polygonList = function (model) {
-	var mainRectWidth = 380 * $author$project$ShapeCreator$adjustWidth(model);
-	var mainRectHeight = 66 * $author$project$ShapeCreator$adjustHeight(model);
+	var mainRectWidth = 480;
+	var mainRectHeight = 66;
 	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
@@ -20035,9 +19970,7 @@ var $author$project$ShapeCreator$polygonList = function (model) {
 					A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, mainRectWidth, mainRectHeight))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-(135 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2),
+				_Utils_Tuple2(-165, mainRectHeight / 2),
 				A3(
 					$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
 					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
@@ -20045,38 +19978,29 @@ var $author$project$ShapeCreator$polygonList = function (model) {
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						$MacCASOutreach$graphicsvg$GraphicSVG$white,
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$rect,
-							69 * $author$project$ShapeCreator$adjustWidth(model),
-							22 * $author$project$ShapeCreator$adjustHeight(model))))),
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 90, 22)))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-(155 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2.3),
+				_Utils_Tuple2(-195, mainRectHeight / 2.3),
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$author$project$ShapeCreator$titleColour,
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$size,
-						17 * $author$project$ShapeCreator$adjustHeight(model),
+						17,
 						$MacCASOutreach$graphicsvg$GraphicSVG$italic(
 							$MacCASOutreach$graphicsvg$GraphicSVG$serif(
 								$MacCASOutreach$graphicsvg$GraphicSVG$text('Polygon')))))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					((-mainRectWidth) / 2) + (10 * $author$project$ShapeCreator$adjustWidth(model)),
-					0),
+				_Utils_Tuple2(((-mainRectWidth) / 2) + 10, 0),
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$scale,
 					1.5,
 					A2($author$project$ShapeCreator$copiable, model, 'polyPoints = '))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					((-mainRectWidth) / 2) + (10 * $author$project$ShapeCreator$adjustWidth(model)),
-					(-mainRectHeight) / 3.5),
+				_Utils_Tuple2(((-mainRectWidth) / 2) + 10, (-mainRectHeight) / 3.5),
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$scale,
 					1,
@@ -20087,9 +20011,7 @@ var $author$project$ShapeCreator$polygonList = function (model) {
 							$author$project$ShapeCreator$getPolygonDic(model))))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-(30 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2),
+				_Utils_Tuple2(-40, mainRectHeight / 2),
 				A3(
 					$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
 					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
@@ -20102,25 +20024,19 @@ var $author$project$ShapeCreator$polygonList = function (model) {
 							137,
 							5,
 							0.6 + (0.4 * $elm$core$Basics$sin(5 * model.time))),
-						A3(
-							$MacCASOutreach$graphicsvg$GraphicSVG$roundedRect,
-							105 * $author$project$ShapeCreator$adjustWidth(model),
-							22 * $author$project$ShapeCreator$adjustHeight(model),
-							5 * $author$project$ShapeCreator$adjustHeight(model))))),
+						A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 140, 22, 5)))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
 				$author$project$ShapeCreator$NextPolygon,
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						-(73 * $author$project$ShapeCreator$adjustWidth(model)),
-						mainRectHeight / 2.3),
+					_Utils_Tuple2(-93, mainRectHeight / 2.3),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						$MacCASOutreach$graphicsvg$GraphicSVG$black,
 						A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$size,
-							16 * $author$project$ShapeCreator$adjustHeight(model),
+							16,
 							$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
 								$MacCASOutreach$graphicsvg$GraphicSVG$text('Next Polygon'))))))
 			]));
@@ -20148,9 +20064,7 @@ var $author$project$ShapeCreator$time2 = F5(
 				[
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						0,
-						8 * $author$project$ShapeCreator$adjustHeight(model)),
+					_Utils_Tuple2(0, 8),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						A4(
@@ -20164,10 +20078,8 @@ var $author$project$ShapeCreator$time2 = F5(
 				])) : shape;
 	});
 var $author$project$ShapeCreator$stamps = function (model) {
-	var mainRectWidth = 112 * $author$project$ShapeCreator$adjustWidth(model);
-	var mainRectHeight = 45 * $author$project$ShapeCreator$adjustHeight(model);
-	var dropDownWords = $elm$core$Basics$round(
-		A2($author$project$Wrapper3D$relativeP, 60, model.height));
+	var mainRectWidth = 150;
+	var mainRectHeight = 45;
 	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
@@ -20189,21 +20101,16 @@ var $author$project$ShapeCreator$stamps = function (model) {
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						$MacCASOutreach$graphicsvg$GraphicSVG$white,
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$rect,
-							80 * $author$project$ShapeCreator$adjustWidth(model),
-							12 * $author$project$ShapeCreator$adjustHeight(model))))),
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 100, 12)))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-(30 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2.3),
+				_Utils_Tuple2(-40, mainRectHeight / 2.3),
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$author$project$ShapeCreator$titleColour,
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$size,
-						10 * $author$project$ShapeCreator$adjustHeight(model),
+						10,
 						$MacCASOutreach$graphicsvg$GraphicSVG$italic(
 							$MacCASOutreach$graphicsvg$GraphicSVG$serif(
 								$MacCASOutreach$graphicsvg$GraphicSVG$text('2. Pick a Material!')))))),
@@ -20219,13 +20126,11 @@ var $author$project$ShapeCreator$stamps = function (model) {
 									$author$project$ShapeCreator$time2,
 									model,
 									ss,
-									A2($author$project$Wrapper3D$relativeP, 9.5, model.width),
-									10 * $author$project$ShapeCreator$adjustHeight(model),
+									140,
+									10,
 									A2(
 										$MacCASOutreach$graphicsvg$GraphicSVG$move,
-										_Utils_Tuple2(
-											-(50 * $author$project$ShapeCreator$adjustWidth(model)),
-											5 * $author$project$ShapeCreator$adjustHeight(model)),
+										_Utils_Tuple2(-60, 5),
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
 											$author$project$ShapeCreator$Draw(ss),
@@ -20234,7 +20139,7 @@ var $author$project$ShapeCreator$stamps = function (model) {
 												$MacCASOutreach$graphicsvg$GraphicSVG$black,
 												A2(
 													$MacCASOutreach$graphicsvg$GraphicSVG$size,
-													10 * $author$project$ShapeCreator$adjustHeight(model),
+													10,
 													$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
 														$MacCASOutreach$graphicsvg$GraphicSVG$text(
 															A2($author$project$ShapeCreator$stampString, model, ss)))))))));
@@ -20244,9 +20149,9 @@ var $author$project$ShapeCreator$stamps = function (model) {
 					A2(
 						$elm$core$List$map,
 						function (x) {
-							return (-(10 * $author$project$ShapeCreator$adjustHeight(model))) * x;
+							return (-10.5) * x;
 						},
-						A2($elm$core$List$range, 0, 20 * dropDownWords))))
+						A2($elm$core$List$range, 0, 20))))
 			]));
 };
 var $author$project$ShapeCreator$CustomPolygon = {$: 'CustomPolygon'};
@@ -20298,9 +20203,7 @@ var $author$project$ShapeCreator$time1 = F5(
 				[
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						20 * $author$project$ShapeCreator$adjustWidth(model),
-						58 * $author$project$ShapeCreator$adjustHeight(model)),
+					_Utils_Tuple2(0, 59),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						A4(
@@ -20314,10 +20217,8 @@ var $author$project$ShapeCreator$time1 = F5(
 				])) : shape;
 	});
 var $author$project$ShapeCreator$stencils = function (model) {
-	var mainRectWidth = 235 * $author$project$ShapeCreator$adjustWidth(model);
-	var mainRectHeight = 145 * $author$project$ShapeCreator$adjustHeight(model);
-	var dropDownWords = $elm$core$Basics$round(
-		A2($author$project$Wrapper3D$relativeP, 60, model.height));
+	var mainRectWidth = 293;
+	var mainRectHeight = 149;
 	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
@@ -20331,9 +20232,7 @@ var $author$project$ShapeCreator$stencils = function (model) {
 					A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, mainRectWidth, mainRectHeight))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-(70 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2),
+				_Utils_Tuple2(-88, mainRectHeight / 2),
 				A3(
 					$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
 					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
@@ -20341,15 +20240,10 @@ var $author$project$ShapeCreator$stencils = function (model) {
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						$MacCASOutreach$graphicsvg$GraphicSVG$white,
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$rect,
-							60 * $author$project$ShapeCreator$adjustWidth(model),
-							12 * $author$project$ShapeCreator$adjustHeight(model))))),
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 80, 12)))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-(95 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2.1),
+				_Utils_Tuple2(-120, mainRectHeight / 2.1),
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$author$project$ShapeCreator$titleColour,
@@ -20366,20 +20260,16 @@ var $author$project$ShapeCreator$stencils = function (model) {
 						function (ss, y) {
 							return A2(
 								$MacCASOutreach$graphicsvg$GraphicSVG$move,
-								_Utils_Tuple2(
-									-(20 * $author$project$ShapeCreator$adjustWidth(model)),
-									y),
+								_Utils_Tuple2(0, y),
 								A5(
 									$author$project$ShapeCreator$time1,
 									model,
 									ss,
-									220 * $author$project$ShapeCreator$adjustWidth(model),
-									10 * $author$project$ShapeCreator$adjustHeight(model),
+									280,
+									10,
 									A2(
 										$MacCASOutreach$graphicsvg$GraphicSVG$move,
-										_Utils_Tuple2(
-											-(90 * $author$project$ShapeCreator$adjustWidth(model)),
-											55 * $author$project$ShapeCreator$adjustHeight(model)),
+										_Utils_Tuple2(-130, 55),
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
 											$author$project$ShapeCreator$Sten(ss),
@@ -20398,9 +20288,9 @@ var $author$project$ShapeCreator$stencils = function (model) {
 					A2(
 						$elm$core$List$map,
 						function (x) {
-							return (-(10 * $author$project$ShapeCreator$adjustHeight(model))) * x;
+							return (-10.5) * x;
 						},
-						A2($elm$core$List$range, 0, 20 * dropDownWords))))
+						A2($elm$core$List$range, 0, 20))))
 			]));
 };
 var $author$project$ShapeCreator$Move = {$: 'Move'};
@@ -20431,9 +20321,7 @@ var $author$project$ShapeCreator$time4 = F5(
 				[
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						0,
-						18 * $author$project$ShapeCreator$adjustHeight(model)),
+					_Utils_Tuple2(0, 18),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						A4(
@@ -20462,10 +20350,8 @@ var $author$project$ShapeCreator$transformString = F2(
 		}
 	});
 var $author$project$ShapeCreator$transforms = function (model) {
-	var mainRectWidth = 140 * $author$project$ShapeCreator$adjustWidth(model);
-	var mainRectHeight = 70.5 * $author$project$ShapeCreator$adjustHeight(model);
-	var dropDownWords = $elm$core$Basics$round(
-		A2($author$project$Wrapper3D$relativeP, 60, model.height));
+	var mainRectWidth = 175;
+	var mainRectHeight = 70.5;
 	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
@@ -20479,9 +20365,7 @@ var $author$project$ShapeCreator$transforms = function (model) {
 					A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, mainRectWidth, mainRectHeight))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-(20 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2),
+				_Utils_Tuple2(-25, mainRectHeight / 2),
 				A3(
 					$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
 					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
@@ -20489,21 +20373,16 @@ var $author$project$ShapeCreator$transforms = function (model) {
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						$MacCASOutreach$graphicsvg$GraphicSVG$white,
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$rect,
-							80 * $author$project$ShapeCreator$adjustWidth(model),
-							12 * $author$project$ShapeCreator$adjustHeight(model))))),
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 100, 12)))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-(55 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2.2),
+				_Utils_Tuple2(-68, mainRectHeight / 2.2),
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$author$project$ShapeCreator$titleColour,
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$size,
-						10 * $author$project$ShapeCreator$adjustHeight(model),
+						10,
 						$MacCASOutreach$graphicsvg$GraphicSVG$italic(
 							$MacCASOutreach$graphicsvg$GraphicSVG$serif(
 								$MacCASOutreach$graphicsvg$GraphicSVG$text('4. Apply Transforms!')))))),
@@ -20519,13 +20398,11 @@ var $author$project$ShapeCreator$transforms = function (model) {
 									$author$project$ShapeCreator$time4,
 									model,
 									ss,
-									120 * $author$project$ShapeCreator$adjustWidth(model),
-									10 * $author$project$ShapeCreator$adjustHeight(model),
+									150,
+									10,
 									A2(
 										$MacCASOutreach$graphicsvg$GraphicSVG$move,
-										_Utils_Tuple2(
-											-(60 * $author$project$ShapeCreator$adjustWidth(model)),
-											15 * $author$project$ShapeCreator$adjustHeight(model)),
+										_Utils_Tuple2(-80, 15),
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
 											$author$project$ShapeCreator$Toggle(ss),
@@ -20534,7 +20411,7 @@ var $author$project$ShapeCreator$transforms = function (model) {
 												$MacCASOutreach$graphicsvg$GraphicSVG$black,
 												A2(
 													$MacCASOutreach$graphicsvg$GraphicSVG$size,
-													10 * $author$project$ShapeCreator$adjustHeight(model),
+													10,
 													$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
 														$MacCASOutreach$graphicsvg$GraphicSVG$text(
 															A2($author$project$ShapeCreator$transformString, model, ss)))))))));
@@ -20544,16 +20421,14 @@ var $author$project$ShapeCreator$transforms = function (model) {
 					A2(
 						$elm$core$List$map,
 						function (x) {
-							return (-(10 * $author$project$ShapeCreator$adjustHeight(model))) * x;
+							return (-10.5) * x;
 						},
-						A2($elm$core$List$range, 0, 20 * dropDownWords))))
+						A2($elm$core$List$range, 0, 20))))
 			]));
 };
 var $author$project$ShapeCreator$tweaks = function (model) {
-	var mainRectWidth = 120 * $author$project$ShapeCreator$adjustWidth(model);
-	var mainRectHeight = 181 * $author$project$ShapeCreator$adjustHeight(model);
-	var dropDownWords = $elm$core$Basics$round(
-		A2($author$project$Wrapper3D$relativeP, 60, model.height));
+	var mainRectWidth = 150;
+	var mainRectHeight = 181;
 	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
@@ -20567,9 +20442,7 @@ var $author$project$ShapeCreator$tweaks = function (model) {
 					A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, mainRectWidth, mainRectHeight))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-(20 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2),
+				_Utils_Tuple2(-25, mainRectHeight / 2),
 				A3(
 					$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
 					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
@@ -20577,21 +20450,16 @@ var $author$project$ShapeCreator$tweaks = function (model) {
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						$MacCASOutreach$graphicsvg$GraphicSVG$white,
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$rect,
-							50 * $author$project$ShapeCreator$adjustWidth(model),
-							12 * $author$project$ShapeCreator$adjustHeight(model))))),
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 60, 12)))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-(38 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2.05),
+				_Utils_Tuple2(-50, mainRectHeight / 2.05),
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$author$project$ShapeCreator$titleColour,
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$size,
-						10 * $author$project$ShapeCreator$adjustHeight(model),
+						10,
 						$MacCASOutreach$graphicsvg$GraphicSVG$italic(
 							$MacCASOutreach$graphicsvg$GraphicSVG$serif(
 								$MacCASOutreach$graphicsvg$GraphicSVG$text('5. Tweak it!')))))),
@@ -20606,9 +20474,7 @@ var $author$project$ShapeCreator$tweaks = function (model) {
 							var y = _v1.b;
 							return A2(
 								$MacCASOutreach$graphicsvg$GraphicSVG$move,
-								_Utils_Tuple2(
-									(-(28 * $author$project$ShapeCreator$adjustWidth(model))) + x,
-									(75 * $author$project$ShapeCreator$adjustHeight(model)) + y),
+								_Utils_Tuple2((-35) + x, 75 + y),
 								A2(
 									$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
 									msg,
@@ -20617,7 +20483,7 @@ var $author$project$ShapeCreator$tweaks = function (model) {
 										$MacCASOutreach$graphicsvg$GraphicSVG$black,
 										A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$size,
-											10 * $author$project$ShapeCreator$adjustHeight(model),
+											10,
 											$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
 												$MacCASOutreach$graphicsvg$GraphicSVG$text(str))))));
 						}),
@@ -20938,20 +20804,16 @@ var $author$project$ShapeCreator$tweaks = function (model) {
 							function (idx) {
 								return _List_fromArray(
 									[
-										_Utils_Tuple2(
-										-A2($author$project$Wrapper3D$relativeP, 20, model.height),
-										-(A2($author$project$Wrapper3D$relativeP, 60, model.height) * idx)),
-										_Utils_Tuple2(
-										A2($author$project$Wrapper3D$relativeP, 15, model.height),
-										-(A2($author$project$Wrapper3D$relativeP, 60, model.height) * idx))
+										_Utils_Tuple2(-30, -(10 * idx)),
+										_Utils_Tuple2(40, -(10 * idx))
 									]);
 							},
-							A2($elm$core$List$range, 0, 20 * dropDownWords)))))
+							A2($elm$core$List$range, 0, 20)))))
 			]));
 };
 var $author$project$ShapeCreator$yourCode = function (model) {
-	var mainRectWidth = 235 * $author$project$ShapeCreator$adjustWidth(model);
-	var mainRectHeight = 50 * $author$project$ShapeCreator$adjustHeight(model);
+	var mainRectWidth = 298;
+	var mainRectHeight = 50;
 	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
@@ -20965,9 +20827,7 @@ var $author$project$ShapeCreator$yourCode = function (model) {
 					A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, mainRectWidth, mainRectHeight))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					((-mainRectWidth) / 2) + (50 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2),
+				_Utils_Tuple2(-85, mainRectHeight / 2),
 				A3(
 					$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
 					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
@@ -20975,47 +20835,36 @@ var $author$project$ShapeCreator$yourCode = function (model) {
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						$MacCASOutreach$graphicsvg$GraphicSVG$white,
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$rect,
-							80 * $author$project$ShapeCreator$adjustWidth(model),
-							12 * $author$project$ShapeCreator$adjustHeight(model))))),
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 100, 12)))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					((-mainRectWidth) / 2) + (18 * $author$project$ShapeCreator$adjustWidth(model)),
-					mainRectHeight / 2.4),
+				_Utils_Tuple2(-125, mainRectHeight / 2.4),
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$author$project$ShapeCreator$titleColour,
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$size,
-						10 * $author$project$ShapeCreator$adjustHeight(model),
+						10,
 						$MacCASOutreach$graphicsvg$GraphicSVG$italic(
 							$MacCASOutreach$graphicsvg$GraphicSVG$serif(
 								$MacCASOutreach$graphicsvg$GraphicSVG$text('6. Copy Your Code!')))))),
 				A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(
-					-(105 * $author$project$ShapeCreator$adjustWidth(model)),
-					45 * $author$project$ShapeCreator$adjustHeight(model)),
+				_Utils_Tuple2(-130, 45),
 				$MacCASOutreach$graphicsvg$GraphicSVG$group(
 					_Utils_ap(
 						_List_fromArray(
 							[
 								A2(
 								$MacCASOutreach$graphicsvg$GraphicSVG$move,
-								_Utils_Tuple2(
-									-A2($author$project$Wrapper3D$relativeP, 60, model.height),
-									-A2($author$project$Wrapper3D$relativeP, 15, model.height)),
+								_Utils_Tuple2(-10, -40),
 								A2(
 									$author$project$ShapeCreator$copiable,
 									model,
 									A2($author$project$ShapeCreator$stencilString, model, model.shape))),
 								A2(
 								$MacCASOutreach$graphicsvg$GraphicSVG$move,
-								_Utils_Tuple2(
-									0,
-									-(52 * $author$project$ShapeCreator$adjustHeight(model))),
+								_Utils_Tuple2(0, -52),
 								A2(
 									$author$project$ShapeCreator$copiable,
 									model,
@@ -21050,101 +20899,77 @@ var $author$project$ShapeCreator$yourCode = function (model) {
 											_Utils_Tuple2(model.hasMove, $author$project$ShapeCreator$Move)
 										]))),
 							_List_fromArray(
-								[
-									-(62 * $author$project$ShapeCreator$adjustHeight(model)),
-									-(70 * $author$project$ShapeCreator$adjustHeight(model)),
-									-(80 * $author$project$ShapeCreator$adjustHeight(model)),
-									-(90 * $author$project$ShapeCreator$adjustHeight(model)),
-									-(100 * $author$project$ShapeCreator$adjustHeight(model)),
-									-(110 * $author$project$ShapeCreator$adjustHeight(model)),
-									-(120 * $author$project$ShapeCreator$adjustHeight(model))
-								])))))
+								[-62, -70, -80, -90, -100, -110, -120])))))
 			]));
 };
 var $author$project$ShapeCreator$shapeCreator = function (model) {
 	return A2(
 		$MacCASOutreach$graphicsvg$GraphicSVG$scale,
-		2,
+		2 * $author$project$ShapeCreator$adjustHeight(model),
 		$MacCASOutreach$graphicsvg$GraphicSVG$group(
 			_List_fromArray(
 				[
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						-(172 * $author$project$ShapeCreator$adjustWidth(model)),
-						95 * $author$project$ShapeCreator$adjustHeight(model)),
+					_Utils_Tuple2(-205, 95),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$scale,
 						0.65,
 						$author$project$ShapeCreator$stencils(model))),
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						0,
-						95 * $author$project$ShapeCreator$adjustHeight(model)),
+					_Utils_Tuple2(0, 95),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$scale,
 						0.8,
 						$author$project$ShapeCreator$stamps(model))),
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						200 * $author$project$ShapeCreator$adjustWidth(model),
-						-(12 * $author$project$ShapeCreator$adjustHeight(model))),
+					_Utils_Tuple2(240, -5),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$scale,
 						0.71,
 						$author$project$ShapeCreator$colours(model))),
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						-(200 * $author$project$ShapeCreator$adjustWidth(model)),
-						15 * $author$project$ShapeCreator$adjustHeight(model)),
+					_Utils_Tuple2(-240, 15),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$scale,
 						0.7,
 						$author$project$ShapeCreator$transforms(model))),
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						-(207 * $author$project$ShapeCreator$adjustWidth(model)),
-						-(80 * $author$project$ShapeCreator$adjustHeight(model))),
+					_Utils_Tuple2(-250, -80),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$scale,
 						0.7,
 						$author$project$ShapeCreator$tweaks(model))),
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						0,
-						-(80 * $author$project$ShapeCreator$adjustHeight(model))),
+					_Utils_Tuple2(0, -80),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$scale,
 						0.8,
 						$author$project$ShapeCreator$yourCode(model))),
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(
-						0,
-						-(130 * $author$project$ShapeCreator$adjustHeight(model))),
+					_Utils_Tuple2(0, -130),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$scale,
 						0.5,
 						$author$project$ShapeCreator$polygonList(model)))
 				])));
 };
-var $author$project$ShapeCreator$windowWidth = function (model) {
-	return $author$project$Wrapper3D$unwrapQ(model.width);
-};
 var $author$project$ShapeCreator$overlay = function (model) {
 	return _List_fromArray(
 		[
 			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(
-				(-$author$project$ShapeCreator$windowWidth(model)) / 20,
-				0),
-			$author$project$ShapeCreator$angleDisplay(model)),
+			$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+			1 * $author$project$ShapeCreator$adjustHeight(model),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-40, 0),
+				$author$project$ShapeCreator$angleDisplay(model))),
 			$author$project$ShapeCreator$shapeCreator(model)
 		]);
 };
