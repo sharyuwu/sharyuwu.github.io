@@ -18856,13 +18856,6 @@ var $ianmackenzie$elm_3d_camera$Viewpoint3d$orbitZ = function (_v0) {
 	return $ianmackenzie$elm_3d_camera$Viewpoint3d$orbit(
 		{azimuth: azimuth, distance: distance, elevation: elevation, focalPoint: focalPoint, groundPlane: $ianmackenzie$elm_geometry$SketchPlane3d$xy});
 };
-var $author$project$Wrapper3D$relativeP = F2(
-	function (blockAmount, windowSize) {
-		return $author$project$Wrapper3D$unwrapQ(windowSize) / blockAmount;
-	});
-var $author$project$ShapeCreator$adjustHeight = function (model) {
-	return A2($author$project$Wrapper3D$relativeP, 600, model.height);
-};
 var $author$project$ShapeCreator$Reset = {$: 'Reset'};
 var $MacCASOutreach$graphicsvg$GraphicSVG$notifyTap = F2(
 	function (msg, shape) {
@@ -18932,6 +18925,21 @@ var $author$project$ShapeCreator$angleDisplay = function (model) {
 											$MacCASOutreach$graphicsvg$GraphicSVG$text('Reset')))))
 							]))))
 			]));
+};
+var $author$project$Wrapper3D$relativeP = F2(
+	function (blockAmount, windowSize) {
+		return $author$project$Wrapper3D$unwrapQ(windowSize) / blockAmount;
+	});
+var $author$project$ShapeCreator$adjustHeight = function (model) {
+	return A2($author$project$Wrapper3D$relativeP, 600, model.height);
+};
+var $author$project$ShapeCreator$adjustWidth = function (model) {
+	return A2($author$project$Wrapper3D$relativeP, 1260, model.width);
+};
+var $author$project$ShapeCreator$ratioHelper = function (model) {
+	return (_Utils_cmp(
+		$author$project$ShapeCreator$adjustHeight(model),
+		$author$project$ShapeCreator$adjustWidth(model)) < 0) ? $author$project$ShapeCreator$adjustHeight(model) : $author$project$ShapeCreator$adjustWidth(model);
 };
 var $MacCASOutreach$graphicsvg$GraphicSVG$scale = F2(
 	function (s, shape) {
@@ -20917,7 +20925,7 @@ var $author$project$ShapeCreator$yourCode = function (model) {
 var $author$project$ShapeCreator$shapeCreator = function (model) {
 	return A2(
 		$MacCASOutreach$graphicsvg$GraphicSVG$scale,
-		2 * $author$project$ShapeCreator$adjustHeight(model),
+		2 * $author$project$ShapeCreator$ratioHelper(model),
 		$MacCASOutreach$graphicsvg$GraphicSVG$group(
 			_List_fromArray(
 				[
@@ -20977,7 +20985,7 @@ var $author$project$ShapeCreator$overlay = function (model) {
 		[
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$scale,
-			1 * $author$project$ShapeCreator$adjustHeight(model),
+			1 * $author$project$ShapeCreator$ratioHelper(model),
 			A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
 				_Utils_Tuple2(-40, 0),
