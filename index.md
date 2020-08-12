@@ -9,7 +9,7 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 ### Deemo
 - BeeCollision [BeeCollision](/Deemo/beeCollision.html)
 - ShapeCreator [ShapeCreator](/Deemo/ShapeCreator.html)
-- ShapeCreator [ShapeCreator](/Deemo/ShapeCreator2.html)
+- ShapeCreator [ShapeCreator2](/Deemo/ShapeCreator2.html)
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
@@ -26,6 +26,7 @@ For more details see [GitHub Flavored Markdown](https://guides.github.com/featur
 - Texture image [texture10](/image/texture10.jpg)
 - Texture image [texture11](/image/texture11.jpg)
 - Texture image [texture12](/image/texture12.jpg)
+- Texture image [satellite](/image/dec.png)
 
 ### Jekyll Themes
 
