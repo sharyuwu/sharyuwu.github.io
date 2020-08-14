@@ -27,6 +27,7 @@ For more details see [GitHub Flavored Markdown](https://guides.github.com/featur
 - Texture image [texture11](/image/texture11.jpg)
 - Texture image [texture12](/image/texture12.jpg)
 - Texture image [satellite](/image/dec.png)
+- Texture image [satellite](/image/solarCellBroken.png)
 
 ### Jekyll Themes
 
