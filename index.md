@@ -30,6 +30,7 @@ For more details see [GitHub Flavored Markdown](https://guides.github.com/featur
 - Texture image [satellite](/image/solarCellBroken.png)
 - Texture image [satellite](/image/decBroken1.png)
 - Texture image [satellite](/image/decBroken2.png)
+- Texture image [jupiter](/image/jupiter1.jpg)
 
 ### Jekyll Themes
 
