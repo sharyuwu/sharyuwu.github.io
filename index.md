@@ -11,7 +11,7 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 - ShapeCreator [ShapeCreator](/Deemo/ShapeCreator.html)
 - ShapeCreator [ShapeCreator2](/Deemo/ShapeCreator2.html)
 - Spaceship [Spaceship](/Deemo/spaceshipScene.html)
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+- For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
 ### Image
 - Texture image [texture1](/image/texture1.png)
@@ -31,6 +31,7 @@ For more details see [GitHub Flavored Markdown](https://guides.github.com/featur
 - Texture image [satellite](/image/decBroken1.png)
 - Texture image [satellite](/image/decBroken2.png)
 - Texture image [jupiter](/image/jupiter1.jpg)
+- Texture image [mercury](/image/mercury.jpg)
 
 ### Jekyll Themes
 
