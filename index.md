@@ -9,7 +9,6 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 ### Deemo
 - BeeCollision [BeeCollision](/Deemo/beeCollision.html)
 - ShapeCreator [ShapeCreator](/Deemo/ShapeCreator.html)
-- ShapeCreator [ShapeCreator2](/Deemo/ShapeCreator2.html)
 - Spaceship [Spaceship](/Deemo/spaceshipScene.html)
 - For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
@@ -32,7 +31,6 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 - Texture image [satellite](/image/decBroken2.png)
 - Texture image [jupiter](/image/jupiter1.jpg)
 - Texture image [mercury](/image/mercury.jpg)
-- Testing image [teatinf](draw.jpg)
 ### Jekyll Themes
 
 Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/sharyuwu/sharyuwu.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
