@@ -110,6 +110,12 @@ function _Utils_eq(x, y)
 
 function _Utils_eqHelp(x, y, depth, stack)
 {
+	if (depth > 100)
+	{
+		stack.push(_Utils_Tuple2(x,y));
+		return true;
+	}
+
 	if (x === y)
 	{
 		return true;
@@ -119,12 +125,6 @@ function _Utils_eqHelp(x, y, depth, stack)
 	{
 		typeof x === 'function' && _Debug_crash(5);
 		return false;
-	}
-
-	if (depth > 100)
-	{
-		stack.push(_Utils_Tuple2(x,y));
-		return true;
 	}
 
 	/**/
@@ -652,7 +652,7 @@ function _Debug_toAnsiString(ansi, value)
 		return _Debug_stringColor(ansi, '<' + value.byteLength + ' bytes>');
 	}
 
-	if (typeof File !== 'undefined' && value instanceof File)
+	if (typeof File === 'function' && value instanceof File)
 	{
 		return _Debug_internalColor(ansi, '<' + value.name + '>');
 	}
@@ -722,7 +722,7 @@ function _Debug_fadeColor(ansi, string)
 
 function _Debug_internalColor(ansi, string)
 {
-	return ansi ? '\x1b[36m' + string + '\x1b[0m' : string;
+	return ansi ? '\x1b[94m' + string + '\x1b[0m' : string;
 }
 
 function _Debug_toHexDigit(n)
@@ -875,7 +875,7 @@ var _String_cons = F2(function(chr, str)
 function _String_uncons(string)
 {
 	var word = string.charCodeAt(0);
-	return !isNaN(word)
+	return word
 		? $elm$core$Maybe$Just(
 			0xD800 <= word && word <= 0xDBFF
 				? _Utils_Tuple2(_Utils_chr(string[0] + string[1]), string.slice(2))
@@ -1888,19 +1888,19 @@ function _Platform_initialize(flagDecoder, args, init, update, subscriptions, st
 	var result = A2(_Json_run, flagDecoder, _Json_wrap(args ? args['flags'] : undefined));
 	$elm$core$Result$isOk(result) || _Debug_crash(2 /**/, _Json_errorToString(result.a) /**/);
 	var managers = {};
-	var initPair = init(result.a);
-	var model = initPair.a;
+	result = init(result.a);
+	var model = result.a;
 	var stepper = stepperBuilder(sendToApp, model);
 	var ports = _Platform_setupEffects(managers, sendToApp);
 
 	function sendToApp(msg, viewMetadata)
 	{
-		var pair = A2(update, msg, model);
-		stepper(model = pair.a, viewMetadata);
-		_Platform_enqueueEffects(managers, pair.b, subscriptions(model));
+		result = A2(update, msg, model);
+		stepper(model = result.a, viewMetadata);
+		_Platform_dispatchEffects(managers, result.b, subscriptions(model));
 	}
 
-	_Platform_enqueueEffects(managers, initPair.b, subscriptions(model));
+	_Platform_dispatchEffects(managers, result.b, subscriptions(model));
 
 	return ports ? { ports: ports } : {};
 }
@@ -2058,51 +2058,6 @@ var _Platform_map = F2(function(tagger, bag)
 
 
 // PIPE BAGS INTO EFFECT MANAGERS
-//
-// Effects must be queued!
-//
-// Say your init contains a synchronous command, like Time.now or Time.here
-//
-//   - This will produce a batch of effects (FX_1)
-//   - The synchronous task triggers the subsequent `update` call
-//   - This will produce a batch of effects (FX_2)
-//
-// If we just start dispatching FX_2, subscriptions from FX_2 can be processed
-// before subscriptions from FX_1. No good! Earlier versions of this code had
-// this problem, leading to these reports:
-//
-//   https://github.com/elm/core/issues/980
-//   https://github.com/elm/core/pull/981
-//   https://github.com/elm/compiler/issues/1776
-//
-// The queue is necessary to avoid ordering issues for synchronous commands.
-
-
-// Why use true/false here? Why not just check the length of the queue?
-// The goal is to detect "are we currently dispatching effects?" If we
-// are, we need to bail and let the ongoing while loop handle things.
-//
-// Now say the queue has 1 element. When we dequeue the final element,
-// the queue will be empty, but we are still actively dispatching effects.
-// So you could get queue jumping in a really tricky category of cases.
-//
-var _Platform_effectsQueue = [];
-var _Platform_effectsActive = false;
-
-
-function _Platform_enqueueEffects(managers, cmdBag, subBag)
-{
-	_Platform_effectsQueue.push({ p: managers, q: cmdBag, r: subBag });
-
-	if (_Platform_effectsActive) return;
-
-	_Platform_effectsActive = true;
-	for (var fx; fx = _Platform_effectsQueue.shift(); )
-	{
-		_Platform_dispatchEffects(fx.p, fx.q, fx.r);
-	}
-	_Platform_effectsActive = false;
-}
 
 
 function _Platform_dispatchEffects(managers, cmdBag, subBag)
@@ -2140,8 +2095,8 @@ function _Platform_gatherEffects(isCmd, bag, effectsDict, taggers)
 
 		case 3:
 			_Platform_gatherEffects(isCmd, bag.o, effectsDict, {
-				s: bag.n,
-				t: taggers
+				p: bag.n,
+				q: taggers
 			});
 			return;
 	}
@@ -2152,9 +2107,9 @@ function _Platform_toEffect(isCmd, home, taggers, value)
 {
 	function applyTaggers(x)
 	{
-		for (var temp = taggers; temp; temp = temp.t)
+		for (var temp = taggers; temp; temp = temp.q)
 		{
-			x = temp.s(x);
+			x = temp.p(x);
 		}
 		return x;
 	}
@@ -2201,7 +2156,7 @@ function _Platform_outgoingPort(name, converter)
 	_Platform_checkPortName(name);
 	_Platform_effectManagers[name] = {
 		e: _Platform_outgoingPortMap,
-		u: converter,
+		r: converter,
 		a: _Platform_setupOutgoingPort
 	};
 	return _Platform_leaf(name);
@@ -2214,7 +2169,7 @@ var _Platform_outgoingPortMap = F2(function(tagger, value) { return value; });
 function _Platform_setupOutgoingPort(name)
 {
 	var subs = [];
-	var converter = _Platform_effectManagers[name].u;
+	var converter = _Platform_effectManagers[name].r;
 
 	// CREATE MANAGER
 
@@ -2271,7 +2226,7 @@ function _Platform_incomingPort(name, converter)
 	_Platform_checkPortName(name);
 	_Platform_effectManagers[name] = {
 		f: _Platform_incomingPortMap,
-		u: converter,
+		r: converter,
 		a: _Platform_setupIncomingPort
 	};
 	return _Platform_leaf(name);
@@ -2290,7 +2245,7 @@ var _Platform_incomingPortMap = F2(function(tagger, finalTagger)
 function _Platform_setupIncomingPort(name, sendToApp)
 {
 	var subs = _List_Nil;
-	var converter = _Platform_effectManagers[name].u;
+	var converter = _Platform_effectManagers[name].r;
 
 	// CREATE MANAGER
 
@@ -5422,10 +5377,6 @@ var _Bitwise_shiftRightZfBy = F2(function(offset, a)
 });
 
 
-function _WebGL_log(/* msg */) {
-  // console.log(msg);
-}
-
 var _WebGL_guid = 0;
 
 function _WebGL_listEach(fn, list) {
@@ -5459,148 +5410,280 @@ var _WebGL_entity = F5(function (settings, vert, frag, mesh, uniforms) {
 });
 
 // eslint-disable-next-line no-unused-vars
-var _WebGL_enableBlend = F2(function (gl, setting) {
-  gl.enable(gl.BLEND);
+var _WebGL_enableBlend = F2(function (cache, setting) {
+  var blend = cache.blend;
+  blend.toggle = cache.toggle;
+
+  if (!blend.enabled) {
+    cache.gl.enable(cache.gl.BLEND);
+    blend.enabled = true;
+  }
+
   // a   b   c   d   e   f   g h i j
   // eq1 f11 f12 eq2 f21 f22 r g b a
-  gl.blendEquationSeparate(setting.a, setting.d);
-  gl.blendFuncSeparate(setting.b, setting.c, setting.e, setting.f);
-  gl.blendColor(setting.g, setting.h, setting.i, setting.j);
+  if (blend.a !== setting.a || blend.d !== setting.d) {
+    cache.gl.blendEquationSeparate(setting.a, setting.d);
+    blend.a = setting.a;
+    blend.d = setting.d;
+  }
+  if (blend.b !== setting.b || blend.c !== setting.c || blend.e !== setting.e || blend.f !== setting.f) {
+    cache.gl.blendFuncSeparate(setting.b, setting.c, setting.e, setting.f);
+    blend.b = setting.b;
+    blend.c = setting.c;
+    blend.e = setting.e;
+    blend.f = setting.f;
+  }
+  if (blend.g !== setting.g || blend.h !== setting.h || blend.i !== setting.i || blend.j !== setting.j) {
+    cache.gl.blendColor(setting.g, setting.h, setting.i, setting.j);
+    blend.g = setting.g;
+    blend.h = setting.h;
+    blend.i = setting.i;
+    blend.j = setting.j;
+  }
 });
 
 // eslint-disable-next-line no-unused-vars
-var _WebGL_enableDepthTest = F2(function (gl, setting) {
-  gl.enable(gl.DEPTH_TEST);
+var _WebGL_enableDepthTest = F2(function (cache, setting) {
+  var depthTest = cache.depthTest;
+  depthTest.toggle = cache.toggle;
+
+  if (!depthTest.enabled) {
+    cache.gl.enable(cache.gl.DEPTH_TEST);
+    depthTest.enabled = true;
+  }
+
   // a    b    c    d
   // func mask near far
-  gl.depthFunc(setting.a);
-  gl.depthMask(setting.b);
-  gl.depthRange(setting.c, setting.d);
+  if (depthTest.a !== setting.a) {
+    cache.gl.depthFunc(setting.a);
+    depthTest.a = setting.a;
+  }
+  if (depthTest.b !== setting.b) {
+    cache.gl.depthMask(setting.b);
+    depthTest.b = setting.b;
+  }
+  if (depthTest.c !== setting.c || depthTest.d !== setting.d) {
+    cache.gl.depthRange(setting.c, setting.d);
+    depthTest.c = setting.c;
+    depthTest.d = setting.d;
+  }
 });
 
 // eslint-disable-next-line no-unused-vars
-var _WebGL_enableStencilTest = F2(function (gl, setting) {
-  gl.enable(gl.STENCIL_TEST);
+var _WebGL_enableStencilTest = F2(function (cache, setting) {
+  var stencilTest = cache.stencilTest;
+  stencilTest.toggle = cache.toggle;
+
+  if (!stencilTest.enabled) {
+    cache.gl.enable(cache.gl.STENCIL_TEST);
+    stencilTest.enabled = true;
+  }
+
   // a   b    c         d     e     f      g      h     i     j      k
   // ref mask writeMask test1 fail1 zfail1 zpass1 test2 fail2 zfail2 zpass2
-  gl.stencilFuncSeparate(gl.FRONT, setting.d, setting.a, setting.b);
-  gl.stencilOpSeparate(gl.FRONT, setting.e, setting.f, setting.g);
-  gl.stencilMaskSeparate(gl.FRONT, setting.c);
-  gl.stencilFuncSeparate(gl.BACK, setting.h, setting.a, setting.b);
-  gl.stencilOpSeparate(gl.BACK, setting.i, setting.j, setting.k);
-  gl.stencilMaskSeparate(gl.BACK, setting.c);
+  if (stencilTest.d !== setting.d || stencilTest.a !== setting.a || stencilTest.b !== setting.b) {
+    cache.gl.stencilFuncSeparate(cache.gl.FRONT, setting.d, setting.a, setting.b);
+    stencilTest.d = setting.d;
+    // a and b are set in the cache.gl.BACK diffing because they should be the same
+  }
+  if (stencilTest.e !== setting.e || stencilTest.f !== setting.f || stencilTest.g !== setting.g) {
+    cache.gl.stencilOpSeparate(cache.gl.FRONT, setting.e, setting.f, setting.g);
+    stencilTest.e = setting.e;
+    stencilTest.f = setting.f;
+    stencilTest.g = setting.g;
+  }
+  if (stencilTest.c !== setting.c) {
+    cache.gl.stencilMask(setting.c);
+    stencilTest.c = setting.c;
+  }
+  if (stencilTest.h !== setting.h || stencilTest.a !== setting.a || stencilTest.b !== setting.b) {
+    cache.gl.stencilFuncSeparate(cache.gl.BACK, setting.h, setting.a, setting.b);
+    stencilTest.h = setting.h;
+    stencilTest.a = setting.a;
+    stencilTest.b = setting.b;
+  }
+  if (stencilTest.i !== setting.i || stencilTest.j !== setting.j || stencilTest.k !== setting.k) {
+    cache.gl.stencilOpSeparate(cache.gl.BACK, setting.i, setting.j, setting.k);
+    stencilTest.i = setting.i;
+    stencilTest.j = setting.j;
+    stencilTest.k = setting.k;
+  }
 });
 
 // eslint-disable-next-line no-unused-vars
-var _WebGL_enableScissor = F2(function (gl, setting) {
-  gl.enable(gl.SCISSOR_TEST);
-  gl.scissor(setting.a, setting.b, setting.c, setting.d);
+var _WebGL_enableScissor = F2(function (cache, setting) {
+  var scissor = cache.scissor;
+  scissor.toggle = cache.toggle;
+
+  if (!scissor.enabled) {
+    cache.gl.enable(cache.gl.SCISSOR_TEST);
+    scissor.enabled = true;
+  }
+
+  if (scissor.a !== setting.a || scissor.b !== setting.b || scissor.c !== setting.c || scissor.d !== setting.d) {
+    cache.gl.scissor(setting.a, setting.b, setting.c, setting.d);
+    scissor.a = setting.a;
+    scissor.b = setting.b;
+    scissor.c = setting.c;
+    scissor.d = setting.d;
+  }
 });
 
 // eslint-disable-next-line no-unused-vars
-var _WebGL_enableColorMask = F2(function (gl, setting) {
-  gl.colorMask(setting.a, setting.b, setting.c, setting.d);
+var _WebGL_enableColorMask = F2(function (cache, setting) {
+  var colorMask = cache.colorMask;
+  colorMask.toggle = cache.toggle;
+  colorMask.enabled = true;
+
+  if (colorMask.a !== setting.a || colorMask.b !== setting.b || colorMask.c !== setting.c || colorMask.d !== setting.d) {
+    cache.gl.colorMask(setting.a, setting.b, setting.c, setting.d);
+    colorMask.a = setting.a;
+    colorMask.b = setting.b;
+    colorMask.c = setting.c;
+    colorMask.d = setting.d;
+  }
 });
 
 // eslint-disable-next-line no-unused-vars
-var _WebGL_enableCullFace = F2(function (gl, setting) {
-  gl.enable(gl.CULL_FACE);
-  gl.cullFace(setting.a);
+var _WebGL_enableCullFace = F2(function (cache, setting) {
+  var cullFace = cache.cullFace;
+  cullFace.toggle = cache.toggle;
+
+  if (!cullFace.enabled) {
+    cache.gl.enable(cache.gl.CULL_FACE);
+    cullFace.enabled = true;
+  }
+
+  if (cullFace.a !== setting.a) {
+    cache.gl.cullFace(setting.a);
+    cullFace.a = setting.a;
+  }
 });
 
 // eslint-disable-next-line no-unused-vars
-var _WebGL_enablePolygonOffset = F2(function (gl, setting) {
-  gl.enable(gl.POLYGON_OFFSET_FILL);
-  gl.polygonOffset(setting.a, setting.b);
+var _WebGL_enablePolygonOffset = F2(function (cache, setting) {
+  var polygonOffset = cache.polygonOffset;
+  polygonOffset.toggle = cache.toggle;
+
+  if (!polygonOffset.enabled) {
+    cache.gl.enable(cache.gl.POLYGON_OFFSET_FILL);
+    polygonOffset.enabled = true;
+  }
+
+  if (polygonOffset.a !== setting.a || polygonOffset.b !== setting.b) {
+    cache.gl.polygonOffset(setting.a, setting.b);
+    polygonOffset.a = setting.a;
+    polygonOffset.b = setting.b;
+  }
 });
 
 // eslint-disable-next-line no-unused-vars
-var _WebGL_enableSampleCoverage = F2(function (gl, setting) {
-  gl.enable(gl.SAMPLE_COVERAGE);
-  gl.sampleCoverage(setting.a, setting.b);
+var _WebGL_enableSampleCoverage = F2(function (cache, setting) {
+  var sampleCoverage = cache.sampleCoverage;
+  sampleCoverage.toggle = cache.toggle;
+
+  if (!sampleCoverage.enabled) {
+    cache.gl.enable(cache.gl.SAMPLE_COVERAGE);
+    sampleCoverage.enabled = true;
+  }
+
+  if (sampleCoverage.a !== setting.a || sampleCoverage.b !== setting.b) {
+    cache.gl.sampleCoverage(setting.a, setting.b);
+    sampleCoverage.a = setting.a;
+    sampleCoverage.b = setting.b;
+  }
 });
 
 // eslint-disable-next-line no-unused-vars
-var _WebGL_enableSampleAlphaToCoverage = F2(function (gl, setting) {
-  gl.enable(gl.SAMPLE_ALPHA_TO_COVERAGE);
-});
+var _WebGL_enableSampleAlphaToCoverage = function (cache) {
+  var sampleAlphaToCoverage = cache.sampleAlphaToCoverage;
+  sampleAlphaToCoverage.toggle = cache.toggle;
 
-// eslint-disable-next-line no-unused-vars
+  if (!sampleAlphaToCoverage.enabled) {
+    cache.gl.enable(cache.gl.SAMPLE_ALPHA_TO_COVERAGE);
+    sampleAlphaToCoverage.enabled = true;
+  }
+};
+
 var _WebGL_disableBlend = function (cache) {
-  cache.gl.disable(cache.gl.BLEND);
+  if (cache.blend.enabled) {
+    cache.gl.disable(cache.gl.BLEND);
+    cache.blend.enabled = false;
+  }
 };
 
-// eslint-disable-next-line no-unused-vars
 var _WebGL_disableDepthTest = function (cache) {
-  cache.gl.disable(cache.gl.DEPTH_TEST);
-  cache.gl.depthMask(true);
+  if (cache.depthTest.enabled) {
+    cache.gl.disable(cache.gl.DEPTH_TEST);
+    cache.depthTest.enabled = false;
+  }
 };
 
-// eslint-disable-next-line no-unused-vars
 var _WebGL_disableStencilTest = function (cache) {
-  cache.gl.disable(cache.gl.STENCIL_TEST);
-  cache.gl.stencilMask(cache.STENCIL_WRITEMASK);
+  if (cache.stencilTest.enabled) {
+    cache.gl.disable(cache.gl.STENCIL_TEST);
+    cache.stencilTest.enabled = false;
+  }
 };
 
-// eslint-disable-next-line no-unused-vars
 var _WebGL_disableScissor = function (cache) {
-  cache.gl.disable(cache.gl.SCISSOR_TEST);
+  if (cache.scissor.enabled) {
+    cache.gl.disable(cache.gl.SCISSOR_TEST);
+    cache.scissor.enabled = false;
+  }
 };
 
-// eslint-disable-next-line no-unused-vars
 var _WebGL_disableColorMask = function (cache) {
-  cache.gl.colorMask(true, true, true, true);
+  var colorMask = cache.colorMask;
+  if (!colorMask.a || !colorMask.b || !colorMask.c || !colorMask.d) {
+    cache.gl.colorMask(true, true, true, true);
+    colorMask.a = true;
+    colorMask.b = true;
+    colorMask.c = true;
+    colorMask.d = true;
+  }
 };
 
-// eslint-disable-next-line no-unused-vars
 var _WebGL_disableCullFace = function (cache) {
   cache.gl.disable(cache.gl.CULL_FACE);
 };
 
-// eslint-disable-next-line no-unused-vars
 var _WebGL_disablePolygonOffset = function (cache) {
   cache.gl.disable(cache.gl.POLYGON_OFFSET_FILL);
 };
 
-// eslint-disable-next-line no-unused-vars
 var _WebGL_disableSampleCoverage = function (cache) {
   cache.gl.disable(cache.gl.SAMPLE_COVERAGE);
 };
 
-// eslint-disable-next-line no-unused-vars
 var _WebGL_disableSampleAlphaToCoverage = function (cache) {
   cache.gl.disable(cache.gl.SAMPLE_ALPHA_TO_COVERAGE);
 };
 
+var _WebGL_settings = ['blend', 'depthTest', 'stencilTest', 'scissor', 'colorMask', 'cullFace', 'polygonOffset', 'sampleCoverage', 'sampleAlphaToCoverage'];
+var _WebGL_disableFunctions = [_WebGL_disableBlend, _WebGL_disableDepthTest, _WebGL_disableStencilTest, _WebGL_disableScissor, _WebGL_disableColorMask, _WebGL_disableCullFace, _WebGL_disablePolygonOffset, _WebGL_disableSampleCoverage, _WebGL_disableSampleAlphaToCoverage];
+
 function _WebGL_doCompile(gl, src, type) {
-
   var shader = gl.createShader(type);
-  _WebGL_log('Created shader');
-
-  gl.shaderSource(shader, src);
+  // Enable OES_standard_derivatives extension
+  gl.shaderSource(shader, '#extension GL_OES_standard_derivatives : enable\n' + src);
   gl.compileShader(shader);
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    throw gl.getShaderInfoLog(shader);
-  }
-
   return shader;
-
 }
 
 function _WebGL_doLink(gl, vshader, fshader) {
-
   var program = gl.createProgram();
-  _WebGL_log('Created program');
 
   gl.attachShader(program, vshader);
   gl.attachShader(program, fshader);
   gl.linkProgram(program);
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    throw gl.getProgramInfoLog(program);
+    throw ('Link failed: ' + gl.getProgramInfoLog(program) +
+      '\nvs info-log: ' + gl.getShaderInfoLog(vshader) +
+      '\nfs info-log: ' + gl.getShaderInfoLog(fshader));
   }
 
   return program;
-
 }
 
 function _WebGL_getAttributeInfo(gl, type) {
@@ -5673,8 +5756,6 @@ function _WebGL_doBindAttribute(gl, attribute, mesh, attributes) {
   }, mesh.b);
 
   var buffer = gl.createBuffer();
-  _WebGL_log('Created attribute buffer ' + attribute.name);
-
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
   return buffer;
@@ -5699,7 +5780,6 @@ function _WebGL_doBindAttribute(gl, attribute, mesh, attributes) {
  */
 function _WebGL_doBindSetup(gl, mesh) {
   if (mesh.a.indexSize > 0) {
-    _WebGL_log('Created index buffer');
     var indexBuffer = gl.createBuffer();
     var indices = _WebGL_makeIndexedBuffer(mesh.c, mesh.a.indexSize);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -5747,16 +5827,26 @@ function _WebGL_getProgID(vertID, fragID) {
 }
 
 var _WebGL_drawGL = F2(function (model, domNode) {
-
-  var gl = model.f.gl;
+  var cache = model.f;
+  var gl = cache.gl;
 
   if (!gl) {
     return domNode;
   }
 
   gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+
+  if (!cache.depthTest.b) {
+    gl.depthMask(true);
+    cache.depthTest.b = true;
+  }
+  if (cache.stencilTest.c !== cache.STENCIL_WRITEMASK) {
+    gl.stencilMask(cache.STENCIL_WRITEMASK);
+    cache.stencilTest.c = cache.STENCIL_WRITEMASK;
+  }
+  _WebGL_disableScissor(cache);
+  _WebGL_disableColorMask(cache);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
-  _WebGL_log('Drawing');
 
   function drawEntity(entity) {
     if (!entity.d.b.b) {
@@ -5765,35 +5855,37 @@ var _WebGL_drawGL = F2(function (model, domNode) {
 
     var progid;
     var program;
+    var i;
+
     if (entity.b.id && entity.c.id) {
       progid = _WebGL_getProgID(entity.b.id, entity.c.id);
-      program = model.f.programs[progid];
+      program = cache.programs[progid];
     }
 
     if (!program) {
 
       var vshader;
       if (entity.b.id) {
-        vshader = model.f.shaders[entity.b.id];
+        vshader = cache.shaders[entity.b.id];
       } else {
         entity.b.id = _WebGL_guid++;
       }
 
       if (!vshader) {
         vshader = _WebGL_doCompile(gl, entity.b.src, gl.VERTEX_SHADER);
-        model.f.shaders[entity.b.id] = vshader;
+        cache.shaders[entity.b.id] = vshader;
       }
 
       var fshader;
       if (entity.c.id) {
-        fshader = model.f.shaders[entity.c.id];
+        fshader = cache.shaders[entity.c.id];
       } else {
         entity.c.id = _WebGL_guid++;
       }
 
       if (!fshader) {
         fshader = _WebGL_doCompile(gl, entity.c.src, gl.FRAGMENT_SHADER);
-        model.f.shaders[entity.c.id] = fshader;
+        cache.shaders[entity.c.id] = fshader;
       }
 
       var glProgram = _WebGL_doLink(gl, vshader, fshader);
@@ -5801,47 +5893,56 @@ var _WebGL_drawGL = F2(function (model, domNode) {
       program = {
         glProgram: glProgram,
         attributes: Object.assign({}, entity.b.attributes, entity.c.attributes),
-        uniformSetters: _WebGL_createUniformSetters(
-          gl,
-          model,
-          glProgram,
-          Object.assign({}, entity.b.uniforms, entity.c.uniforms)
-        )
+        currentUniforms: {},
+        activeAttributes: [],
+        activeAttributeLocations: []
       };
 
-      progid = _WebGL_getProgID(entity.b.id, entity.c.id);
-      model.f.programs[progid] = program;
+      program.uniformSetters = _WebGL_createUniformSetters(
+        gl,
+        model,
+        program,
+        Object.assign({}, entity.b.uniforms, entity.c.uniforms)
+      );
 
+      var numActiveAttributes = gl.getProgramParameter(glProgram, gl.ACTIVE_ATTRIBUTES);
+      for (i = 0; i < numActiveAttributes; i++) {
+        var attribute = gl.getActiveAttrib(glProgram, i);
+        var attribLocation = gl.getAttribLocation(glProgram, attribute.name);
+        program.activeAttributes.push(attribute);
+        program.activeAttributeLocations.push(attribLocation);
+      }
+
+      progid = _WebGL_getProgID(entity.b.id, entity.c.id);
+      cache.programs[progid] = program;
     }
 
-    gl.useProgram(program.glProgram);
+    if (cache.lastProgId !== progid) {
+      gl.useProgram(program.glProgram);
+      cache.lastProgId = progid;
+    }
 
     _WebGL_setUniforms(program.uniformSetters, entity.e);
 
-    var buffer = model.f.buffers.get(entity.d);
+    var buffer = cache.buffers.get(entity.d);
 
     if (!buffer) {
       buffer = _WebGL_doBindSetup(gl, entity.d);
-      model.f.buffers.set(entity.d, buffer);
+      cache.buffers.set(entity.d, buffer);
     }
 
-    var numAttributes = gl.getProgramParameter(program.glProgram, gl.ACTIVE_ATTRIBUTES);
-
-    for (var i = 0; i < numAttributes; i++) {
-      var attribute = gl.getActiveAttrib(program.glProgram, i);
-
-      var attribLocation = gl.getAttribLocation(program.glProgram, attribute.name);
-      gl.enableVertexAttribArray(attribLocation);
+    for (i = 0; i < program.activeAttributes.length; i++) {
+      attribute = program.activeAttributes[i];
+      attribLocation = program.activeAttributeLocations[i];
 
       if (buffer.buffers[attribute.name] === undefined) {
         buffer.buffers[attribute.name] = _WebGL_doBindAttribute(gl, attribute, entity.d, program.attributes);
       }
-      var attributeBuffer = buffer.buffers[attribute.name];
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer.buffers[attribute.name]);
+
       var attributeInfo = _WebGL_getAttributeInfo(gl, attribute.type);
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, attributeBuffer);
-
       if (attributeInfo.arraySize === 1) {
+        gl.enableVertexAttribArray(attribLocation);
         gl.vertexAttribPointer(attribLocation, attributeInfo.size, attributeInfo.baseType, false, 0, 0);
       } else {
         // Point to four vec4 in case of mat4
@@ -5853,7 +5954,19 @@ var _WebGL_drawGL = F2(function (model, domNode) {
         }
       }
     }
-    _WebGL_listEach($elm_explorations$webgl$WebGL$Internal$enableSetting(gl), entity.a);
+
+    // Apply all the new settings
+    cache.toggle = !cache.toggle;
+    _WebGL_listEach($elm_explorations$webgl$WebGL$Internal$enableSetting(cache), entity.a);
+    // Disable the settings that were applied in the previous draw call
+    for (i = 0; i < _WebGL_settings.length; i++) {
+      var setting = cache[_WebGL_settings[i]];
+      if (setting.toggle !== cache.toggle && setting.enabled) {
+        _WebGL_disableFunctions[i](cache);
+        setting.enabled = false;
+        setting.toggle = cache.toggle;
+      }
+    }
 
     if (buffer.indexBuffer) {
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer.indexBuffer);
@@ -5861,9 +5974,6 @@ var _WebGL_drawGL = F2(function (model, domNode) {
     } else {
       gl.drawArrays(entity.d.a.mode, 0, buffer.numIndices);
     }
-
-    _WebGL_listEach($elm_explorations$webgl$WebGL$Internal$disableSetting(model.f), entity.a);
-
   }
 
   _WebGL_listEach(drawEntity, model.g);
@@ -5871,62 +5981,88 @@ var _WebGL_drawGL = F2(function (model, domNode) {
 });
 
 function _WebGL_createUniformSetters(gl, model, program, uniformsMap) {
+  var glProgram = program.glProgram;
+  var currentUniforms = program.currentUniforms;
   var textureCounter = 0;
-  function createUniformSetter(program, uniform) {
-    var uniformLocation = gl.getUniformLocation(program, uniform.name);
+  var cache = model.f;
+  function createUniformSetter(glProgram, uniform) {
+    var uniformName = uniform.name;
+    var uniformLocation = gl.getUniformLocation(glProgram, uniformName);
     switch (uniform.type) {
       case gl.INT:
         return function (value) {
-          gl.uniform1i(uniformLocation, value);
+          if (currentUniforms[uniformName] !== value) {
+            gl.uniform1i(uniformLocation, value);
+            currentUniforms[uniformName] = value;
+          }
         };
       case gl.FLOAT:
         return function (value) {
-          gl.uniform1f(uniformLocation, value);
+          if (currentUniforms[uniformName] !== value) {
+            gl.uniform1f(uniformLocation, value);
+            currentUniforms[uniformName] = value;
+          }
         };
       case gl.FLOAT_VEC2:
         return function (value) {
-          gl.uniform2fv(uniformLocation, new Float32Array(value));
+          if (currentUniforms[uniformName] !== value) {
+            gl.uniform2f(uniformLocation, value[0], value[1]);
+            currentUniforms[uniformName] = value;
+          }
         };
       case gl.FLOAT_VEC3:
         return function (value) {
-          gl.uniform3fv(uniformLocation, new Float32Array(value));
+          if (currentUniforms[uniformName] !== value) {
+            gl.uniform3f(uniformLocation, value[0], value[1], value[2]);
+            currentUniforms[uniformName] = value;
+          }
         };
       case gl.FLOAT_VEC4:
         return function (value) {
-          gl.uniform4fv(uniformLocation, new Float32Array(value));
+          if (currentUniforms[uniformName] !== value) {
+            gl.uniform4f(uniformLocation, value[0], value[1], value[2], value[3]);
+            currentUniforms[uniformName] = value;
+          }
         };
       case gl.FLOAT_MAT4:
         return function (value) {
-          gl.uniformMatrix4fv(uniformLocation, false, new Float32Array(value));
+          if (currentUniforms[uniformName] !== value) {
+            gl.uniformMatrix4fv(uniformLocation, false, new Float32Array(value));
+            currentUniforms[uniformName] = value;
+          }
         };
       case gl.SAMPLER_2D:
         var currentTexture = textureCounter++;
         return function (texture) {
           gl.activeTexture(gl.TEXTURE0 + currentTexture);
-          var tex = model.f.textures.get(texture);
+          var tex = cache.textures.get(texture);
           if (!tex) {
-            _WebGL_log('Created texture');
             tex = texture.createTexture(gl);
-            model.f.textures.set(texture, tex);
+            cache.textures.set(texture, tex);
           }
           gl.bindTexture(gl.TEXTURE_2D, tex);
-          gl.uniform1i(uniformLocation, currentTexture);
+          if (currentUniforms[uniformName] !== texture) {
+            gl.uniform1i(uniformLocation, currentTexture);
+            currentUniforms[uniformName] = texture;
+          }
         };
       case gl.BOOL:
         return function (value) {
-          gl.uniform1i(uniformLocation, value);
+          if (currentUniforms[uniformName] !== value) {
+            gl.uniform1i(uniformLocation, value);
+            currentUniforms[uniformName] = value;
+          }
         };
       default:
-        _WebGL_log('Unsupported uniform type: ' + uniform.type);
         return function () { };
     }
   }
 
   var uniformSetters = {};
-  var numUniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
+  var numUniforms = gl.getProgramParameter(glProgram, gl.ACTIVE_UNIFORMS);
   for (var i = 0; i < numUniforms; i++) {
-    var uniform = gl.getActiveUniform(program, i);
-    uniformSetters[uniformsMap[uniform.name] || uniform.name] = createUniformSetter(program, uniform);
+    var uniform = gl.getActiveUniform(glProgram, i);
+    uniformSetters[uniformsMap[uniform.name] || uniform.name] = createUniformSetter(glProgram, uniform);
   }
 
   return uniformSetters;
@@ -6022,7 +6158,6 @@ function _WebGL_render(model) {
     return A2($elm_explorations$webgl$WebGL$Internal$enableOption, options, option);
   }, model.h);
 
-  _WebGL_log('Render canvas');
   var canvas = _VirtualDom_doc.createElement('canvas');
   var gl = canvas.getContext && (
     canvas.getContext('webgl', options.contextAttributes) ||
@@ -6034,9 +6169,27 @@ function _WebGL_render(model) {
       sceneSetting(gl);
     });
 
+    // Activate OES_standard_derivatives extension
+    gl.getExtension('OES_standard_derivatives');
+
     model.f.gl = gl;
+
+    // Cache the current settings in order to diff them to avoid redundant calls
+    // https://emscripten.org/docs/optimizing/Optimizing-WebGL.html#avoid-redundant-calls
+    model.f.toggle = false; // used to diff the settings from the previous and current draw calls
+    model.f.blend = { enabled: false, toggle: false };
+    model.f.depthTest = { enabled: false, toggle: false };
+    model.f.stencilTest = { enabled: false, toggle: false };
+    model.f.scissor = { enabled: false, toggle: false };
+    model.f.colorMask = { enabled: false, toggle: false };
+    model.f.cullFace = { enabled: false, toggle: false };
+    model.f.polygonOffset = { enabled: false, toggle: false };
+    model.f.sampleCoverage = { enabled: false, toggle: false };
+    model.f.sampleAlphaToCoverage = { enabled: false, toggle: false };
+
     model.f.shaders = [];
     model.f.programs = {};
+    model.f.lastProgId = null;
     model.f.buffers = new WeakMap();
     model.f.textures = new WeakMap();
     // Memorize the initial stencil write mask, because
@@ -8879,9 +9032,72 @@ var $author$project$Wrapper3D$ellipsoidMesh = F3(
 var $elm$core$Basics$abs = function (n) {
 	return (n < 0) ? (-n) : n;
 };
+var $elm$core$Bitwise$and = _Bitwise_and;
 var $elm$core$Char$fromCode = _Char_fromCode;
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $elm$core$String$fromList = _String_fromList;
+var $ianmackenzie$elm_units$Length$inMeters = function (_v0) {
+	var numMeters = _v0.a;
+	return numMeters;
+};
+var $ianmackenzie$elm_units$Length$inCentimeters = function (length) {
+	return 100 * $ianmackenzie$elm_units$Length$inMeters(length);
+};
+var $elm$core$String$replace = F3(
+	function (before, after, string) {
+		return A2(
+			$elm$core$String$join,
+			after,
+			A2($elm$core$String$split, before, string));
+	});
+var $elm$core$String$right = F2(
+	function (n, string) {
+		return (n < 1) ? '' : A3(
+			$elm$core$String$slice,
+			-n,
+			$elm$core$String$length(string),
+			string);
+	});
+var $author$project$Wrapper3D$lastDigits = F2(
+	function (n, val) {
+		var stringVal = A3(
+			$elm$core$String$replace,
+			'.',
+			'',
+			$elm$core$String$fromFloat(val));
+		return A2($elm$core$String$right, n, stringVal);
+	});
+var $ianmackenzie$elm_geometry$Point3d$xCoordinate = function (_v0) {
+	var p = _v0.a;
+	return $ianmackenzie$elm_units$Quantity$Quantity(p.x);
+};
+var $ianmackenzie$elm_geometry$Point3d$yCoordinate = function (_v0) {
+	var p = _v0.a;
+	return $ianmackenzie$elm_units$Quantity$Quantity(p.y);
+};
+var $ianmackenzie$elm_geometry$Point3d$zCoordinate = function (_v0) {
+	var p = _v0.a;
+	return $ianmackenzie$elm_units$Quantity$Quantity(p.z);
+};
+var $ianmackenzie$elm_geometry$Point3d$toTuple = F2(
+	function (fromQuantity, point) {
+		return _Utils_Tuple3(
+			fromQuantity(
+				$ianmackenzie$elm_geometry$Point3d$xCoordinate(point)),
+			fromQuantity(
+				$ianmackenzie$elm_geometry$Point3d$yCoordinate(point)),
+			fromQuantity(
+				$ianmackenzie$elm_geometry$Point3d$zCoordinate(point)));
+	});
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
 var $author$project$Wrapper3D$getMeshName = function (mesh) {
 	switch (mesh.$) {
 		case 'Primitive':
@@ -8908,7 +9124,11 @@ var $author$project$Wrapper3D$getMeshName = function (mesh) {
 					var x = _v3.a;
 					var y = _v3.b;
 					return $elm$core$Char$fromCode(
-						$elm$core$Basics$abs(
+						A2(
+							$elm$core$Maybe$withDefault,
+							1157,
+							$elm$core$String$toInt(
+								A2($author$project$Wrapper3D$lastDigits, 8, x + (y * x)))) & $elm$core$Basics$abs(
 							$elm$core$Basics$round(x * y)));
 				},
 				points);
@@ -8923,7 +9143,11 @@ var $author$project$Wrapper3D$getMeshName = function (mesh) {
 					var x = _v4.a;
 					var y = _v4.b;
 					return $elm$core$Char$fromCode(
-						$elm$core$Basics$abs(
+						A2(
+							$elm$core$Maybe$withDefault,
+							42,
+							$elm$core$String$toInt(
+								A2($author$project$Wrapper3D$lastDigits, 8, x + (y * x)))) & $elm$core$Basics$abs(
 							$elm$core$Basics$round(x * y)));
 				},
 				points);
@@ -8933,11 +9157,42 @@ var $author$project$Wrapper3D$getMeshName = function (mesh) {
 			var radius = mesh.a;
 			var height = mesh.b;
 			return 'texturedCylinder' + ($elm$core$String$fromFloat(radius) + $elm$core$String$fromFloat(height));
-		default:
+		case 'TruncatedCone':
 			var topR = mesh.a;
 			var botR = mesh.b;
 			var height = mesh.c;
 			return 'truncatedCone' + ($elm$core$String$fromFloat(topR) + ($elm$core$String$fromFloat(botR) + $elm$core$String$fromFloat(height)));
+		default:
+			var triangularMesh = mesh.a;
+			var doCulling = mesh.b;
+			var positions = A2(
+				$elm$core$List$map,
+				function (vertex) {
+					return vertex.position;
+				},
+				$elm$core$Array$toList(
+					$ianmackenzie$elm_triangular_mesh$TriangularMesh$vertices(triangularMesh)));
+			var listIDHelper = A2(
+				$elm$core$List$map,
+				function (_v5) {
+					var x = _v5.a;
+					var y = _v5.b;
+					var z = _v5.c;
+					return $elm$core$Char$fromCode(
+						A2(
+							$elm$core$Maybe$withDefault,
+							1234,
+							$elm$core$String$toInt(
+								A2($author$project$Wrapper3D$lastDigits, 8, (x + y) + (z * x)))) & $elm$core$Basics$abs(
+							$elm$core$Basics$round((x * y) * z)));
+				},
+				A2(
+					$elm$core$List$map,
+					$ianmackenzie$elm_geometry$Point3d$toTuple($ianmackenzie$elm_units$Length$inCentimeters),
+					positions));
+			var listID = $elm$core$String$fromList(listIDHelper);
+			var cullMarker = doCulling ? 'culled' : '';
+			return 'customObject' + (listID + cullMarker);
 	}
 };
 var $ianmackenzie$elm_3d_scene$Scene3d$Types$EmptyShadow = {$: 'EmptyShadow'};
@@ -9039,7 +9294,6 @@ var $elm$core$Maybe$map3 = F4(
 			}
 		}
 	});
-var $elm$core$Bitwise$and = _Bitwise_and;
 var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
 var $elm$core$Array$bitMask = 4294967295 >>> (32 - $elm$core$Array$shiftStep);
 var $elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
@@ -9778,15 +10032,6 @@ var $ianmackenzie$elm_3d_scene$Scene3d$Mesh$texturedFacets = function (givenMesh
 	return $ianmackenzie$elm_3d_scene$Scene3d$Mesh$texturedFaces(
 		A2($ianmackenzie$elm_triangular_mesh$TriangularMesh$indexed, collectedVertices, faceIndices));
 };
-var $elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
 var $author$project$Wrapper3D$polyConeMesh = F2(
 	function (points, _v0) {
 		var xtip = _v0.a;
@@ -11251,247 +11496,11 @@ var $ianmackenzie$elm_geometry$Axis3d$through = F2(
 			{direction: givenDirection, originPoint: givenPoint});
 	});
 var $ianmackenzie$elm_geometry$Axis3d$x = A2($ianmackenzie$elm_geometry$Axis3d$through, $ianmackenzie$elm_geometry$Point3d$origin, $ianmackenzie$elm_geometry$Direction3d$x);
-var $author$project$Wrapper3D$rotateX3D = F2(
-	function (angle, entityBBox) {
-		var toBlock3d = function (boundingBox) {
-			return $ianmackenzie$elm_geometry$Block3d$with(
-				{
-					x1: $ianmackenzie$elm_geometry$BoundingBox3d$minX(boundingBox),
-					x2: $ianmackenzie$elm_geometry$BoundingBox3d$maxX(boundingBox),
-					y1: $ianmackenzie$elm_geometry$BoundingBox3d$minY(boundingBox),
-					y2: $ianmackenzie$elm_geometry$BoundingBox3d$maxY(boundingBox),
-					z1: $ianmackenzie$elm_geometry$BoundingBox3d$minZ(boundingBox),
-					z2: $ianmackenzie$elm_geometry$BoundingBox3d$maxZ(boundingBox)
-				});
-		};
-		if (entityBBox.$ === 'ObjectGroup') {
-			var attributes = entityBBox.a;
-			return $author$project$Wrapper3D$ObjectGroup(
-				_Utils_update(
-					attributes,
-					{
-						boundingBox: function () {
-							var _v1 = attributes.boundingBox;
-							switch (_v1.$) {
-								case 'Box':
-									var boundingbox = _v1.a;
-									return $author$project$Wrapper3D$Box(
-										$ianmackenzie$elm_geometry$Block3d$boundingBox(
-											A3(
-												$ianmackenzie$elm_geometry$Block3d$rotateAround,
-												$ianmackenzie$elm_geometry$Axis3d$x,
-												$ianmackenzie$elm_units$Angle$radians(angle),
-												toBlock3d(boundingbox))));
-								case 'Composite':
-									var boxes = _v1.a;
-									return $author$project$Wrapper3D$Composite(
-										A2(
-											$elm$core$List$map,
-											function (compositeBox) {
-												return $ianmackenzie$elm_geometry$Block3d$boundingBox(
-													A3(
-														$ianmackenzie$elm_geometry$Block3d$rotateAround,
-														$ianmackenzie$elm_geometry$Axis3d$x,
-														$ianmackenzie$elm_units$Angle$radians(angle),
-														toBlock3d(compositeBox)));
-											},
-											boxes));
-								default:
-									return $author$project$Wrapper3D$NoBox;
-							}
-						}(),
-						subObjects: A2(
-							$elm$core$List$map,
-							function (object) {
-								return A2($author$project$Wrapper3D$rotateX3D, angle, object);
-							},
-							attributes.subObjects)
-					}));
-		} else {
-			var object = entityBBox.a;
-			var _v2 = object.boundingBox;
-			switch (_v2.$) {
-				case 'Box':
-					var boundingBox = _v2.a;
-					return $author$project$Wrapper3D$Object(
-						_Utils_update(
-							object,
-							{
-								boundingBox: $author$project$Wrapper3D$Box(
-									$ianmackenzie$elm_geometry$Block3d$boundingBox(
-										A3(
-											$ianmackenzie$elm_geometry$Block3d$rotateAround,
-											$ianmackenzie$elm_geometry$Axis3d$x,
-											$ianmackenzie$elm_units$Angle$radians(angle),
-											toBlock3d(boundingBox)))),
-								shape: A3(
-									$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
-									$ianmackenzie$elm_geometry$Axis3d$x,
-									$ianmackenzie$elm_units$Angle$radians(angle),
-									object.shape)
-							}));
-				case 'Composite':
-					var boxes = _v2.a;
-					return $author$project$Wrapper3D$Object(
-						_Utils_update(
-							object,
-							{
-								boundingBox: $author$project$Wrapper3D$Composite(
-									A2(
-										$elm$core$List$map,
-										function (compositeBox) {
-											return $ianmackenzie$elm_geometry$Block3d$boundingBox(
-												A3(
-													$ianmackenzie$elm_geometry$Block3d$rotateAround,
-													$ianmackenzie$elm_geometry$Axis3d$x,
-													$ianmackenzie$elm_units$Angle$radians(angle),
-													toBlock3d(compositeBox)));
-										},
-										boxes)),
-								shape: A3(
-									$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
-									$ianmackenzie$elm_geometry$Axis3d$x,
-									$ianmackenzie$elm_units$Angle$radians(angle),
-									object.shape)
-							}));
-				default:
-					return $author$project$Wrapper3D$Object(
-						_Utils_update(
-							object,
-							{
-								boundingBox: $author$project$Wrapper3D$NoBox,
-								shape: A3(
-									$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
-									$ianmackenzie$elm_geometry$Axis3d$x,
-									$ianmackenzie$elm_units$Angle$radians(angle),
-									object.shape)
-							}));
-			}
-		}
-	});
 var $ianmackenzie$elm_geometry$Axis3d$y = A2($ianmackenzie$elm_geometry$Axis3d$through, $ianmackenzie$elm_geometry$Point3d$origin, $ianmackenzie$elm_geometry$Direction3d$y);
-var $author$project$Wrapper3D$rotateY3D = F2(
-	function (angle, entityBBox) {
-		var toBlock3d = function (boundingBox) {
-			return $ianmackenzie$elm_geometry$Block3d$with(
-				{
-					x1: $ianmackenzie$elm_geometry$BoundingBox3d$minX(boundingBox),
-					x2: $ianmackenzie$elm_geometry$BoundingBox3d$maxX(boundingBox),
-					y1: $ianmackenzie$elm_geometry$BoundingBox3d$minY(boundingBox),
-					y2: $ianmackenzie$elm_geometry$BoundingBox3d$maxY(boundingBox),
-					z1: $ianmackenzie$elm_geometry$BoundingBox3d$minZ(boundingBox),
-					z2: $ianmackenzie$elm_geometry$BoundingBox3d$maxZ(boundingBox)
-				});
-		};
-		if (entityBBox.$ === 'ObjectGroup') {
-			var attributes = entityBBox.a;
-			return $author$project$Wrapper3D$ObjectGroup(
-				_Utils_update(
-					attributes,
-					{
-						boundingBox: function () {
-							var _v1 = attributes.boundingBox;
-							switch (_v1.$) {
-								case 'Box':
-									var boundingbox = _v1.a;
-									return $author$project$Wrapper3D$Box(
-										$ianmackenzie$elm_geometry$Block3d$boundingBox(
-											A3(
-												$ianmackenzie$elm_geometry$Block3d$rotateAround,
-												$ianmackenzie$elm_geometry$Axis3d$y,
-												$ianmackenzie$elm_units$Angle$radians(angle),
-												toBlock3d(boundingbox))));
-								case 'Composite':
-									var boxes = _v1.a;
-									return $author$project$Wrapper3D$Composite(
-										A2(
-											$elm$core$List$map,
-											function (compositeBox) {
-												return $ianmackenzie$elm_geometry$Block3d$boundingBox(
-													A3(
-														$ianmackenzie$elm_geometry$Block3d$rotateAround,
-														$ianmackenzie$elm_geometry$Axis3d$y,
-														$ianmackenzie$elm_units$Angle$radians(angle),
-														toBlock3d(compositeBox)));
-											},
-											boxes));
-								default:
-									return $author$project$Wrapper3D$NoBox;
-							}
-						}(),
-						subObjects: A2(
-							$elm$core$List$map,
-							function (object) {
-								return A2($author$project$Wrapper3D$rotateY3D, angle, object);
-							},
-							attributes.subObjects)
-					}));
-		} else {
-			var object = entityBBox.a;
-			var _v2 = object.boundingBox;
-			switch (_v2.$) {
-				case 'Box':
-					var boundingBox = _v2.a;
-					return $author$project$Wrapper3D$Object(
-						_Utils_update(
-							object,
-							{
-								boundingBox: $author$project$Wrapper3D$Box(
-									$ianmackenzie$elm_geometry$Block3d$boundingBox(
-										A3(
-											$ianmackenzie$elm_geometry$Block3d$rotateAround,
-											$ianmackenzie$elm_geometry$Axis3d$y,
-											$ianmackenzie$elm_units$Angle$radians(angle),
-											toBlock3d(boundingBox)))),
-								shape: A3(
-									$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
-									$ianmackenzie$elm_geometry$Axis3d$y,
-									$ianmackenzie$elm_units$Angle$radians(angle),
-									object.shape)
-							}));
-				case 'Composite':
-					var boxes = _v2.a;
-					return $author$project$Wrapper3D$Object(
-						_Utils_update(
-							object,
-							{
-								boundingBox: $author$project$Wrapper3D$Composite(
-									A2(
-										$elm$core$List$map,
-										function (compositeBox) {
-											return $ianmackenzie$elm_geometry$Block3d$boundingBox(
-												A3(
-													$ianmackenzie$elm_geometry$Block3d$rotateAround,
-													$ianmackenzie$elm_geometry$Axis3d$y,
-													$ianmackenzie$elm_units$Angle$radians(angle),
-													toBlock3d(compositeBox)));
-										},
-										boxes)),
-								shape: A3(
-									$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
-									$ianmackenzie$elm_geometry$Axis3d$y,
-									$ianmackenzie$elm_units$Angle$radians(angle),
-									object.shape)
-							}));
-				default:
-					return $author$project$Wrapper3D$Object(
-						_Utils_update(
-							object,
-							{
-								boundingBox: $author$project$Wrapper3D$NoBox,
-								shape: A3(
-									$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
-									$ianmackenzie$elm_geometry$Axis3d$y,
-									$ianmackenzie$elm_units$Angle$radians(angle),
-									object.shape)
-							}));
-			}
-		}
-	});
 var $ianmackenzie$elm_geometry$Direction3d$z = $ianmackenzie$elm_geometry$Direction3d$positiveZ;
 var $ianmackenzie$elm_geometry$Axis3d$z = A2($ianmackenzie$elm_geometry$Axis3d$through, $ianmackenzie$elm_geometry$Point3d$origin, $ianmackenzie$elm_geometry$Direction3d$z);
-var $author$project$Wrapper3D$rotateZ3D = F2(
-	function (angle, entityBBox) {
+var $author$project$Wrapper3D$rotate3D = F4(
+	function (pitch, yaw, roll, entityBBox) {
 		var toBlock3d = function (boundingBox) {
 			return $ianmackenzie$elm_geometry$Block3d$with(
 				{
@@ -11519,8 +11528,16 @@ var $author$project$Wrapper3D$rotateZ3D = F2(
 											A3(
 												$ianmackenzie$elm_geometry$Block3d$rotateAround,
 												$ianmackenzie$elm_geometry$Axis3d$z,
-												$ianmackenzie$elm_units$Angle$radians(angle),
-												toBlock3d(boundingbox))));
+												$ianmackenzie$elm_units$Angle$radians(yaw),
+												A3(
+													$ianmackenzie$elm_geometry$Block3d$rotateAround,
+													$ianmackenzie$elm_geometry$Axis3d$x,
+													$ianmackenzie$elm_units$Angle$radians(roll),
+													A3(
+														$ianmackenzie$elm_geometry$Block3d$rotateAround,
+														$ianmackenzie$elm_geometry$Axis3d$y,
+														$ianmackenzie$elm_units$Angle$radians(pitch),
+														toBlock3d(boundingbox))))));
 								case 'Composite':
 									var boxes = _v1.a;
 									return $author$project$Wrapper3D$Composite(
@@ -11531,8 +11548,16 @@ var $author$project$Wrapper3D$rotateZ3D = F2(
 													A3(
 														$ianmackenzie$elm_geometry$Block3d$rotateAround,
 														$ianmackenzie$elm_geometry$Axis3d$z,
-														$ianmackenzie$elm_units$Angle$radians(angle),
-														toBlock3d(compositeBox)));
+														$ianmackenzie$elm_units$Angle$radians(yaw),
+														A3(
+															$ianmackenzie$elm_geometry$Block3d$rotateAround,
+															$ianmackenzie$elm_geometry$Axis3d$x,
+															$ianmackenzie$elm_units$Angle$radians(roll),
+															A3(
+																$ianmackenzie$elm_geometry$Block3d$rotateAround,
+																$ianmackenzie$elm_geometry$Axis3d$y,
+																$ianmackenzie$elm_units$Angle$radians(pitch),
+																toBlock3d(compositeBox)))));
 											},
 											boxes));
 								default:
@@ -11542,7 +11567,7 @@ var $author$project$Wrapper3D$rotateZ3D = F2(
 						subObjects: A2(
 							$elm$core$List$map,
 							function (object) {
-								return A2($author$project$Wrapper3D$rotateZ3D, angle, object);
+								return A4($author$project$Wrapper3D$rotate3D, pitch, yaw, roll, object);
 							},
 							attributes.subObjects)
 					}));
@@ -11561,13 +11586,43 @@ var $author$project$Wrapper3D$rotateZ3D = F2(
 										A3(
 											$ianmackenzie$elm_geometry$Block3d$rotateAround,
 											$ianmackenzie$elm_geometry$Axis3d$z,
-											$ianmackenzie$elm_units$Angle$radians(angle),
-											toBlock3d(boundingBox)))),
+											$ianmackenzie$elm_units$Angle$radians(yaw),
+											A3(
+												$ianmackenzie$elm_geometry$Block3d$rotateAround,
+												$ianmackenzie$elm_geometry$Axis3d$x,
+												$ianmackenzie$elm_units$Angle$radians(roll),
+												A3(
+													$ianmackenzie$elm_geometry$Block3d$rotateAround,
+													$ianmackenzie$elm_geometry$Axis3d$y,
+													$ianmackenzie$elm_units$Angle$radians(pitch),
+													toBlock3d(boundingBox)))))),
+								rotation: {
+									pitch: A2(
+										$ianmackenzie$elm_units$Quantity$plus,
+										$ianmackenzie$elm_units$Angle$radians(pitch),
+										object.rotation.pitch),
+									roll: A2(
+										$ianmackenzie$elm_units$Quantity$plus,
+										$ianmackenzie$elm_units$Angle$radians(roll),
+										object.rotation.roll),
+									yaw: A2(
+										$ianmackenzie$elm_units$Quantity$plus,
+										$ianmackenzie$elm_units$Angle$radians(yaw),
+										object.rotation.yaw)
+								},
 								shape: A3(
 									$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
 									$ianmackenzie$elm_geometry$Axis3d$z,
-									$ianmackenzie$elm_units$Angle$radians(angle),
-									object.shape)
+									$ianmackenzie$elm_units$Angle$radians(yaw),
+									A3(
+										$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
+										$ianmackenzie$elm_geometry$Axis3d$x,
+										$ianmackenzie$elm_units$Angle$radians(roll),
+										A3(
+											$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
+											$ianmackenzie$elm_geometry$Axis3d$y,
+											$ianmackenzie$elm_units$Angle$radians(pitch),
+											object.shape)))
 							}));
 				case 'Composite':
 					var boxes = _v2.a;
@@ -11583,15 +11638,45 @@ var $author$project$Wrapper3D$rotateZ3D = F2(
 												A3(
 													$ianmackenzie$elm_geometry$Block3d$rotateAround,
 													$ianmackenzie$elm_geometry$Axis3d$z,
-													$ianmackenzie$elm_units$Angle$radians(angle),
-													toBlock3d(compositeBox)));
+													$ianmackenzie$elm_units$Angle$radians(yaw),
+													A3(
+														$ianmackenzie$elm_geometry$Block3d$rotateAround,
+														$ianmackenzie$elm_geometry$Axis3d$x,
+														$ianmackenzie$elm_units$Angle$radians(roll),
+														A3(
+															$ianmackenzie$elm_geometry$Block3d$rotateAround,
+															$ianmackenzie$elm_geometry$Axis3d$y,
+															$ianmackenzie$elm_units$Angle$radians(pitch),
+															toBlock3d(compositeBox)))));
 										},
 										boxes)),
+								rotation: {
+									pitch: A2(
+										$ianmackenzie$elm_units$Quantity$plus,
+										$ianmackenzie$elm_units$Angle$radians(pitch),
+										object.rotation.pitch),
+									roll: A2(
+										$ianmackenzie$elm_units$Quantity$plus,
+										$ianmackenzie$elm_units$Angle$radians(roll),
+										object.rotation.roll),
+									yaw: A2(
+										$ianmackenzie$elm_units$Quantity$plus,
+										$ianmackenzie$elm_units$Angle$radians(yaw),
+										object.rotation.yaw)
+								},
 								shape: A3(
 									$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
 									$ianmackenzie$elm_geometry$Axis3d$z,
-									$ianmackenzie$elm_units$Angle$radians(angle),
-									object.shape)
+									$ianmackenzie$elm_units$Angle$radians(yaw),
+									A3(
+										$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
+										$ianmackenzie$elm_geometry$Axis3d$x,
+										$ianmackenzie$elm_units$Angle$radians(roll),
+										A3(
+											$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
+											$ianmackenzie$elm_geometry$Axis3d$y,
+											$ianmackenzie$elm_units$Angle$radians(pitch),
+											object.shape)))
 							}));
 				default:
 					return $author$project$Wrapper3D$Object(
@@ -11599,14 +11684,48 @@ var $author$project$Wrapper3D$rotateZ3D = F2(
 							object,
 							{
 								boundingBox: $author$project$Wrapper3D$NoBox,
+								rotation: {
+									pitch: A2(
+										$ianmackenzie$elm_units$Quantity$plus,
+										$ianmackenzie$elm_units$Angle$radians(pitch),
+										object.rotation.pitch),
+									roll: A2(
+										$ianmackenzie$elm_units$Quantity$plus,
+										$ianmackenzie$elm_units$Angle$radians(roll),
+										object.rotation.roll),
+									yaw: A2(
+										$ianmackenzie$elm_units$Quantity$plus,
+										$ianmackenzie$elm_units$Angle$radians(yaw),
+										object.rotation.yaw)
+								},
 								shape: A3(
 									$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
 									$ianmackenzie$elm_geometry$Axis3d$z,
-									$ianmackenzie$elm_units$Angle$radians(angle),
-									object.shape)
+									$ianmackenzie$elm_units$Angle$radians(yaw),
+									A3(
+										$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
+										$ianmackenzie$elm_geometry$Axis3d$x,
+										$ianmackenzie$elm_units$Angle$radians(roll),
+										A3(
+											$ianmackenzie$elm_3d_scene$Scene3d$rotateAround,
+											$ianmackenzie$elm_geometry$Axis3d$y,
+											$ianmackenzie$elm_units$Angle$radians(pitch),
+											object.shape)))
 							}));
 			}
 		}
+	});
+var $author$project$Wrapper3D$rotateX3D = F2(
+	function (angle, entityBBox) {
+		return A4($author$project$Wrapper3D$rotate3D, 0, 0, angle, entityBBox);
+	});
+var $author$project$Wrapper3D$rotateY3D = F2(
+	function (angle, entityBBox) {
+		return A4($author$project$Wrapper3D$rotate3D, angle, 0, 0, entityBBox);
+	});
+var $author$project$Wrapper3D$rotateZ3D = F2(
+	function (angle, entityBBox) {
+		return A4($author$project$Wrapper3D$rotate3D, 0, angle, 0, entityBBox);
 	});
 var $author$project$Wrapper3D$Block = function (a) {
 	return {$: 'Block', a: a};
@@ -11633,18 +11752,6 @@ var $ianmackenzie$elm_geometry$Quantity$Extra$scaleAbout = F3(
 		var x = _v1.a;
 		return $ianmackenzie$elm_units$Quantity$Quantity(x0 + (scale * (x - x0)));
 	});
-var $ianmackenzie$elm_geometry$Point3d$xCoordinate = function (_v0) {
-	var p = _v0.a;
-	return $ianmackenzie$elm_units$Quantity$Quantity(p.x);
-};
-var $ianmackenzie$elm_geometry$Point3d$yCoordinate = function (_v0) {
-	var p = _v0.a;
-	return $ianmackenzie$elm_units$Quantity$Quantity(p.y);
-};
-var $ianmackenzie$elm_geometry$Point3d$zCoordinate = function (_v0) {
-	var p = _v0.a;
-	return $ianmackenzie$elm_units$Quantity$Quantity(p.z);
-};
 var $ianmackenzie$elm_geometry$BoundingBox3d$scaleAbout = F3(
 	function (point, scale, boundingBox) {
 		var z0 = $ianmackenzie$elm_geometry$Point3d$zCoordinate(point);
@@ -11715,22 +11822,14 @@ var $author$project$Wrapper3D$scale3D = F2(
 								case 'Box':
 									var boundingbox = _v1.a;
 									return $author$project$Wrapper3D$Box(
-										A3(
-											$ianmackenzie$elm_geometry$BoundingBox3d$scaleAbout,
-											A3($ianmackenzie$elm_geometry$Point3d$centimeters, 0, 0, 0),
-											factor,
-											boundingbox));
+										A3($ianmackenzie$elm_geometry$BoundingBox3d$scaleAbout, $ianmackenzie$elm_geometry$Point3d$origin, factor, boundingbox));
 								case 'Composite':
 									var boxes = _v1.a;
 									return $author$project$Wrapper3D$Composite(
 										A2(
 											$elm$core$List$map,
 											function (compositeBox) {
-												return A3(
-													$ianmackenzie$elm_geometry$BoundingBox3d$scaleAbout,
-													A3($ianmackenzie$elm_geometry$Point3d$centimeters, 0, 0, 0),
-													factor,
-													compositeBox);
+												return A3($ianmackenzie$elm_geometry$BoundingBox3d$scaleAbout, $ianmackenzie$elm_geometry$Point3d$origin, factor, compositeBox);
 											},
 											boxes));
 								default:
@@ -11789,16 +11888,8 @@ var $author$project$Wrapper3D$scale3D = F2(
 							{
 								approxShape: scaledShape,
 								boundingBox: $author$project$Wrapper3D$Box(
-									A3(
-										$ianmackenzie$elm_geometry$BoundingBox3d$scaleAbout,
-										A3($ianmackenzie$elm_geometry$Point3d$centimeters, 0, 0, 0),
-										factor,
-										boundingBox)),
-								shape: A3(
-									$ianmackenzie$elm_3d_scene$Scene3d$scaleAbout,
-									A3($ianmackenzie$elm_geometry$Point3d$centimeters, 0, 0, 0),
-									factor,
-									object.shape)
+									A3($ianmackenzie$elm_geometry$BoundingBox3d$scaleAbout, $ianmackenzie$elm_geometry$Point3d$origin, factor, boundingBox)),
+								shape: A3($ianmackenzie$elm_3d_scene$Scene3d$scaleAbout, $ianmackenzie$elm_geometry$Point3d$origin, factor, object.shape)
 							}));
 				case 'Composite':
 					var boxes = _v2.a;
@@ -11811,18 +11902,10 @@ var $author$project$Wrapper3D$scale3D = F2(
 									A2(
 										$elm$core$List$map,
 										function (compositeBox) {
-											return A3(
-												$ianmackenzie$elm_geometry$BoundingBox3d$scaleAbout,
-												A3($ianmackenzie$elm_geometry$Point3d$centimeters, 0, 0, 0),
-												factor,
-												compositeBox);
+											return A3($ianmackenzie$elm_geometry$BoundingBox3d$scaleAbout, $ianmackenzie$elm_geometry$Point3d$origin, factor, compositeBox);
 										},
 										boxes)),
-								shape: A3(
-									$ianmackenzie$elm_3d_scene$Scene3d$scaleAbout,
-									A3($ianmackenzie$elm_geometry$Point3d$centimeters, 0, 0, 0),
-									factor,
-									object.shape)
+								shape: A3($ianmackenzie$elm_3d_scene$Scene3d$scaleAbout, $ianmackenzie$elm_geometry$Point3d$origin, factor, object.shape)
 							}));
 				default:
 					return $author$project$Wrapper3D$Object(
@@ -11831,11 +11914,7 @@ var $author$project$Wrapper3D$scale3D = F2(
 							{
 								approxShape: scaledShape,
 								boundingBox: object.boundingBox,
-								shape: A3(
-									$ianmackenzie$elm_3d_scene$Scene3d$scaleAbout,
-									A3($ianmackenzie$elm_geometry$Point3d$centimeters, 0, 0, 0),
-									factor,
-									object.shape)
+								shape: A3($ianmackenzie$elm_3d_scene$Scene3d$scaleAbout, $ianmackenzie$elm_geometry$Point3d$origin, factor, object.shape)
 							}));
 			}
 		}
@@ -12043,29 +12122,6 @@ var $ianmackenzie$elm_3d_scene$Scene3d$UnoptimizedShaders$colorTextureFragment =
 	attributes: {},
 	uniforms: {colorTexture: 'colorTexture'}
 };
-var $elm_explorations$webgl$WebGL$Internal$disableSetting = F2(
-	function (cache, setting) {
-		switch (setting.$) {
-			case 'Blend':
-				return _WebGL_disableBlend(cache);
-			case 'DepthTest':
-				return _WebGL_disableDepthTest(cache);
-			case 'StencilTest':
-				return _WebGL_disableStencilTest(cache);
-			case 'Scissor':
-				return _WebGL_disableScissor(cache);
-			case 'ColorMask':
-				return _WebGL_disableColorMask(cache);
-			case 'CullFace':
-				return _WebGL_disableCullFace(cache);
-			case 'PolygonOffset':
-				return _WebGL_disablePolygonOffset(cache);
-			case 'SampleCoverage':
-				return _WebGL_disableSampleCoverage(cache);
-			default:
-				return _WebGL_disableSampleAlphaToCoverage(cache);
-		}
-	});
 var $elm_explorations$webgl$WebGL$Internal$enableOption = F2(
 	function (ctx, option) {
 		switch (option.$) {
@@ -12084,26 +12140,26 @@ var $elm_explorations$webgl$WebGL$Internal$enableOption = F2(
 		}
 	});
 var $elm_explorations$webgl$WebGL$Internal$enableSetting = F2(
-	function (gl, setting) {
+	function (cache, setting) {
 		switch (setting.$) {
 			case 'Blend':
-				return A2(_WebGL_enableBlend, gl, setting);
+				return A2(_WebGL_enableBlend, cache, setting);
 			case 'DepthTest':
-				return A2(_WebGL_enableDepthTest, gl, setting);
+				return A2(_WebGL_enableDepthTest, cache, setting);
 			case 'StencilTest':
-				return A2(_WebGL_enableStencilTest, gl, setting);
+				return A2(_WebGL_enableStencilTest, cache, setting);
 			case 'Scissor':
-				return A2(_WebGL_enableScissor, gl, setting);
+				return A2(_WebGL_enableScissor, cache, setting);
 			case 'ColorMask':
-				return A2(_WebGL_enableColorMask, gl, setting);
+				return A2(_WebGL_enableColorMask, cache, setting);
 			case 'CullFace':
-				return A2(_WebGL_enableCullFace, gl, setting);
+				return A2(_WebGL_enableCullFace, cache, setting);
 			case 'PolygonOffset':
-				return A2(_WebGL_enablePolygonOffset, gl, setting);
+				return A2(_WebGL_enablePolygonOffset, cache, setting);
 			case 'SampleCoverage':
-				return A2(_WebGL_enableSampleCoverage, gl, setting);
+				return A2(_WebGL_enableSampleCoverage, cache, setting);
 			default:
-				return A2(_WebGL_enableSampleAlphaToCoverage, gl, setting);
+				return _WebGL_enableSampleAlphaToCoverage(cache);
 		}
 	});
 var $elm_explorations$webgl$WebGL$entityWith = _WebGL_entity;
@@ -13558,22 +13614,43 @@ var $ianmackenzie$elm_geometry$Block3d$from = F2(
 			$ianmackenzie$elm_geometry$Point3d$yCoordinate(p2),
 			$ianmackenzie$elm_geometry$Point3d$zCoordinate(p2));
 	});
-var $author$project$Wrapper3D$box = F4(
+var $author$project$Wrapper3D$boxU = F4(
 	function (length, width, height, material) {
 		var boxShape = A2(
 			$ianmackenzie$elm_geometry$Block3d$from,
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, (-length) / 2, (-width) / 2, (-height) / 2),
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, length / 2, width / 2, height / 2));
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				A2($ianmackenzie$elm_units$Quantity$divideBy, -2, length),
+				A2($ianmackenzie$elm_units$Quantity$divideBy, -2, width),
+				A2($ianmackenzie$elm_units$Quantity$divideBy, -2, height)),
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				A2($ianmackenzie$elm_units$Quantity$divideBy, 2, length),
+				A2($ianmackenzie$elm_units$Quantity$divideBy, 2, width),
+				A2($ianmackenzie$elm_units$Quantity$divideBy, 2, height)));
 		return $author$project$Wrapper3D$Object(
 			{
 				approxShape: $author$project$Wrapper3D$Block(
-					_Utils_Tuple3(length, width, height)),
+					_Utils_Tuple3(
+						$ianmackenzie$elm_units$Length$inCentimeters(length),
+						$ianmackenzie$elm_units$Length$inCentimeters(width),
+						$ianmackenzie$elm_units$Length$inCentimeters(height))),
 				boundingBox: $author$project$Wrapper3D$Box(
 					$ianmackenzie$elm_geometry$Block3d$boundingBox(boxShape)),
 				customMesh: $author$project$Wrapper3D$Primitive,
 				name: 'box',
+				rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 				shape: A2($ianmackenzie$elm_3d_scene$Scene3d$blockWithShadow, material, boxShape)
 			});
+	});
+var $author$project$Wrapper3D$box = F4(
+	function (length, width, height, material) {
+		return A4(
+			$author$project$Wrapper3D$boxU,
+			$ianmackenzie$elm_units$Length$centimeters(length),
+			$ianmackenzie$elm_units$Length$centimeters(width),
+			$ianmackenzie$elm_units$Length$centimeters(height),
+			material);
 	});
 var $ianmackenzie$elm_geometry$Geometry$Types$Cone3d = function (a) {
 	return {$: 'Cone3d', a: a};
@@ -13933,61 +14010,44 @@ var $ianmackenzie$elm_3d_scene$Scene3d$coneWithShadow = F2(
 	function (givenMaterial, givenCone) {
 		return A4($ianmackenzie$elm_3d_scene$Scene3d$Entity$cone, true, true, givenMaterial, givenCone);
 	});
-var $author$project$Wrapper3D$cone = F3(
+var $author$project$Wrapper3D$coneU = F3(
 	function (r, h, material) {
 		var coneShape = A2(
 			$ianmackenzie$elm_geometry$Cone3d$along,
 			$ianmackenzie$elm_geometry$Axis3d$z,
-			{
-				base: $ianmackenzie$elm_units$Length$centimeters(0),
-				radius: $ianmackenzie$elm_units$Length$centimeters(r),
-				tip: $ianmackenzie$elm_units$Length$centimeters(h)
-			});
+			{base: $ianmackenzie$elm_units$Quantity$zero, radius: r, tip: h});
 		return $author$project$Wrapper3D$Object(
 			{
-				approxShape: A2($author$project$Wrapper3D$Cone, r, h),
+				approxShape: A2(
+					$author$project$Wrapper3D$Cone,
+					$ianmackenzie$elm_units$Length$inCentimeters(r),
+					$ianmackenzie$elm_units$Length$inCentimeters(h)),
 				boundingBox: $author$project$Wrapper3D$Box(
 					$ianmackenzie$elm_geometry$Cone3d$boundingBox(coneShape)),
 				customMesh: $author$project$Wrapper3D$Primitive,
 				name: 'cone',
+				rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 				shape: A2($ianmackenzie$elm_3d_scene$Scene3d$coneWithShadow, material, coneShape)
 			});
 	});
+var $author$project$Wrapper3D$cone = F3(
+	function (r, h, material) {
+		return A3(
+			$author$project$Wrapper3D$coneU,
+			$ianmackenzie$elm_units$Length$centimeters(r),
+			$ianmackenzie$elm_units$Length$centimeters(h),
+			material);
+	});
+var $author$project$Wrapper3D$cubeU = F2(
+	function (size, material) {
+		return A4($author$project$Wrapper3D$boxU, size, size, size, material);
+	});
 var $author$project$Wrapper3D$cube = F2(
 	function (size, material) {
-		var cubeShape = A2(
-			$ianmackenzie$elm_geometry$Block3d$from,
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, 0, 0, 0),
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, size, size, size));
-		return $author$project$Wrapper3D$Object(
-			{
-				approxShape: $author$project$Wrapper3D$Block(
-					_Utils_Tuple3(size, size, size)),
-				boundingBox: $author$project$Wrapper3D$Box(
-					$ianmackenzie$elm_geometry$Block3d$boundingBox(cubeShape)),
-				customMesh: $author$project$Wrapper3D$Primitive,
-				name: 'cube',
-				shape: A2($ianmackenzie$elm_3d_scene$Scene3d$blockWithShadow, material, cubeShape)
-			});
-	});
-var $ianmackenzie$elm_geometry$Geometry$Types$Cylinder3d = function (a) {
-	return {$: 'Cylinder3d', a: a};
-};
-var $ianmackenzie$elm_geometry$Cylinder3d$along = F2(
-	function (givenAxis, _arguments) {
-		var givenAxisDirection = $ianmackenzie$elm_geometry$Axis3d$direction(givenAxis);
-		var computedDirection = A2($ianmackenzie$elm_units$Quantity$greaterThanOrEqualTo, _arguments.start, _arguments.end) ? givenAxisDirection : $ianmackenzie$elm_geometry$Direction3d$reverse(givenAxisDirection);
-		var computedCenterPoint = A2(
-			$ianmackenzie$elm_geometry$Point3d$along,
-			givenAxis,
-			A2($ianmackenzie$elm_units$Quantity$midpoint, _arguments.start, _arguments.end));
-		return $ianmackenzie$elm_geometry$Geometry$Types$Cylinder3d(
-			{
-				axis: A2($ianmackenzie$elm_geometry$Axis3d$through, computedCenterPoint, computedDirection),
-				length: $ianmackenzie$elm_units$Quantity$abs(
-					A2($ianmackenzie$elm_units$Quantity$minus, _arguments.start, _arguments.end)),
-				radius: $ianmackenzie$elm_units$Quantity$abs(_arguments.radius)
-			});
+		return A2(
+			$author$project$Wrapper3D$cubeU,
+			$ianmackenzie$elm_units$Length$centimeters(size),
+			material);
 	});
 var $ianmackenzie$elm_geometry$Cylinder3d$axis = function (_v0) {
 	var cylinder = _v0.a;
@@ -14046,6 +14106,18 @@ var $ianmackenzie$elm_geometry$Cylinder3d$boundingBox = function (cylinder) {
 		$ianmackenzie$elm_geometry$Circle3d$boundingBox(
 			$ianmackenzie$elm_geometry$Cylinder3d$endCap(cylinder)));
 };
+var $ianmackenzie$elm_geometry$Geometry$Types$Cylinder3d = function (a) {
+	return {$: 'Cylinder3d', a: a};
+};
+var $ianmackenzie$elm_geometry$Cylinder3d$centeredOn = F3(
+	function (givenCenterPoint, givenDirection, _arguments) {
+		return $ianmackenzie$elm_geometry$Geometry$Types$Cylinder3d(
+			{
+				axis: A2($ianmackenzie$elm_geometry$Axis3d$through, givenCenterPoint, givenDirection),
+				length: $ianmackenzie$elm_units$Quantity$abs(_arguments.length),
+				radius: $ianmackenzie$elm_units$Quantity$abs(_arguments.radius)
+			});
+	});
 var $ianmackenzie$elm_3d_scene$Scene3d$Primitives$cylinder = function () {
 	var subdivisions = 72;
 	var wedgeAngle = A2(
@@ -14166,25 +14238,34 @@ var $ianmackenzie$elm_3d_scene$Scene3d$cylinderWithShadow = F2(
 	function (givenMaterial, givenCylinder) {
 		return A4($ianmackenzie$elm_3d_scene$Scene3d$Entity$cylinder, true, true, givenMaterial, givenCylinder);
 	});
-var $author$project$Wrapper3D$cylinder = F3(
+var $author$project$Wrapper3D$cylinderU = F3(
 	function (r, h, material) {
-		var cylinderShape = A2(
-			$ianmackenzie$elm_geometry$Cylinder3d$along,
-			$ianmackenzie$elm_geometry$Axis3d$z,
-			{
-				end: $ianmackenzie$elm_units$Length$centimeters(h),
-				radius: $ianmackenzie$elm_units$Length$centimeters(r),
-				start: $ianmackenzie$elm_units$Length$centimeters(0)
-			});
+		var cylinderShape = A3(
+			$ianmackenzie$elm_geometry$Cylinder3d$centeredOn,
+			$ianmackenzie$elm_geometry$Point3d$origin,
+			$ianmackenzie$elm_geometry$Direction3d$z,
+			{length: h, radius: r});
 		return $author$project$Wrapper3D$Object(
 			{
-				approxShape: A2($author$project$Wrapper3D$Cylinder, r, h),
+				approxShape: A2(
+					$author$project$Wrapper3D$Cylinder,
+					$ianmackenzie$elm_units$Length$inCentimeters(r),
+					$ianmackenzie$elm_units$Length$inCentimeters(h)),
 				boundingBox: $author$project$Wrapper3D$Box(
 					$ianmackenzie$elm_geometry$Cylinder3d$boundingBox(cylinderShape)),
 				customMesh: $author$project$Wrapper3D$Primitive,
 				name: 'cylinder',
+				rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 				shape: A2($ianmackenzie$elm_3d_scene$Scene3d$cylinderWithShadow, material, cylinderShape)
 			});
+	});
+var $author$project$Wrapper3D$cylinder = F3(
+	function (r, h, material) {
+		return A3(
+			$author$project$Wrapper3D$cylinderU,
+			$ianmackenzie$elm_units$Length$centimeters(r),
+			$ianmackenzie$elm_units$Length$centimeters(h),
+			material);
 	});
 var $author$project$ShapeCreator$stencilFun = function (m) {
 	var _v0 = m.shape;
@@ -14366,6 +14447,7 @@ var $author$project$Wrapper3D$customPolygon = F2(
 								A3($ianmackenzie$elm_geometry$Point3d$centimeters, minx, miny, 0))),
 						customMesh: $author$project$Wrapper3D$Primitive,
 						name: 'customPolygon',
+						rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 						shape: A3(
 							$ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow,
 							material,
@@ -14380,6 +14462,7 @@ var $author$project$Wrapper3D$customPolygon = F2(
 						boundingBox: $author$project$Wrapper3D$NoBox,
 						customMesh: $author$project$Wrapper3D$Primitive,
 						name: 'customPolygon',
+						rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 						shape: A3(
 							$ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow,
 							material,
@@ -14395,6 +14478,7 @@ var $author$project$Wrapper3D$customPolygon = F2(
 					boundingBox: $author$project$Wrapper3D$NoBox,
 					customMesh: $author$project$Wrapper3D$Primitive,
 					name: 'customPolygon',
+					rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 					shape: A3(
 						$ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow,
 						material,
@@ -14444,6 +14528,7 @@ var $author$project$Wrapper3D$ellipsoid = F5(
 				customMesh: $author$project$Wrapper3D$Ellipsoid(
 					_Utils_Tuple3(length, width, height)),
 				name: 'ellipsoid',
+				rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 				shape: A3($ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow, material, mesh, shadow)
 			});
 	});
@@ -14613,6 +14698,7 @@ var $author$project$Wrapper3D$polyCone = F4(
 							points,
 							_Utils_Tuple3(xtip, ytip, ztip)),
 						name: 'polyCone',
+						rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 						shape: A3($ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow, material, mesh, shadow)
 					});
 			} else {
@@ -14625,6 +14711,7 @@ var $author$project$Wrapper3D$polyCone = F4(
 							points,
 							_Utils_Tuple3(xtip, ytip, ztip)),
 						name: 'polyCone',
+						rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 						shape: A3($ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow, material, mesh, shadow)
 					});
 			}
@@ -14638,6 +14725,7 @@ var $author$project$Wrapper3D$polyCone = F4(
 						points,
 						_Utils_Tuple3(xtip, ytip, ztip)),
 					name: 'polyCone',
+					rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 					shape: A3($ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow, material, mesh, shadow)
 				});
 		}
@@ -14718,6 +14806,7 @@ var $author$project$Wrapper3D$polyCylinder = F4(
 								A3($ianmackenzie$elm_geometry$Point3d$centimeters, minx, miny, 0))),
 						customMesh: A2($author$project$Wrapper3D$PolyCylinder, points, height),
 						name: 'polyCylinder',
+						rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 						shape: A3($ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow, material, mesh, shadow)
 					});
 			} else {
@@ -14727,6 +14816,7 @@ var $author$project$Wrapper3D$polyCylinder = F4(
 						boundingBox: $author$project$Wrapper3D$NoBox,
 						customMesh: A2($author$project$Wrapper3D$PolyCylinder, points, height),
 						name: 'polyCylinder',
+						rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 						shape: A3($ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow, material, mesh, shadow)
 					});
 			}
@@ -14737,6 +14827,7 @@ var $author$project$Wrapper3D$polyCylinder = F4(
 					boundingBox: $author$project$Wrapper3D$NoBox,
 					customMesh: A2($author$project$Wrapper3D$PolyCylinder, points, height),
 					name: 'polyCylinder',
+					rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 					shape: A3($ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow, material, mesh, shadow)
 				});
 		}
@@ -14749,10 +14840,6 @@ var $elm$core$List$head = function (list) {
 	} else {
 		return $elm$core$Maybe$Nothing;
 	}
-};
-var $ianmackenzie$elm_units$Length$inMeters = function (_v0) {
-	var numMeters = _v0.a;
-	return numMeters;
 };
 var $elm$core$Tuple$second = function (_v0) {
 	var y = _v0.b;
@@ -14863,9 +14950,14 @@ var $author$project$Wrapper3D$polygon3D = F3(
 					boundingBox: $author$project$Wrapper3D$Box(polygonBBox),
 					customMesh: $author$project$Wrapper3D$Primitive,
 					name: 'polygon',
+					rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 					shape: A3($ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow, material, mesh, shadow)
 				}));
 	});
+var $ianmackenzie$elm_units$Quantity$negate = function (_v0) {
+	var value = _v0.a;
+	return $ianmackenzie$elm_units$Quantity$Quantity(-value);
+};
 var $ianmackenzie$elm_geometry$BoundingBox3d$hullHelp = F7(
 	function (currentMinX, currentMaxX, currentMinY, currentMaxY, currentMinZ, currentMaxZ, points) {
 		hullHelp:
@@ -15326,30 +15418,58 @@ var $ianmackenzie$elm_3d_scene$Scene3d$quadWithShadow = F5(
 	function (givenMaterial, p1, p2, p3, p4) {
 		return A7($ianmackenzie$elm_3d_scene$Scene3d$Entity$quad, true, true, givenMaterial, p1, p2, p3, p4);
 	});
-var $author$project$Wrapper3D$rectangle3D = F3(
+var $author$project$Wrapper3D$quad3D = F3(
 	function (length, width, material) {
-		var wValue = width / 2;
-		var lValue = length / 2;
+		var wValue = A2($ianmackenzie$elm_units$Quantity$divideBy, 2, width);
+		var lValue = A2($ianmackenzie$elm_units$Quantity$divideBy, 2, length);
 		var rectangleBBox = A2(
 			$ianmackenzie$elm_geometry$BoundingBox3d$from,
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, -lValue, -wValue, 0),
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, lValue, wValue, 0));
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				$ianmackenzie$elm_units$Quantity$negate(lValue),
+				$ianmackenzie$elm_units$Quantity$negate(wValue),
+				$ianmackenzie$elm_units$Quantity$zero),
+			A3($ianmackenzie$elm_geometry$Point3d$xyz, lValue, wValue, $ianmackenzie$elm_units$Quantity$zero));
 		var rectangleShape = A5(
 			$ianmackenzie$elm_3d_scene$Scene3d$quadWithShadow,
 			material,
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, -lValue, -wValue, 0),
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, -lValue, wValue, 0),
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, lValue, wValue, 0),
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, lValue, -wValue, 0));
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				$ianmackenzie$elm_units$Quantity$negate(lValue),
+				$ianmackenzie$elm_units$Quantity$negate(wValue),
+				$ianmackenzie$elm_units$Quantity$zero),
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				$ianmackenzie$elm_units$Quantity$negate(lValue),
+				wValue,
+				$ianmackenzie$elm_units$Quantity$zero),
+			A3($ianmackenzie$elm_geometry$Point3d$xyz, lValue, wValue, $ianmackenzie$elm_units$Quantity$zero),
+			A3(
+				$ianmackenzie$elm_geometry$Point3d$xyz,
+				lValue,
+				$ianmackenzie$elm_units$Quantity$negate(wValue),
+				$ianmackenzie$elm_units$Quantity$zero));
 		return $author$project$Wrapper3D$Object(
 			{
 				approxShape: $author$project$Wrapper3D$Block(
-					_Utils_Tuple3(length, width, 0.1)),
+					_Utils_Tuple3(
+						$ianmackenzie$elm_units$Length$inCentimeters(length),
+						$ianmackenzie$elm_units$Length$inCentimeters(width),
+						0.1)),
 				boundingBox: $author$project$Wrapper3D$Box(rectangleBBox),
 				customMesh: $author$project$Wrapper3D$Primitive,
 				name: 'rectangle',
+				rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 				shape: rectangleShape
 			});
+	});
+var $author$project$Wrapper3D$rectangle3D = F3(
+	function (length, width, material) {
+		return A3(
+			$author$project$Wrapper3D$quad3D,
+			$ianmackenzie$elm_units$Length$centimeters(length),
+			$ianmackenzie$elm_units$Length$centimeters(width),
+			material);
 	});
 var $author$project$Wrapper3D$ring = F4(
 	function (radius, thickness, model, material) {
@@ -15419,6 +15539,7 @@ var $author$project$Wrapper3D$ring = F4(
 						])),
 				customMesh: A2($author$project$Wrapper3D$Ring, radius, thickness),
 				name: 'ring',
+				rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 				shape: A3($ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow, material, mesh, shadow)
 			});
 	});
@@ -15690,49 +15811,33 @@ var $ianmackenzie$elm_geometry$Sphere3d$withRadius = F2(
 				radius: $ianmackenzie$elm_units$Quantity$abs(givenRadius)
 			});
 	});
+var $author$project$Wrapper3D$sphereU = F2(
+	function (r, material) {
+		var sphereShape = A2($ianmackenzie$elm_geometry$Sphere3d$withRadius, r, $ianmackenzie$elm_geometry$Point3d$origin);
+		var rCm = $ianmackenzie$elm_units$Length$inCentimeters(r);
+		return $author$project$Wrapper3D$Object(
+			{
+				approxShape: $author$project$Wrapper3D$EllipsoidShape(
+					_Utils_Tuple3(rCm, rCm, rCm)),
+				boundingBox: $author$project$Wrapper3D$Box(
+					$ianmackenzie$elm_geometry$Sphere3d$boundingBox(sphereShape)),
+				customMesh: $author$project$Wrapper3D$Primitive,
+				name: 'sphere',
+				rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
+				shape: A2($ianmackenzie$elm_3d_scene$Scene3d$sphereWithShadow, material, sphereShape)
+			});
+	});
 var $author$project$Wrapper3D$sphere = F2(
 	function (r, material) {
-		var sphereShape = A2(
-			$ianmackenzie$elm_geometry$Sphere3d$withRadius,
-			$ianmackenzie$elm_units$Length$centimeters(r),
-			$ianmackenzie$elm_geometry$Point3d$origin);
 		return A2(
-			$author$project$Wrapper3D$move3D,
-			_Utils_Tuple3(0, 0, r),
-			$author$project$Wrapper3D$Object(
-				{
-					approxShape: $author$project$Wrapper3D$EllipsoidShape(
-						_Utils_Tuple3(r, r, r)),
-					boundingBox: $author$project$Wrapper3D$Box(
-						$ianmackenzie$elm_geometry$Sphere3d$boundingBox(sphereShape)),
-					customMesh: $author$project$Wrapper3D$Primitive,
-					name: 'sphere',
-					shape: A2($ianmackenzie$elm_3d_scene$Scene3d$sphereWithShadow, material, sphereShape)
-				}));
+			$author$project$Wrapper3D$sphereU,
+			$ianmackenzie$elm_units$Length$centimeters(r),
+			material);
 	});
 var $author$project$Wrapper3D$square3D = F2(
 	function (length, material) {
-		var posValue = length / 2;
-		var quadBBox = A2(
-			$ianmackenzie$elm_geometry$BoundingBox3d$from,
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, -posValue, -posValue, 0),
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, posValue, posValue, 0));
-		var quadShape = A5(
-			$ianmackenzie$elm_3d_scene$Scene3d$quadWithShadow,
-			material,
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, -posValue, -posValue, 0),
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, -posValue, posValue, 0),
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, posValue, posValue, 0),
-			A3($ianmackenzie$elm_geometry$Point3d$centimeters, posValue, -posValue, 0));
-		return $author$project$Wrapper3D$Object(
-			{
-				approxShape: $author$project$Wrapper3D$Block(
-					_Utils_Tuple3(length, length, 0.1)),
-				boundingBox: $author$project$Wrapper3D$Box(quadBBox),
-				customMesh: $author$project$Wrapper3D$Primitive,
-				name: 'square',
-				shape: quadShape
-			});
+		var lenVal = $ianmackenzie$elm_units$Length$centimeters(length);
+		return A3($author$project$Wrapper3D$quad3D, lenVal, lenVal, material);
 	});
 var $author$project$Wrapper3D$texturedCylinder = F4(
 	function (radius, height, model, material) {
@@ -15772,6 +15877,7 @@ var $author$project$Wrapper3D$texturedCylinder = F4(
 				boundingBox: $author$project$Wrapper3D$Box(boundingBox),
 				customMesh: A2($author$project$Wrapper3D$TexturedCylinder, radius, height),
 				name: 'texturedCylinder',
+				rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 				shape: A3($ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow, material, mesh, shadow)
 			});
 	});
@@ -15817,6 +15923,7 @@ var $author$project$Wrapper3D$truncatedCone = F5(
 				boundingBox: $author$project$Wrapper3D$Box(boundingBox),
 				customMesh: A3($author$project$Wrapper3D$TruncatedCone, topR, botR, height),
 				name: 'truncatedCone',
+				rotation: {pitch: $ianmackenzie$elm_units$Quantity$zero, roll: $ianmackenzie$elm_units$Quantity$zero, yaw: $ianmackenzie$elm_units$Quantity$zero},
 				shape: A3($ianmackenzie$elm_3d_scene$Scene3d$meshWithShadow, material, mesh, shadow)
 			});
 	});
@@ -16171,7 +16278,6 @@ var $author$project$GSVGSkybox$update = F2(
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
-var $elm$core$Debug$log = _Debug_log;
 var $elm$core$Maybe$map = F2(
 	function (f, maybe) {
 		if (maybe.$ === 'Just') {
@@ -16599,11 +16705,7 @@ var $author$project$GSVGTexture$update = F2(
 				var _v5 = msg.a;
 				var widgetID = _v5.a;
 				var imageURL = _v5.b;
-				var newTextures = A3(
-					$elm$core$Dict$insert,
-					A2($elm$core$Debug$log, 'Generated...', widgetID),
-					imageURL,
-					model.textures);
+				var newTextures = A3($elm$core$Dict$insert, widgetID, imageURL, model.textures);
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -16668,9 +16770,8 @@ var $ianmackenzie$elm_3d_scene$Scene3d$Material$load = function (url) {
 };
 var $author$project$TextureLoader$update = F2(
 	function (msg, model) {
-		var _v0 = A2($elm$core$Debug$log, 'TL.msg', msg);
-		if (_v0.$ === 'RequestNew') {
-			var _v1 = _v0.a;
+		if (msg.$ === 'RequestNew') {
+			var _v1 = msg.a;
 			var name = _v1.a;
 			var url = _v1.b;
 			return _Utils_Tuple2(
@@ -16684,8 +16785,8 @@ var $author$project$TextureLoader$update = F2(
 					$author$project$TextureLoader$TextureLoaded(name),
 					$ianmackenzie$elm_3d_scene$Scene3d$Material$load(url)));
 		} else {
-			var name = _v0.a;
-			var res = _v0.b;
+			var name = msg.a;
+			var res = msg.b;
 			if (res.$ === 'Ok') {
 				var texture = res.a;
 				return _Utils_Tuple2(
@@ -17812,10 +17913,6 @@ var $ianmackenzie$elm_3d_scene$Scene3d$lightingDisabled = _Utils_Tuple2(
 		lights78: A2($ianmackenzie$elm_3d_scene$Scene3d$lightPair, $ianmackenzie$elm_3d_scene$Scene3d$Light$disabled, $ianmackenzie$elm_3d_scene$Scene3d$Light$disabled)
 	},
 	A4($elm_explorations$linear_algebra$Math$Vector4$vec4, 0, 0, 0, 0));
-var $ianmackenzie$elm_units$Quantity$negate = function (_v0) {
-	var value = _v0.a;
-	return $ianmackenzie$elm_units$Quantity$Quantity(-value);
-};
 var $elm_explorations$webgl$WebGL$Settings$StencilTest$equal = $elm_explorations$webgl$WebGL$Settings$StencilTest$Test(514);
 var $elm_explorations$webgl$WebGL$Settings$DepthTest$lessOrEqual = function (_v0) {
 	var write = _v0.write;
@@ -23205,7 +23302,7 @@ var $author$project$ShapeCreator$yourCode = function (model) {
 								A2(
 									$author$project$ShapeCreator$copiable,
 									model,
-									'  |> ' + (A2($author$project$ShapeCreator$stampString, model, model.draw) + ((_Utils_eq(model.draw, $author$project$ShapeCreator$Texture) ? $author$project$ShapeCreator$textureString(model.textureStyle) : A2($author$project$ShapeCreator$clrString, model, model.clr)) + ((_Utils_eq(model.draw, $author$project$ShapeCreator$Metal) || _Utils_eq(model.draw, $author$project$ShapeCreator$Plastic)) ? A2($myrho$elm_round$Round$round, 1, model.roughness) : '')))))
+									'  |> ' + (A2($author$project$ShapeCreator$stampString, model, model.draw) + ((_Utils_eq(model.draw, $author$project$ShapeCreator$Texture) ? $author$project$ShapeCreator$textureString(model.textureStyle) : A2($author$project$ShapeCreator$clrString, model, model.clr)) + ((_Utils_eq(model.draw, $author$project$ShapeCreator$Metal) || _Utils_eq(model.draw, $author$project$ShapeCreator$Plastic)) ? (' ' + A2($myrho$elm_round$Round$round, 1, model.roughness)) : '')))))
 							]),
 						A3(
 							$elm$core$List$map2,
