@@ -10,7 +10,7 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 - BeeCollision [BeeCollision](/Deemo/beeCollision.html)
 - ShapeCreator [ShapeCreator](/Deemo/ShapeCreator.html)
 - Spaceship [Spaceship](/Deemo/spaceshipScene.html)
-- RubeGoldberg [RubeGoldberg](/Deemo/spaceshipScene.RubeGoldberg.html)
+- RubeGoldberg [RubeGoldberg](/Deemo/RubeGoldberg.html)
   
 - For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
