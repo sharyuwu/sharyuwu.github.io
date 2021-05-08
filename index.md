@@ -11,6 +11,7 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 - ShapeCreator [ShapeCreator](/Deemo/ShapeCreator.html)
 - Spaceship [Spaceship](/Deemo/spaceshipScene.html)
 - RubeGoldberg [RubeGoldberg](/Deemo/RubeGoldberg.html)
+- RubeGoldberg [musicCreator](/Deemo/musicCreator.html)
   
 - For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
