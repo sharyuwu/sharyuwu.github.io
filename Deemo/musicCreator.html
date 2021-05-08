@@ -8652,11 +8652,6 @@ var $author$project$MusicCreator$GotNewWidth = F2(
 var $author$project$MusicCreator$Released = {$: 'Released'};
 var $author$project$MusicCreator$Ts44 = {$: 'Ts44'};
 var $elm$browser$Browser$Dom$getViewport = _Browser_withWindow(_Browser_getViewport);
-var $author$project$MusicCreator$EighthN = {$: 'EighthN'};
-var $author$project$MusicCreator$SelectNote = F4(
-	function (pos, posInit, dragState, note) {
-		return {dragState: dragState, note: note, pos: pos, posInit: posInit};
-	});
 var $author$project$MusicCreator$noteToString = function (notes) {
 	switch (notes.$) {
 		case 'Empty':
@@ -8694,6 +8689,10 @@ var $author$project$MusicCreator$generateName = function (record) {
 		$author$project$MusicCreator$noteToString(record.note),
 		tostring(record.pos));
 };
+var $author$project$MusicCreator$SelectNote = F4(
+	function (pos, posInit, dragState, note) {
+		return {dragState: dragState, note: note, pos: pos, posInit: posInit};
+	});
 var $author$project$MusicCreator$makeScoreNoteX = F2(
 	function (z, dist) {
 		return (-40) + (dist * z);
@@ -8764,45 +8763,9 @@ var $author$project$MusicCreator$scoreNote = function (dist) {
 				b);
 		},
 		$author$project$MusicCreator$updateScoreNoteYDict(
-			A2(
-				$author$project$MusicCreator$updateScoreNoteXDict,
-				dist,
-				_List_fromArray(
-					[
-						_Utils_Tuple2(
-						'name',
-						A4(
-							$author$project$MusicCreator$SelectNote,
-							_Utils_Tuple2(0, -3.5),
-							_Utils_Tuple2(0, 0),
-							$author$project$MusicCreator$Released,
-							$author$project$MusicCreator$EighthN)),
-						_Utils_Tuple2(
-						'name',
-						A4(
-							$author$project$MusicCreator$SelectNote,
-							_Utils_Tuple2(0, -3.5),
-							_Utils_Tuple2(0, 0),
-							$author$project$MusicCreator$Released,
-							$author$project$MusicCreator$EighthN)),
-						_Utils_Tuple2(
-						'name',
-						A4(
-							$author$project$MusicCreator$SelectNote,
-							_Utils_Tuple2(0, -3.5),
-							_Utils_Tuple2(0, 0),
-							$author$project$MusicCreator$Released,
-							$author$project$MusicCreator$EighthN)),
-						_Utils_Tuple2(
-						'name',
-						A4(
-							$author$project$MusicCreator$SelectNote,
-							_Utils_Tuple2(0, -3.5),
-							_Utils_Tuple2(0, 0),
-							$author$project$MusicCreator$Released,
-							$author$project$MusicCreator$EighthN))
-					]))));
+			A2($author$project$MusicCreator$updateScoreNoteXDict, dist, _List_Nil)));
 };
+var $author$project$MusicCreator$EighthN = {$: 'EighthN'};
 var $author$project$MusicCreator$EighthR = {$: 'EighthR'};
 var $author$project$MusicCreator$HalfN = {$: 'HalfN'};
 var $author$project$MusicCreator$HalfR = {$: 'HalfR'};
@@ -11651,8 +11614,11 @@ var $author$project$MusicCreator$groupedNote = F2(
 		return $MacCASOutreach$graphicsvg$GraphicSVG$group(
 			_List_fromArray(
 				[
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					p1,
 					$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
-					$MacCASOutreach$graphicsvg$GraphicSVG$square(20)),
+						$MacCASOutreach$graphicsvg$GraphicSVG$square(20))),
 					A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
 					p1,
