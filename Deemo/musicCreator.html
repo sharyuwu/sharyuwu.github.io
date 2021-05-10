@@ -8997,6 +8997,20 @@ var $author$project$MusicCreator$checkBeaming = F2(
 var $elm$core$List$concat = function (lists) {
 	return A3($elm$core$List$foldr, $elm$core$List$append, _List_Nil, lists);
 };
+var $author$project$MusicCreator$clearEmpty = function (list) {
+	return $elm$core$List$concat(
+		A2(
+			$elm$core$List$map,
+			function (_v0) {
+				var name = _v0.a;
+				var a = _v0.b;
+				return _Utils_eq(a.note, $author$project$MusicCreator$Empty) ? _List_Nil : _List_fromArray(
+					[
+						_Utils_Tuple2(name, a)
+					]);
+			},
+			list));
+};
 var $author$project$MusicCreator$defselectNoteRec = A4(
 	$author$project$MusicCreator$SelectNote,
 	_Utils_Tuple2(0, 0),
@@ -9268,25 +9282,17 @@ var $author$project$MusicCreator$changeDrageScoreNoteUpdateScoreNote = F2(
 			model.timeSignature).b;
 		var updateNewList = validateEachBeaming ? $author$project$MusicCreator$updateScoreName(
 			$author$project$MusicCreator$updateScoreNoteYDict(
-				A2($author$project$MusicCreator$updateScoreNoteXDict, model.sizeofNote, newList))) : $author$project$MusicCreator$updateScoreName(
+				A2(
+					$author$project$MusicCreator$updateScoreNoteXDict,
+					model.sizeofNote,
+					$author$project$MusicCreator$clearEmpty(newList)))) : $author$project$MusicCreator$updateScoreName(
 			$author$project$MusicCreator$updateScoreNoteYDict(
-				A2($author$project$MusicCreator$updateScoreNoteXDict, model.sizeofNote, listUpdateInitXY)));
+				A2(
+					$author$project$MusicCreator$updateScoreNoteXDict,
+					model.sizeofNote,
+					$author$project$MusicCreator$clearEmpty(listUpdateInitXY))));
 		return updateNewList;
 	});
-var $author$project$MusicCreator$clearEmpty = function (list) {
-	return $elm$core$List$concat(
-		A2(
-			$elm$core$List$map,
-			function (_v0) {
-				var name = _v0.a;
-				var a = _v0.b;
-				return _Utils_eq(a.note, $author$project$MusicCreator$Empty) ? _List_Nil : _List_fromArray(
-					[
-						_Utils_Tuple2(name, a)
-					]);
-			},
-			list));
-};
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (maybe.$ === 'Just') {
@@ -11790,6 +11796,41 @@ var $author$project$Line2dAssist$line = F2(
 			$author$project$Line2dAssist$point(p1),
 			$author$project$Line2dAssist$point(p2));
 	});
+var $ianmackenzie$elm_geometry$LineSegment2d$midpoint = function (lineSegment) {
+	return A2($ianmackenzie$elm_geometry$LineSegment2d$interpolate, lineSegment, 0.5);
+};
+var $ianmackenzie$elm_units$Length$inMeters = function (_v0) {
+	var numMeters = _v0.a;
+	return numMeters;
+};
+var $ianmackenzie$elm_units$Length$inCentimeters = function (length) {
+	return 100 * $ianmackenzie$elm_units$Length$inMeters(length);
+};
+var $ianmackenzie$elm_geometry$Point2d$xCoordinate = function (_v0) {
+	var p = _v0.a;
+	return $ianmackenzie$elm_units$Quantity$Quantity(p.x);
+};
+var $ianmackenzie$elm_geometry$Point2d$yCoordinate = function (_v0) {
+	var p = _v0.a;
+	return $ianmackenzie$elm_units$Quantity$Quantity(p.y);
+};
+var $ianmackenzie$elm_geometry$Point2d$toTuple = F2(
+	function (fromQuantity, point) {
+		return _Utils_Tuple2(
+			fromQuantity(
+				$ianmackenzie$elm_geometry$Point2d$xCoordinate(point)),
+			fromQuantity(
+				$ianmackenzie$elm_geometry$Point2d$yCoordinate(point)));
+	});
+var $author$project$Line2dAssist$xy = function (p) {
+	return A2($ianmackenzie$elm_geometry$Point2d$toTuple, $ianmackenzie$elm_units$Length$inCentimeters, p);
+};
+var $author$project$Line2dAssist$midPoint = F2(
+	function (p1, p2) {
+		return $author$project$Line2dAssist$xy(
+			$ianmackenzie$elm_geometry$LineSegment2d$midpoint(
+				A2($author$project$Line2dAssist$line, p1, p2)));
+	});
 var $author$project$MusicCreator$noteAndName = function (list) {
 	return A2(
 		$elm$core$List$map,
@@ -11799,9 +11840,6 @@ var $author$project$MusicCreator$noteAndName = function (list) {
 			return _Utils_Tuple2(name, a.note);
 		},
 		list);
-};
-var $ianmackenzie$elm_geometry$LineSegment2d$midpoint = function (lineSegment) {
-	return A2($ianmackenzie$elm_geometry$LineSegment2d$interpolate, lineSegment, 0.5);
 };
 var $ianmackenzie$elm_geometry$LineSegment2d$mapEndpoints = F2(
 	function (_function, lineSegment) {
@@ -11959,57 +11997,152 @@ var $elm$core$List$take = F2(
 	function (n, list) {
 		return A3($elm$core$List$takeFast, 0, n, list);
 	});
-var $ianmackenzie$elm_units$Length$inMeters = function (_v0) {
-	var numMeters = _v0.a;
-	return numMeters;
+var $ianmackenzie$elm_geometry$Geometry$Types$Direction2d = function (a) {
+	return {$: 'Direction2d', a: a};
 };
-var $ianmackenzie$elm_units$Length$inCentimeters = function (length) {
-	return 100 * $ianmackenzie$elm_units$Length$inMeters(length);
-};
-var $ianmackenzie$elm_geometry$Point2d$xCoordinate = function (_v0) {
-	var p = _v0.a;
-	return $ianmackenzie$elm_units$Quantity$Quantity(p.x);
-};
-var $ianmackenzie$elm_geometry$Point2d$yCoordinate = function (_v0) {
-	var p = _v0.a;
-	return $ianmackenzie$elm_units$Quantity$Quantity(p.y);
-};
-var $ianmackenzie$elm_geometry$Point2d$toTuple = F2(
-	function (fromQuantity, point) {
-		return _Utils_Tuple2(
-			fromQuantity(
-				$ianmackenzie$elm_geometry$Point2d$xCoordinate(point)),
-			fromQuantity(
-				$ianmackenzie$elm_geometry$Point2d$yCoordinate(point)));
+var $ianmackenzie$elm_geometry$Direction2d$negativeY = $ianmackenzie$elm_geometry$Geometry$Types$Direction2d(
+	{x: 0, y: -1});
+var $ianmackenzie$elm_geometry$Point2d$translateBy = F2(
+	function (_v0, _v1) {
+		var v = _v0.a;
+		var p = _v1.a;
+		return $ianmackenzie$elm_geometry$Geometry$Types$Point2d(
+			{x: p.x + v.x, y: p.y + v.y});
 	});
-var $author$project$Line2dAssist$xy = function (p) {
-	return A2($ianmackenzie$elm_geometry$Point2d$toTuple, $ianmackenzie$elm_units$Length$inCentimeters, p);
+var $ianmackenzie$elm_geometry$LineSegment2d$translateBy = function (displacementVector) {
+	return $ianmackenzie$elm_geometry$LineSegment2d$mapEndpoints(
+		$ianmackenzie$elm_geometry$Point2d$translateBy(displacementVector));
 };
+var $ianmackenzie$elm_geometry$Vector2d$withLength = F2(
+	function (_v0, _v1) {
+		var a = _v0.a;
+		var d = _v1.a;
+		return $ianmackenzie$elm_geometry$Geometry$Types$Vector2d(
+			{x: a * d.x, y: a * d.y});
+	});
+var $ianmackenzie$elm_geometry$LineSegment2d$translateIn = F3(
+	function (translationDirection, distance, lineSegment) {
+		return A2(
+			$ianmackenzie$elm_geometry$LineSegment2d$translateBy,
+			A2($ianmackenzie$elm_geometry$Vector2d$withLength, distance, translationDirection),
+			lineSegment);
+	});
+var $author$project$Line2dAssist$translateInNy = F2(
+	function (line1, x) {
+		return A3(
+			$ianmackenzie$elm_geometry$LineSegment2d$translateIn,
+			$ianmackenzie$elm_geometry$Direction2d$negativeY,
+			$ianmackenzie$elm_units$Length$centimeters(x),
+			line1);
+	});
+var $ianmackenzie$elm_geometry$Direction2d$positiveY = $ianmackenzie$elm_geometry$Geometry$Types$Direction2d(
+	{x: 0, y: 1});
+var $author$project$Line2dAssist$translateInPy = F2(
+	function (line1, x) {
+		return A3(
+			$ianmackenzie$elm_geometry$LineSegment2d$translateIn,
+			$ianmackenzie$elm_geometry$Direction2d$positiveY,
+			$ianmackenzie$elm_units$Length$centimeters(x),
+			line1);
+	});
 var $author$project$MusicCreator$drawgroup = function (list) {
+	var secondBarLineHelper2 = F2(
+		function (b, tmp) {
+			secondBarLineHelper2:
+			while (true) {
+				if (!b.b) {
+					return _Utils_Tuple2(tmp, _List_Nil);
+				} else {
+					var _v1 = b.a;
+					var name1 = _v1.a;
+					var x1 = _v1.b;
+					var xs = b.b;
+					if (_Utils_eq(x1.note, $author$project$MusicCreator$SixteenthN)) {
+						var $temp$b = xs,
+							$temp$tmp = _Utils_Tuple2(x1.pos, true);
+						b = $temp$b;
+						tmp = $temp$tmp;
+						continue secondBarLineHelper2;
+					} else {
+						if (tmp.b) {
+							return _Utils_Tuple2(tmp, xs);
+						} else {
+							return _Utils_Tuple2(
+								_Utils_Tuple2(x1.pos, false),
+								xs);
+						}
+					}
+				}
+			}
+		});
+	var secondBarLineHelper1 = function (b) {
+		secondBarLineHelper1:
+		while (true) {
+			if (!b.b) {
+				return _List_Nil;
+			} else {
+				if (!b.b.b) {
+					var _v3 = b.a;
+					var name1 = _v3.a;
+					var x1 = _v3.b;
+					return _List_fromArray(
+						[
+							_Utils_Tuple2(
+							x1.pos,
+							_Utils_Tuple2(x1.pos, false))
+						]);
+				} else {
+					var _v4 = b.a;
+					var name1 = _v4.a;
+					var x1 = _v4.b;
+					var xs = b.b;
+					if (_Utils_eq(x1.note, $author$project$MusicCreator$SixteenthN)) {
+						return A2(
+							$elm$core$List$cons,
+							_Utils_Tuple2(
+								x1.pos,
+								A2(
+									secondBarLineHelper2,
+									xs,
+									_Utils_Tuple2(x1.pos, false)).a),
+							secondBarLineHelper1(
+								A2(
+									secondBarLineHelper2,
+									xs,
+									_Utils_Tuple2(x1.pos, false)).b));
+					} else {
+						var $temp$b = xs;
+						b = $temp$b;
+						continue secondBarLineHelper1;
+					}
+				}
+			}
+		}
+	};
 	var posList = A2(
 		$elm$core$List$map,
-		function (_v4) {
-			var name = _v4.a;
-			var a = _v4.b;
+		function (_v11) {
+			var name = _v11.a;
+			var a = _v11.b;
 			return _Utils_Tuple2(a.pos.a, a.pos.b);
 		},
 		$author$project$MusicCreator$clearEmpty(list));
 	var pos2 = function () {
-		var _v3 = A2(
+		var _v10 = A2(
 			$elm$core$List$drop,
 			$elm$core$List$length(posList) - 1,
 			posList);
-		if (_v3.b && (!_v3.b.b)) {
-			var a = _v3.a;
+		if (_v10.b && (!_v10.b.b)) {
+			var a = _v10.a;
 			return a;
 		} else {
 			return _Utils_Tuple2(0, 0);
 		}
 	}();
 	var pos1 = function () {
-		var _v2 = A2($elm$core$List$take, 1, posList);
-		if (_v2.b && (!_v2.b.b)) {
-			var a = _v2.a;
+		var _v9 = A2($elm$core$List$take, 1, posList);
+		if (_v9.b && (!_v9.b.b)) {
+			var a = _v9.a;
 			return a;
 		} else {
 			return _Utils_Tuple2(0, 0);
@@ -12019,43 +12152,118 @@ var $author$project$MusicCreator$drawgroup = function (list) {
 		var countPitch = A3(
 			$elm$core$List$foldl,
 			F2(
-				function (_v1, def) {
-					var x = _v1.a;
-					var y = _v1.b;
+				function (_v8, def) {
+					var x = _v8.a;
+					var y = _v8.b;
 					return (y <= 0) ? (def + 1) : (def - 1);
 				}),
 			0,
 			posList);
 		return (countPitch > 0) ? true : false;
 	}();
-	var pos1ConsiderP = ifDecrese ? _Utils_Tuple2(pos1.a + 3.5, pos1.b + 24) : _Utils_Tuple2(pos1.a - 4, pos1.b - 24);
-	var pos2ConsiderP = ifDecrese ? _Utils_Tuple2(pos2.a + 4.5, pos2.b + 24) : _Utils_Tuple2(pos2.a - 3.5, pos2.b - 24);
+	var pos1ConsiderP = F2(
+		function (p, hight) {
+			return ifDecrese ? _Utils_Tuple2(p.a + 3.5, p.b + hight) : _Utils_Tuple2(p.a - 4.6, p.b - hight);
+		});
+	var pos2ConsiderP = F2(
+		function (p, hight) {
+			return ifDecrese ? _Utils_Tuple2(p.a + 4.5, p.b + hight) : _Utils_Tuple2(p.a - 3.3, p.b - hight);
+		});
+	var topBarLine = A2(
+		$author$project$Line2dAssist$scale,
+		A2(
+			$author$project$Line2dAssist$line,
+			A2(pos1ConsiderP, pos1, 24),
+			A2(pos2ConsiderP, pos2, 24)),
+		20);
+	var secondLine = ifDecrese ? A2($author$project$Line2dAssist$translateInNy, topBarLine, 6) : A2($author$project$Line2dAssist$translateInPy, topBarLine, 6);
+	var drawSecondLine = function () {
+		var shiftLeft = function (p) {
+			return _Utils_Tuple2(p.a - 20, p.b);
+		};
+		var maybeLine = function (p) {
+			var p2 = A2(pos2ConsiderP, pos2, 24);
+			var p1 = A2(pos1ConsiderP, p, 0);
+			return A2(
+				$author$project$Line2dAssist$scale,
+				A2(
+					$author$project$Line2dAssist$line,
+					p1,
+					_Utils_Tuple2(p1.a, p2.b * (-20))),
+				20);
+		};
+		var defaultPos = $author$project$Line2dAssist$point(
+			_Utils_Tuple2(0, 0));
+		var maybepoint = function (p) {
+			return $author$project$Line2dAssist$xy(
+				A2(
+					$elm$core$Maybe$withDefault,
+					defaultPos,
+					A2(
+						$author$project$Line2dAssist$intersection,
+						secondLine,
+						maybeLine(p))));
+		};
+		return A2(
+			$elm$core$List$map,
+			function (_v6) {
+				var p1 = _v6.a;
+				var _v7 = _v6.b;
+				var p2 = _v7.a;
+				var ifEnd = _v7.b;
+				return ifEnd ? A3(
+					$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
+					$MacCASOutreach$graphicsvg$GraphicSVG$solid(4),
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$line,
+						maybepoint(p1),
+						maybepoint(p2))) : ((!_Utils_eq(p1, p2)) ? A3(
+					$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
+					$MacCASOutreach$graphicsvg$GraphicSVG$solid(4),
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$line,
+						maybepoint(p1),
+						maybepoint(
+							A2($author$project$Line2dAssist$midPoint, p1, p2)))) : A3(
+					$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
+					$MacCASOutreach$graphicsvg$GraphicSVG$solid(4),
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$line,
+						maybepoint(p1),
+						maybepoint(
+							A2(
+								$author$project$Line2dAssist$midPoint,
+								p1,
+								shiftLeft(p1))))));
+			},
+			secondBarLineHelper1(list));
+	}();
 	var drawNote = function () {
-		var topBarLine = A2(
-			$author$project$Line2dAssist$scale,
-			A2($author$project$Line2dAssist$line, pos1ConsiderP, pos2ConsiderP),
-			20);
 		var noteList = $author$project$MusicCreator$noteAndName(
 			$author$project$MusicCreator$clearEmpty(list));
 		var maybeStaff = function (b) {
-			var lineP = ifDecrese ? A2(
-				$author$project$Line2dAssist$line,
-				_Utils_Tuple2(b.a + 4, pos2ConsiderP.b * (-20)),
-				_Utils_Tuple2(b.a + 4, pos2ConsiderP.b * 20)) : A2(
-				$author$project$Line2dAssist$line,
-				_Utils_Tuple2(b.a - 4, pos2ConsiderP.b * (-20)),
-				_Utils_Tuple2(b.a - 4, pos2ConsiderP.b * 20));
+			var lineP = function () {
+				var p2 = A2(pos2ConsiderP, pos2, 24);
+				return ifDecrese ? A2(
+					$author$project$Line2dAssist$line,
+					_Utils_Tuple2(b.a + 4, p2.b * (-20)),
+					_Utils_Tuple2(b.a + 4, p2.b * 20)) : A2(
+					$author$project$Line2dAssist$line,
+					_Utils_Tuple2(b.a - 4, p2.b * (-20)),
+					_Utils_Tuple2(b.a - 4, p2.b * 20));
+			}();
 			return A2($author$project$Line2dAssist$scale, lineP, 20);
 		};
-		var defaultPos = function (b) {
-			return $author$project$Line2dAssist$point(
-				_Utils_Tuple2(0, 0));
-		};
+		var defaultPos = $author$project$Line2dAssist$point(
+			_Utils_Tuple2(0, 0));
 		var staffPos = function (b) {
 			return $author$project$Line2dAssist$xy(
 				A2(
 					$elm$core$Maybe$withDefault,
-					defaultPos(b),
+					defaultPos,
 					A2(
 						$author$project$Line2dAssist$intersection,
 						topBarLine,
@@ -12064,9 +12272,9 @@ var $author$project$MusicCreator$drawgroup = function (list) {
 		return A3(
 			$elm$core$List$map2,
 			F2(
-				function (_v0, b) {
-					var name = _v0.a;
-					var a = _v0.b;
+				function (_v5, b) {
+					var name = _v5.a;
+					var a = _v5.b;
 					return A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown,
 						$author$project$MusicCreator$ChangeDragState(name),
@@ -12085,7 +12293,11 @@ var $author$project$MusicCreator$drawgroup = function (list) {
 				$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
 				$MacCASOutreach$graphicsvg$GraphicSVG$solid(4),
 				$MacCASOutreach$graphicsvg$GraphicSVG$black,
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$line, pos1ConsiderP, pos2ConsiderP)),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$line,
+					A2(pos1ConsiderP, pos1, 24),
+					A2(pos2ConsiderP, pos2, 24))),
+				$MacCASOutreach$graphicsvg$GraphicSVG$group(drawSecondLine),
 				$MacCASOutreach$graphicsvg$GraphicSVG$group(drawNote)
 			]));
 };
