@@ -8652,14 +8652,6 @@ var $author$project$MusicCreator$GotNewWidth = F2(
 var $author$project$MusicCreator$Released = {$: 'Released'};
 var $author$project$MusicCreator$Ts44 = {$: 'Ts44'};
 var $elm$browser$Browser$Dom$getViewport = _Browser_withWindow(_Browser_getViewport);
-var $author$project$MusicCreator$EighthN = {$: 'EighthN'};
-var $author$project$MusicCreator$SelectNote = F5(
-	function (pos, posInit, dragState, note, _function) {
-		return {dragState: dragState, _function: _function, note: note, pos: pos, posInit: posInit};
-	});
-var $author$project$MusicCreator$NoArticulation = {$: 'NoArticulation'};
-var $author$project$MusicCreator$NoDynamic = {$: 'NoDynamic'};
-var $author$project$MusicCreator$defaultFunction = {articulation: $author$project$MusicCreator$NoArticulation, dynamic: $author$project$MusicCreator$NoDynamic, lyric: _List_Nil};
 var $author$project$MusicCreator$noteToString = function (notes) {
 	switch (notes.$) {
 		case 'Empty':
@@ -8682,8 +8674,20 @@ var $author$project$MusicCreator$noteToString = function (notes) {
 			return 'quarter';
 		case 'EighthR':
 			return 'eighth';
-		default:
+		case 'SixteenthR':
 			return 'sixteenth';
+		case 'HalfND':
+			return 'half';
+		case 'QuarterND':
+			return 'quarter';
+		case 'EighthND':
+			return 'eighth';
+		case 'HalfRD':
+			return 'half';
+		case 'QuarterRD':
+			return 'quarter';
+		default:
+			return 'eighth';
 	}
 };
 var $elm$core$Debug$toString = _Debug_toString;
@@ -8697,9 +8701,13 @@ var $author$project$MusicCreator$generateName = function (record) {
 		$author$project$MusicCreator$noteToString(record.note),
 		tostring(record.pos));
 };
+var $author$project$MusicCreator$SelectNote = F5(
+	function (pos, posInit, dragState, note, _function) {
+		return {dragState: dragState, _function: _function, note: note, pos: pos, posInit: posInit};
+	});
 var $author$project$MusicCreator$makeScoreNoteX = F2(
 	function (z, dist) {
-		return (-40) + (dist * z);
+		return (-145) + (dist * z);
 	});
 var $author$project$MusicCreator$updateScoreNoteXDict = F2(
 	function (dist, list) {
@@ -8736,10 +8744,14 @@ var $author$project$MusicCreator$updateScoreNoteXDict = F2(
 			list);
 	});
 var $author$project$MusicCreator$updateScoreNoteYDict = function (list) {
+	var adjectY = function (p) {
+		return (p > 50) ? 50 : ((_Utils_cmp(p, -36) < 0) ? (-36) : p);
+	};
 	var upadateY = function (p) {
 		return _Utils_Tuple2(
 			p.a,
-			$elm$core$Basics$round(p.b / 3.5) * 3.5);
+			adjectY(
+				$elm$core$Basics$round(p.b / 3.5) * 3.5));
 	};
 	return A2(
 		$elm$core$List$map,
@@ -8769,48 +8781,7 @@ var $author$project$MusicCreator$scoreNote = function (dist) {
 				b);
 		},
 		$author$project$MusicCreator$updateScoreNoteYDict(
-			A2(
-				$author$project$MusicCreator$updateScoreNoteXDict,
-				dist,
-				_List_fromArray(
-					[
-						_Utils_Tuple2(
-						'name',
-						A5(
-							$author$project$MusicCreator$SelectNote,
-							_Utils_Tuple2(0, -3.5),
-							_Utils_Tuple2(0, 0),
-							$author$project$MusicCreator$Released,
-							$author$project$MusicCreator$EighthN,
-							$author$project$MusicCreator$defaultFunction)),
-						_Utils_Tuple2(
-						'name',
-						A5(
-							$author$project$MusicCreator$SelectNote,
-							_Utils_Tuple2(0, -3.5),
-							_Utils_Tuple2(0, 0),
-							$author$project$MusicCreator$Released,
-							$author$project$MusicCreator$EighthN,
-							$author$project$MusicCreator$defaultFunction)),
-						_Utils_Tuple2(
-						'name',
-						A5(
-							$author$project$MusicCreator$SelectNote,
-							_Utils_Tuple2(0, -3.5),
-							_Utils_Tuple2(0, 0),
-							$author$project$MusicCreator$Released,
-							$author$project$MusicCreator$EighthN,
-							$author$project$MusicCreator$defaultFunction)),
-						_Utils_Tuple2(
-						'name',
-						A5(
-							$author$project$MusicCreator$SelectNote,
-							_Utils_Tuple2(0, -3.5),
-							_Utils_Tuple2(0, 0),
-							$author$project$MusicCreator$Released,
-							$author$project$MusicCreator$EighthN,
-							$author$project$MusicCreator$defaultFunction))
-					]))));
+			A2($author$project$MusicCreator$updateScoreNoteXDict, dist, _List_Nil)));
 };
 var $author$project$MusicCreator$F = {$: 'F'};
 var $author$project$MusicCreator$FF = {$: 'FF'};
@@ -8873,23 +8844,39 @@ var $author$project$MusicCreator$selectDynamicList = _List_fromArray(
 			$author$project$MusicCreator$Released,
 			$author$project$MusicCreator$FF))
 	]);
+var $author$project$MusicCreator$EighthN = {$: 'EighthN'};
+var $author$project$MusicCreator$EighthND = {$: 'EighthND'};
 var $author$project$MusicCreator$EighthR = {$: 'EighthR'};
+var $author$project$MusicCreator$EighthRD = {$: 'EighthRD'};
 var $author$project$MusicCreator$HalfN = {$: 'HalfN'};
+var $author$project$MusicCreator$HalfND = {$: 'HalfND'};
 var $author$project$MusicCreator$HalfR = {$: 'HalfR'};
+var $author$project$MusicCreator$HalfRD = {$: 'HalfRD'};
 var $author$project$MusicCreator$QuarterN = {$: 'QuarterN'};
+var $author$project$MusicCreator$QuarterND = {$: 'QuarterND'};
 var $author$project$MusicCreator$QuarterR = {$: 'QuarterR'};
+var $author$project$MusicCreator$QuarterRD = {$: 'QuarterRD'};
 var $author$project$MusicCreator$SixteenthN = {$: 'SixteenthN'};
 var $author$project$MusicCreator$SixteenthR = {$: 'SixteenthR'};
 var $author$project$MusicCreator$WholeN = {$: 'WholeN'};
 var $author$project$MusicCreator$WholeR = {$: 'WholeR'};
+var $author$project$MusicCreator$NoArticulation = {$: 'NoArticulation'};
+var $author$project$MusicCreator$NoDynamic = {$: 'NoDynamic'};
+var $author$project$MusicCreator$defselectDynamicRec = A4(
+	$author$project$MusicCreator$SelectDynamic,
+	_Utils_Tuple2(0, 0),
+	_Utils_Tuple2(0, 0),
+	$author$project$MusicCreator$Released,
+	$author$project$MusicCreator$NoDynamic);
+var $author$project$MusicCreator$defaultFunction = {articulation: $author$project$MusicCreator$NoArticulation, dynamic: $author$project$MusicCreator$defselectDynamicRec, lyric: _List_Nil};
 var $author$project$MusicCreator$selectNoteList = _List_fromArray(
 	[
 		_Utils_Tuple2(
 		'selectNote1',
 		A5(
 			$author$project$MusicCreator$SelectNote,
-			_Utils_Tuple2(-235.0, 60.0),
-			_Utils_Tuple2(-235.0, 60.0),
+			_Utils_Tuple2(-245.0, 60.0),
+			_Utils_Tuple2(-245.0, 60.0),
 			$author$project$MusicCreator$Released,
 			$author$project$MusicCreator$WholeN,
 			$author$project$MusicCreator$defaultFunction)),
@@ -8897,8 +8884,8 @@ var $author$project$MusicCreator$selectNoteList = _List_fromArray(
 		'selectNote2',
 		A5(
 			$author$project$MusicCreator$SelectNote,
-			_Utils_Tuple2(-220.0, 60.0),
-			_Utils_Tuple2(-220.0, 60.0),
+			_Utils_Tuple2(-230.0, 60.0),
+			_Utils_Tuple2(-230.0, 60.0),
 			$author$project$MusicCreator$Released,
 			$author$project$MusicCreator$HalfN,
 			$author$project$MusicCreator$defaultFunction)),
@@ -8906,71 +8893,125 @@ var $author$project$MusicCreator$selectNoteList = _List_fromArray(
 		'selectNote3',
 		A5(
 			$author$project$MusicCreator$SelectNote,
-			_Utils_Tuple2(-205.0, 60.0),
-			_Utils_Tuple2(-205.0, 60.0),
+			_Utils_Tuple2(-215.0, 60.0),
+			_Utils_Tuple2(-215.0, 60.0),
 			$author$project$MusicCreator$Released,
-			$author$project$MusicCreator$QuarterN,
+			$author$project$MusicCreator$HalfND,
 			$author$project$MusicCreator$defaultFunction)),
 		_Utils_Tuple2(
 		'selectNote4',
 		A5(
 			$author$project$MusicCreator$SelectNote,
-			_Utils_Tuple2(-190.0, 60.0),
-			_Utils_Tuple2(-190.0, 60.0),
+			_Utils_Tuple2(-200.0, 60.0),
+			_Utils_Tuple2(-200.0, 60.0),
 			$author$project$MusicCreator$Released,
-			$author$project$MusicCreator$EighthN,
+			$author$project$MusicCreator$QuarterN,
 			$author$project$MusicCreator$defaultFunction)),
 		_Utils_Tuple2(
 		'selectNote5',
 		A5(
 			$author$project$MusicCreator$SelectNote,
-			_Utils_Tuple2(-175.0, 60.0),
-			_Utils_Tuple2(-175.0, 60.0),
+			_Utils_Tuple2(-185.0, 60.0),
+			_Utils_Tuple2(-185.0, 60.0),
 			$author$project$MusicCreator$Released,
-			$author$project$MusicCreator$SixteenthN,
+			$author$project$MusicCreator$QuarterND,
 			$author$project$MusicCreator$defaultFunction)),
 		_Utils_Tuple2(
 		'selectNote6',
 		A5(
 			$author$project$MusicCreator$SelectNote,
-			_Utils_Tuple2(-235.0, 37.0),
-			_Utils_Tuple2(-235.0, 37.0),
+			_Utils_Tuple2(-170.0, 60.0),
+			_Utils_Tuple2(-170.0, 60.0),
 			$author$project$MusicCreator$Released,
-			$author$project$MusicCreator$WholeR,
+			$author$project$MusicCreator$EighthN,
 			$author$project$MusicCreator$defaultFunction)),
 		_Utils_Tuple2(
 		'selectNote7',
 		A5(
 			$author$project$MusicCreator$SelectNote,
-			_Utils_Tuple2(-220.0, 37.0),
-			_Utils_Tuple2(-220.0, 37.0),
+			_Utils_Tuple2(-155.0, 60.0),
+			_Utils_Tuple2(-155.0, 60.0),
 			$author$project$MusicCreator$Released,
-			$author$project$MusicCreator$HalfR,
+			$author$project$MusicCreator$EighthND,
 			$author$project$MusicCreator$defaultFunction)),
 		_Utils_Tuple2(
 		'selectNote8',
 		A5(
 			$author$project$MusicCreator$SelectNote,
-			_Utils_Tuple2(-205.0, 37.0),
-			_Utils_Tuple2(-205.0, 37.0),
+			_Utils_Tuple2(-140.0, 60.0),
+			_Utils_Tuple2(-140.0, 60.0),
 			$author$project$MusicCreator$Released,
-			$author$project$MusicCreator$QuarterR,
+			$author$project$MusicCreator$SixteenthN,
 			$author$project$MusicCreator$defaultFunction)),
 		_Utils_Tuple2(
 		'selectNote9',
 		A5(
 			$author$project$MusicCreator$SelectNote,
-			_Utils_Tuple2(-190.0, 37.0),
-			_Utils_Tuple2(-190.0, 37.0),
+			_Utils_Tuple2(-245.0, 37.0),
+			_Utils_Tuple2(-245.0, 37.0),
 			$author$project$MusicCreator$Released,
-			$author$project$MusicCreator$EighthR,
+			$author$project$MusicCreator$WholeR,
 			$author$project$MusicCreator$defaultFunction)),
 		_Utils_Tuple2(
 		'selectNote10',
 		A5(
 			$author$project$MusicCreator$SelectNote,
-			_Utils_Tuple2(-175.0, 37.0),
-			_Utils_Tuple2(-175.0, 37.0),
+			_Utils_Tuple2(-230.0, 37.0),
+			_Utils_Tuple2(-230.0, 37.0),
+			$author$project$MusicCreator$Released,
+			$author$project$MusicCreator$HalfR,
+			$author$project$MusicCreator$defaultFunction)),
+		_Utils_Tuple2(
+		'selectNote11',
+		A5(
+			$author$project$MusicCreator$SelectNote,
+			_Utils_Tuple2(-215.0, 37.0),
+			_Utils_Tuple2(-215.0, 37.0),
+			$author$project$MusicCreator$Released,
+			$author$project$MusicCreator$HalfRD,
+			$author$project$MusicCreator$defaultFunction)),
+		_Utils_Tuple2(
+		'selectNote12',
+		A5(
+			$author$project$MusicCreator$SelectNote,
+			_Utils_Tuple2(-200.0, 37.0),
+			_Utils_Tuple2(-200.0, 37.0),
+			$author$project$MusicCreator$Released,
+			$author$project$MusicCreator$QuarterR,
+			$author$project$MusicCreator$defaultFunction)),
+		_Utils_Tuple2(
+		'selectNote13',
+		A5(
+			$author$project$MusicCreator$SelectNote,
+			_Utils_Tuple2(-185.0, 37.0),
+			_Utils_Tuple2(-185.0, 37.0),
+			$author$project$MusicCreator$Released,
+			$author$project$MusicCreator$QuarterRD,
+			$author$project$MusicCreator$defaultFunction)),
+		_Utils_Tuple2(
+		'selectNote14',
+		A5(
+			$author$project$MusicCreator$SelectNote,
+			_Utils_Tuple2(-170.0, 37.0),
+			_Utils_Tuple2(-170.0, 37.0),
+			$author$project$MusicCreator$Released,
+			$author$project$MusicCreator$EighthR,
+			$author$project$MusicCreator$defaultFunction)),
+		_Utils_Tuple2(
+		'selectNote15',
+		A5(
+			$author$project$MusicCreator$SelectNote,
+			_Utils_Tuple2(-155.0, 37.0),
+			_Utils_Tuple2(-155.0, 37.0),
+			$author$project$MusicCreator$Released,
+			$author$project$MusicCreator$EighthRD,
+			$author$project$MusicCreator$defaultFunction)),
+		_Utils_Tuple2(
+		'selectNote16',
+		A5(
+			$author$project$MusicCreator$SelectNote,
+			_Utils_Tuple2(-140.0, 37.0),
+			_Utils_Tuple2(-140.0, 37.0),
 			$author$project$MusicCreator$Released,
 			$author$project$MusicCreator$SixteenthR,
 			$author$project$MusicCreator$defaultFunction))
@@ -8978,7 +9019,6 @@ var $author$project$MusicCreator$selectNoteList = _List_fromArray(
 var $author$project$MusicCreator$init = _Utils_Tuple2(
 	{
 		dragState: $author$project$MusicCreator$Released,
-		dynamicList: _List_Nil,
 		height: 0,
 		pos: _Utils_Tuple2(0, 0),
 		scoreNoteList: $author$project$MusicCreator$scoreNote(20),
@@ -9012,20 +9052,10 @@ var $author$project$MusicCreator$subscriptions = function (model) {
 };
 var $author$project$MusicCreator$Dragging = {$: 'Dragging'};
 var $author$project$MusicCreator$Dynamic = {$: 'Dynamic'};
-var $author$project$MusicCreator$Empty = {$: 'Empty'};
-var $author$project$MusicCreator$defselectDynamicRec = A4(
-	$author$project$MusicCreator$SelectDynamic,
-	_Utils_Tuple2(0, 0),
-	_Utils_Tuple2(0, 0),
-	$author$project$MusicCreator$Released,
-	$author$project$MusicCreator$NoDynamic);
-var $author$project$MusicCreator$defselectNoteRec = A5(
-	$author$project$MusicCreator$SelectNote,
-	_Utils_Tuple2(0, 0),
-	_Utils_Tuple2(0, 0),
-	$author$project$MusicCreator$Released,
-	$author$project$MusicCreator$Empty,
-	$author$project$MusicCreator$defaultFunction);
+var $author$project$MusicCreator$Functions = F3(
+	function (dynamic, lyric, articulation) {
+		return {articulation: articulation, dynamic: dynamic, lyric: lyric};
+	});
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (maybe.$ === 'Just') {
@@ -9049,18 +9079,55 @@ var $author$project$MusicCreator$extractPos = F3(
 			def,
 			A2($elm$core$Dict$get, nameOfNote, dict)).pos;
 	});
+var $author$project$MusicCreator$ifRest = function (notes) {
+	switch (notes.$) {
+		case 'Empty':
+			return false;
+		case 'WholeN':
+			return false;
+		case 'HalfN':
+			return false;
+		case 'QuarterN':
+			return false;
+		case 'EighthN':
+			return false;
+		case 'SixteenthN':
+			return false;
+		case 'WholeR':
+			return true;
+		case 'HalfR':
+			return true;
+		case 'QuarterR':
+			return true;
+		case 'EighthR':
+			return true;
+		case 'SixteenthR':
+			return true;
+		case 'HalfND':
+			return false;
+		case 'QuarterND':
+			return false;
+		case 'EighthND':
+			return false;
+		case 'HalfRD':
+			return true;
+		case 'QuarterRD':
+			return true;
+		default:
+			return true;
+	}
+};
 var $elm$core$Basics$ge = _Utils_ge;
 var $author$project$MusicCreator$insertCondition30 = F3(
 	function (list, x, y) {
-		return ((_Utils_cmp(x, -60) > -1) && ((_Utils_cmp(
+		return (_Utils_cmp(x, -165) > -1) && ((_Utils_cmp(
 			x,
-			(-60) + ($elm$core$List$length(list) * 30)) < 1) && ((_Utils_cmp(y, (-36) - 3) > -1) && (_Utils_cmp(y, 50 + 3) < 1)))) ? true : false;
+			(-165) + ($elm$core$List$length(list) * 30)) < 1) && ((_Utils_cmp(y, (-36) - 3) > -1) && (_Utils_cmp(y, 50 + 3) < 1)));
 	});
 var $elm$core$Basics$min = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) < 0) ? x : y;
 	});
-var $elm$core$Basics$neq = _Utils_notEqual;
 var $elm$core$Basics$pow = _Basics_pow;
 var $elm$core$Basics$sqrt = _Basics_sqrt;
 var $author$project$MusicCreator$changeDragSelectUpdateDynamic = F2(
@@ -9069,54 +9136,11 @@ var $author$project$MusicCreator$changeDragSelectUpdateDynamic = F2(
 		var x = pos.a;
 		var y = pos.b;
 		var f = A3($author$project$MusicCreator$extractF, nameOfNote, model.selectDynamicDict, $author$project$MusicCreator$defselectDynamicRec);
-		var replace = F2(
-			function (_v0, list) {
-				var name1 = _v0.a;
-				var b = _v0.b;
-				var shiftb = function (p) {
-					return _Utils_Tuple2(p.a, p.b - 40);
-				};
-				if (!list.b) {
-					return _List_fromArray(
-						[
-							_Utils_Tuple2(
-							name1,
-							A4(
-								$author$project$MusicCreator$SelectDynamic,
-								shiftb(b.pos),
-								shiftb(b.pos),
-								$author$project$MusicCreator$Released,
-								f))
-						]);
-				} else {
-					var _v2 = list.a;
-					var name2 = _v2.a;
-					var z = _v2.b;
-					var zs = list.b;
-					return _Utils_eq(name1, name2) ? A2(
-						$elm$core$List$cons,
-						_Utils_Tuple2(
-							name1,
-							A4(
-								$author$project$MusicCreator$SelectDynamic,
-								shiftb(b.pos),
-								shiftb(b.pos),
-								$author$project$MusicCreator$Released,
-								f)),
-						zs) : A2(
-						$elm$core$List$cons,
-						_Utils_Tuple2(name2, z),
-						A2(
-							replace,
-							_Utils_Tuple2(name1, b),
-							zs));
-				}
-			});
 		var disFxyTab = A2(
 			$elm$core$List$map,
-			function (_v4) {
-				var a = _v4.a;
-				var b = _v4.b;
+			function (_v1) {
+				var a = _v1.a;
+				var b = _v1.b;
 				return $elm$core$Basics$sqrt(
 					A2($elm$core$Basics$pow, x - a, 2) + A2($elm$core$Basics$pow, y - b, 2));
 			},
@@ -9140,26 +9164,38 @@ var $author$project$MusicCreator$changeDragSelectUpdateDynamic = F2(
 				disFxyTab);
 			return A3($elm$core$List$foldl, $elm$core$Basics$min, 99999, filter1);
 		}();
-		var targetNote = A3(
-			$elm$core$List$foldl,
-			F2(
-				function (_v3, def) {
-					var name = _v3.a;
-					var a = _v3.b;
-					return _Utils_eq(a.note, $author$project$MusicCreator$Empty) ? def : _Utils_Tuple2(name, a);
-				}),
-			_Utils_Tuple2('NoOne', $author$project$MusicCreator$defselectNoteRec),
-			A3(
+		var newList = function () {
+			var updateDynamic = A4(
+				$author$project$MusicCreator$SelectDynamic,
+				_Utils_Tuple2(0, 0),
+				_Utils_Tuple2(0, 0),
+				$author$project$MusicCreator$Released,
+				f);
+			var updateF = function (a) {
+				return A3($author$project$MusicCreator$Functions, updateDynamic, a._function.lyric, a._function.articulation);
+			};
+			return A3(
 				$elm$core$List$map2,
 				F2(
-					function (a, b) {
-						return _Utils_eq(a, targetValue) ? b : _Utils_Tuple2('NoOne', $author$project$MusicCreator$defselectNoteRec);
+					function (_v0, l2) {
+						var name = _v0.a;
+						var a = _v0.b;
+						return (_Utils_eq(l2, targetValue) && (!$author$project$MusicCreator$ifRest(a.note))) ? _Utils_Tuple2(
+							name,
+							A5(
+								$author$project$MusicCreator$SelectNote,
+								a.pos,
+								a.posInit,
+								a.dragState,
+								a.note,
+								updateF(a))) : _Utils_Tuple2(name, a);
 					}),
-				disFxyTab,
-				model.scoreNoteList));
-		var newList = (targetNote.a !== 'NoOne') ? A2(replace, targetNote, model.dynamicList) : model.dynamicList;
+				model.scoreNoteList,
+				disFxyTab);
+		}();
 		return newList;
 	});
+var $author$project$MusicCreator$Empty = {$: 'Empty'};
 var $elm$core$List$append = F2(
 	function (xs, ys) {
 		if (!ys.b) {
@@ -9190,8 +9226,20 @@ var $author$project$MusicCreator$noteToFraction = function (notes) {
 			return 0.25;
 		case 'EighthR':
 			return 0.125;
-		default:
+		case 'SixteenthR':
 			return 0.0625;
+		case 'HalfND':
+			return 0.75;
+		case 'QuarterND':
+			return 0.375;
+		case 'EighthND':
+			return 0.1875;
+		case 'HalfRD':
+			return 0.75;
+		case 'QuarterRD':
+			return 0.375;
+		default:
+			return 0.1875;
 	}
 };
 var $author$project$MusicCreator$tsToBase = function (ts) {
@@ -9278,12 +9326,20 @@ var $author$project$MusicCreator$clearEmpty = function (list) {
 			},
 			list));
 };
+var $author$project$MusicCreator$defselectNoteRec = A5(
+	$author$project$MusicCreator$SelectNote,
+	_Utils_Tuple2(0, 0),
+	_Utils_Tuple2(0, 0),
+	$author$project$MusicCreator$Released,
+	$author$project$MusicCreator$Empty,
+	$author$project$MusicCreator$defaultFunction);
 var $author$project$MusicCreator$insertCondition25 = F3(
 	function (list, x, y) {
-		return ((_Utils_cmp(x, -60) > -1) && ((_Utils_cmp(
+		return (_Utils_cmp(x, -165) > -1) && ((_Utils_cmp(
 			x,
-			(-60) + ($elm$core$List$length(list) * 25)) < 1) && ((_Utils_cmp(y, (-36) - 3) > -1) && (_Utils_cmp(y, 50 + 3) < 1)))) ? true : false;
+			(-165) + ($elm$core$List$length(list) * 25)) < 1) && ((_Utils_cmp(y, (-36) - 3) > -1) && (_Utils_cmp(y, 50 + 3) < 1)));
 	});
+var $elm$core$Basics$neq = _Utils_notEqual;
 var $author$project$MusicCreator$onlyNote = function (list) {
 	return A2(
 		$elm$core$List$map,
@@ -9469,7 +9525,7 @@ var $author$project$MusicCreator$changeDrageScoreNoteUpdateScoreNote = F2(
 					_Utils_Tuple2(0, y),
 					$author$project$MusicCreator$Released,
 					ds,
-					$author$project$MusicCreator$defaultFunction);
+					getDragedNote._function);
 			};
 			var emptyLastnote = $author$project$MusicCreator$defselectNoteRec;
 			return (doesInstart && _Utils_eq(model.trashState, $author$project$MusicCreator$Close)) ? listUpdateInitXY : $elm$core$List$concat(
@@ -9684,6 +9740,190 @@ var $author$project$MusicCreator$changeDrageSeletedNoteUpdateScoreNote = F2(
 		}();
 		return updateNewList;
 	});
+var $author$project$MusicCreator$Open = {$: 'Open'};
+var $author$project$MusicCreator$changeDynamicDragToRealease = F2(
+	function (nameOfNote, model) {
+		var newScoreList = A2(
+			$elm$core$List$map,
+			function (_v5) {
+				var name = _v5.a;
+				var a = _v5.b;
+				return (_Utils_eq(name, nameOfNote) && (!$author$project$MusicCreator$ifRest(a.note))) ? _Utils_Tuple2(
+					name,
+					A5(
+						$author$project$MusicCreator$SelectNote,
+						a.pos,
+						a.posInit,
+						a.dragState,
+						a.note,
+						A3($author$project$MusicCreator$Functions, $author$project$MusicCreator$defselectDynamicRec, a._function.lyric, a._function.articulation))) : _Utils_Tuple2(name, a);
+			},
+			model.scoreNoteList);
+		var getDynamic = A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v4, def) {
+					var name = _v4.a;
+					var a = _v4.b;
+					return _Utils_eq(name, nameOfNote) ? a._function.dynamic : def;
+				}),
+			$author$project$MusicCreator$defselectDynamicRec,
+			model.scoreNoteList);
+		var x = getDynamic.pos.a;
+		var y = getDynamic.pos.b;
+		var f = getDynamic.f;
+		var disFxyTab = A2(
+			$elm$core$List$map,
+			function (_v3) {
+				var a = _v3.a;
+				var b = _v3.b;
+				return $elm$core$Basics$sqrt(
+					A2($elm$core$Basics$pow, x - a, 2) + A2($elm$core$Basics$pow, y - b, 2));
+			},
+			A2(
+				$elm$core$List$map,
+				function (z) {
+					return _Utils_Tuple2(
+						A2($author$project$MusicCreator$makeScoreNoteX, z, model.sizeofNote),
+						0);
+				},
+				A2(
+					$elm$core$List$range,
+					0,
+					$elm$core$List$length(model.scoreNoteList))));
+		var targetValue = function () {
+			var filter1 = A2(
+				$elm$core$List$map,
+				function (z) {
+					return A3($author$project$MusicCreator$insertCondition30, model.scoreNoteList, x, y) ? z : 9999;
+				},
+				disFxyTab);
+			return A3($elm$core$List$foldl, $elm$core$Basics$min, 99999, filter1);
+		}();
+		var ifInsert = A2(
+			$elm$core$List$any,
+			function (a) {
+				return a;
+			},
+			A3(
+				$elm$core$List$map2,
+				F2(
+					function (_v2, l2) {
+						var name = _v2.a;
+						var a = _v2.b;
+						return (_Utils_eq(l2, targetValue) && (!$author$project$MusicCreator$ifRest(a.note))) ? true : false;
+					}),
+				newScoreList,
+				disFxyTab));
+		var newList = function () {
+			var updateDynamic = A4(
+				$author$project$MusicCreator$SelectDynamic,
+				_Utils_Tuple2(0, 0),
+				_Utils_Tuple2(0, 0),
+				$author$project$MusicCreator$Released,
+				f);
+			var updateF = function (a) {
+				return A3($author$project$MusicCreator$Functions, updateDynamic, a._function.lyric, a._function.articulation);
+			};
+			var restoreDynamic = function (a) {
+				return A4(
+					$author$project$MusicCreator$SelectDynamic,
+					_Utils_Tuple2(0, 0),
+					_Utils_Tuple2(0, 0),
+					$author$project$MusicCreator$Released,
+					a._function.dynamic.f);
+			};
+			var restoreF = function (a) {
+				return A3(
+					$author$project$MusicCreator$Functions,
+					restoreDynamic(a),
+					a._function.lyric,
+					a._function.articulation);
+			};
+			return _Utils_eq(model.trashState, $author$project$MusicCreator$Open) ? newScoreList : (ifInsert ? A3(
+				$elm$core$List$map2,
+				F2(
+					function (_v0, l2) {
+						var name = _v0.a;
+						var a = _v0.b;
+						return (_Utils_eq(l2, targetValue) && (!$author$project$MusicCreator$ifRest(a.note))) ? _Utils_Tuple2(
+							name,
+							A5(
+								$author$project$MusicCreator$SelectNote,
+								a.pos,
+								a.posInit,
+								a.dragState,
+								a.note,
+								updateF(a))) : _Utils_Tuple2(name, a);
+					}),
+				newScoreList,
+				disFxyTab) : A2(
+				$elm$core$List$map,
+				function (_v1) {
+					var name = _v1.a;
+					var a = _v1.b;
+					return _Utils_Tuple2(
+						name,
+						A5(
+							$author$project$MusicCreator$SelectNote,
+							a.pos,
+							a.posInit,
+							a.dragState,
+							a.note,
+							restoreF(a)));
+				},
+				model.scoreNoteList));
+		}();
+		return newList;
+	});
+var $author$project$MusicCreator$changeDynamicRealeaseToDrag = F2(
+	function (_v0, pos) {
+		var name = _v0.a;
+		var a = _v0.b;
+		var updateF = function () {
+			var f = a._function;
+			return A3(
+				$author$project$MusicCreator$Functions,
+				A4($author$project$MusicCreator$SelectDynamic, pos, pos, $author$project$MusicCreator$Dragging, f.dynamic.f),
+				f.lyric,
+				f.articulation);
+		}();
+		return _Utils_Tuple2(
+			name,
+			A5($author$project$MusicCreator$SelectNote, a.pos, a.posInit, a.dragState, a.note, updateF));
+	});
+var $author$project$MusicCreator$createdynamicList = function (list) {
+	var position = function (p) {
+		return _Utils_Tuple2(p.a, -20);
+	};
+	var dynamic = function (a) {
+		return a._function.dynamic;
+	};
+	return A2(
+		$elm$core$List$map,
+		function (_v0) {
+			var name = _v0.a;
+			var a = _v0.b;
+			return _Utils_eq(
+				dynamic(a).dragState,
+				$author$project$MusicCreator$Dragging) ? _Utils_Tuple2(
+				name,
+				A4(
+					$author$project$MusicCreator$SelectDynamic,
+					dynamic(a).pos,
+					dynamic(a).pos,
+					$author$project$MusicCreator$Dragging,
+					dynamic(a).f)) : _Utils_Tuple2(
+				name,
+				A4(
+					$author$project$MusicCreator$SelectDynamic,
+					position(a.pos),
+					position(a.pos),
+					$author$project$MusicCreator$Released,
+					dynamic(a).f));
+		},
+		list);
+};
 var $author$project$MusicCreator$extractDragState = F3(
 	function (nameOfNote, dict, def) {
 		return A2(
@@ -9691,7 +9931,6 @@ var $author$project$MusicCreator$extractDragState = F3(
 			def,
 			A2($elm$core$Dict$get, nameOfNote, dict)).dragState;
 	});
-var $author$project$MusicCreator$Open = {$: 'Open'};
 var $author$project$MusicCreator$ifSelectedNoteClosetoTrash = F2(
 	function (model, _v0) {
 		var newx = _v0.a;
@@ -10077,6 +10316,49 @@ var $elm$core$Dict$update = F3(
 			return A2($elm$core$Dict$remove, targetKey, dictionary);
 		}
 	});
+var $author$project$MusicCreator$whileDragScoreUpdateDynamic = F3(
+	function (nameOfNote, model, _v0) {
+		var x = _v0.a;
+		var y = _v0.b;
+		var updateDynamic = function (a) {
+			return A3(
+				$author$project$MusicCreator$Functions,
+				A4(
+					$author$project$MusicCreator$SelectDynamic,
+					_Utils_Tuple2(x, y),
+					_Utils_Tuple2(0, 0),
+					$author$project$MusicCreator$Dragging,
+					a._function.dynamic.f),
+				a._function.lyric,
+				a._function.articulation);
+		};
+		var newList = A2(
+			$elm$core$List$map,
+			function (_v1) {
+				var name = _v1.a;
+				var a = _v1.b;
+				if (_Utils_eq(name, nameOfNote)) {
+					var _v2 = a._function.dynamic.dragState;
+					if (_v2.$ === 'Dragging') {
+						return _Utils_Tuple2(
+							name,
+							A5(
+								$author$project$MusicCreator$SelectNote,
+								a.pos,
+								a.posInit,
+								a.dragState,
+								a.note,
+								updateDynamic(a)));
+					} else {
+						return _Utils_Tuple2(name, a);
+					}
+				} else {
+					return _Utils_Tuple2(name, a);
+				}
+			},
+			model.scoreNoteList);
+		return newList;
+	});
 var $author$project$MusicCreator$whileDrageScoreNoteUpdateScoreNote = F3(
 	function (nameOfNote, model, _v0) {
 		var newx = _v0.a;
@@ -10382,6 +10664,11 @@ var $author$project$MusicCreator$update = F2(
 					_Utils_update(
 						model,
 						{
+							scoreNoteList: _Utils_eq(t, $author$project$MusicCreator$Dynamic) ? A3(
+								$author$project$MusicCreator$whileDragScoreUpdateDynamic,
+								nameOfNote,
+								model,
+								_Utils_Tuple2(x * 2.0, y * 2.0)) : model.scoreNoteList,
 							selectDynamicDict: function () {
 								var _v2 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectDynamicDict, $author$project$MusicCreator$defselectDynamicRec);
 								if (_v2.$ === 'Dragging') {
@@ -10418,41 +10705,57 @@ var $author$project$MusicCreator$update = F2(
 										},
 										model.selectDynamicDict);
 								}
+							}(),
+							trashState: function () {
+								var _v5 = A3(
+									$author$project$MusicCreator$extractDragState,
+									nameOfNote,
+									$elm$core$Dict$fromList(
+										$author$project$MusicCreator$createdynamicList(model.scoreNoteList)),
+									$author$project$MusicCreator$defselectDynamicRec);
+								if (_v5.$ === 'Dragging') {
+									return A2(
+										$author$project$MusicCreator$ifSelectedNoteClosetoTrash,
+										model,
+										_Utils_Tuple2(x * 2.0, y * 2.0));
+								} else {
+									return $author$project$MusicCreator$Close;
+								}
 							}()
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'Drag':
 				var nameOfNote = msg.a;
-				var _v5 = msg.b;
-				var x = _v5.a;
-				var y = _v5.b;
+				var _v6 = msg.b;
+				var x = _v6.a;
+				var y = _v6.b;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
 							pos: function () {
-								var _v6 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectNoteDict, $author$project$MusicCreator$defselectNoteRec);
-								if (_v6.$ === 'Dragging') {
+								var _v7 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectNoteDict, $author$project$MusicCreator$defselectNoteRec);
+								if (_v7.$ === 'Dragging') {
 									return _Utils_Tuple2(x * 2.0, y * 2.0);
 								} else {
 									return model.pos;
 								}
 							}(),
 							scoreNoteList: function () {
-								var _v7 = A3(
+								var _v8 = A3(
 									$author$project$MusicCreator$extractDragState,
 									nameOfNote,
 									$elm$core$Dict$fromList(model.scoreNoteList),
 									$author$project$MusicCreator$defselectNoteRec);
-								if (_v7.$ === 'Dragging') {
+								if (_v8.$ === 'Dragging') {
 									return A3(
 										$author$project$MusicCreator$whileDrageScoreNoteUpdateScoreNote,
 										nameOfNote,
 										model,
 										_Utils_Tuple2(x * 2.0, y * 2.0));
 								} else {
-									var _v8 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectNoteDict, $author$project$MusicCreator$defselectNoteRec);
-									if (_v8.$ === 'Dragging') {
+									var _v9 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectNoteDict, $author$project$MusicCreator$defselectNoteRec);
+									if (_v9.$ === 'Dragging') {
 										return A2($author$project$MusicCreator$whileDrageSeletedNoteUpdateScoreNote, nameOfNote, model);
 									} else {
 										return model.scoreNoteList;
@@ -10460,8 +10763,8 @@ var $author$project$MusicCreator$update = F2(
 								}
 							}(),
 							selectNoteDict: function () {
-								var _v9 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectNoteDict, $author$project$MusicCreator$defselectNoteRec);
-								if (_v9.$ === 'Dragging') {
+								var _v10 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectNoteDict, $author$project$MusicCreator$defselectNoteRec);
+								if (_v10.$ === 'Dragging') {
 									return A3(
 										$elm$core$Dict$update,
 										nameOfNote,
@@ -10498,12 +10801,12 @@ var $author$project$MusicCreator$update = F2(
 								}
 							}(),
 							trashState: function () {
-								var _v12 = A3(
+								var _v13 = A3(
 									$author$project$MusicCreator$extractDragState,
 									nameOfNote,
 									$elm$core$Dict$fromList(model.scoreNoteList),
 									$author$project$MusicCreator$defselectNoteRec);
-								if (_v12.$ === 'Dragging') {
+								if (_v13.$ === 'Dragging') {
 									return A2(
 										$author$project$MusicCreator$ifSelectedNoteClosetoTrash,
 										model,
@@ -10517,14 +10820,48 @@ var $author$project$MusicCreator$update = F2(
 			case 'ChangeDragStateF':
 				var nameOfNote = msg.a;
 				var t = msg.b;
+				var _v14 = msg.c;
+				var x = _v14.a;
+				var y = _v14.b;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							dynamicList: _Utils_eq(t, $author$project$MusicCreator$Dynamic) ? A2($author$project$MusicCreator$changeDragSelectUpdateDynamic, nameOfNote, model) : model.dynamicList,
+							scoreNoteList: function () {
+								if (_Utils_eq(t, $author$project$MusicCreator$Dynamic)) {
+									var _v15 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectDynamicDict, $author$project$MusicCreator$defselectDynamicRec);
+									if (_v15.$ === 'Dragging') {
+										return A2($author$project$MusicCreator$changeDragSelectUpdateDynamic, nameOfNote, model);
+									} else {
+										var _v16 = A3(
+											$author$project$MusicCreator$extractDragState,
+											nameOfNote,
+											$elm$core$Dict$fromList(
+												$author$project$MusicCreator$createdynamicList(model.scoreNoteList)),
+											$author$project$MusicCreator$defselectDynamicRec);
+										if (_v16.$ === 'Dragging') {
+											return A2($author$project$MusicCreator$changeDynamicDragToRealease, nameOfNote, model);
+										} else {
+											return A2(
+												$elm$core$List$map,
+												function (_v17) {
+													var name = _v17.a;
+													var a = _v17.b;
+													return _Utils_eq(name, nameOfNote) ? A2(
+														$author$project$MusicCreator$changeDynamicRealeaseToDrag,
+														_Utils_Tuple2(name, a),
+														_Utils_Tuple2(x * 2.0, y * 2.0)) : _Utils_Tuple2(name, a);
+												},
+												model.scoreNoteList);
+										}
+									}
+								} else {
+									return model.scoreNoteList;
+								}
+							}(),
 							selectDynamicDict: function () {
-								var _v13 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectDynamicDict, $author$project$MusicCreator$defselectDynamicRec);
-								if (_v13.$ === 'Released') {
+								var _v18 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectDynamicDict, $author$project$MusicCreator$defselectDynamicRec);
+								if (_v18.$ === 'Released') {
 									return A3(
 										$elm$core$Dict$update,
 										nameOfNote,
@@ -10553,6 +10890,19 @@ var $author$project$MusicCreator$update = F2(
 										},
 										model.selectDynamicDict);
 								}
+							}(),
+							trashState: function () {
+								var _v21 = A3(
+									$author$project$MusicCreator$extractDragState,
+									nameOfNote,
+									$elm$core$Dict$fromList(
+										$author$project$MusicCreator$createdynamicList(model.scoreNoteList)),
+									$author$project$MusicCreator$defselectDynamicRec);
+								if (_v21.$ === 'Dragging') {
+									return $author$project$MusicCreator$Close;
+								} else {
+									return $author$project$MusicCreator$Close;
+								}
 							}()
 						}),
 					$elm$core$Platform$Cmd$none);
@@ -10563,27 +10913,27 @@ var $author$project$MusicCreator$update = F2(
 						model,
 						{
 							dragState: function () {
-								var _v16 = model.dragState;
-								if (_v16.$ === 'Released') {
+								var _v22 = model.dragState;
+								if (_v22.$ === 'Released') {
 									return $author$project$MusicCreator$Dragging;
 								} else {
 									return $author$project$MusicCreator$Released;
 								}
 							}(),
 							scoreNoteList: function () {
-								var _v17 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectNoteDict, $author$project$MusicCreator$defselectNoteRec);
-								if (_v17.$ === 'Released') {
-									var _v18 = A3(
+								var _v23 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectNoteDict, $author$project$MusicCreator$defselectNoteRec);
+								if (_v23.$ === 'Released') {
+									var _v24 = A3(
 										$author$project$MusicCreator$extractDragState,
 										nameOfNote,
 										$elm$core$Dict$fromList(model.scoreNoteList),
 										$author$project$MusicCreator$defselectNoteRec);
-									if (_v18.$ === 'Released') {
+									if (_v24.$ === 'Released') {
 										return A2(
 											$elm$core$List$map,
-											function (_v19) {
-												var name = _v19.a;
-												var record = _v19.b;
+											function (_v25) {
+												var name = _v25.a;
+												var record = _v25.b;
 												return _Utils_eq(name, nameOfNote) ? _Utils_Tuple2(
 													name,
 													A5($author$project$MusicCreator$SelectNote, record.pos, record.posInit, $author$project$MusicCreator$Dragging, record.note, record._function)) : _Utils_Tuple2(name, record);
@@ -10597,8 +10947,8 @@ var $author$project$MusicCreator$update = F2(
 								}
 							}(),
 							selectNoteDict: function () {
-								var _v20 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectNoteDict, $author$project$MusicCreator$defselectNoteRec);
-								if (_v20.$ === 'Released') {
+								var _v26 = A3($author$project$MusicCreator$extractDragState, nameOfNote, model.selectNoteDict, $author$project$MusicCreator$defselectNoteRec);
+								if (_v26.$ === 'Released') {
 									return A3(
 										$elm$core$Dict$update,
 										nameOfNote,
@@ -10629,12 +10979,12 @@ var $author$project$MusicCreator$update = F2(
 								}
 							}(),
 							trashState: function () {
-								var _v23 = A3(
+								var _v29 = A3(
 									$author$project$MusicCreator$extractDragState,
 									nameOfNote,
 									$elm$core$Dict$fromList(model.scoreNoteList),
 									$author$project$MusicCreator$defselectNoteRec);
-								if (_v23.$ === 'Released') {
+								if (_v29.$ === 'Released') {
 									return $author$project$MusicCreator$Close;
 								} else {
 									return $author$project$MusicCreator$Close;
@@ -10651,9 +11001,9 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$collage = F3(
 var $author$project$MusicCreator$ChangeDragState = function (a) {
 	return {$: 'ChangeDragState', a: a};
 };
-var $author$project$MusicCreator$ChangeDragStateF = F2(
-	function (a, b) {
-		return {$: 'ChangeDragStateF', a: a, b: b};
+var $author$project$MusicCreator$ChangeDragStateF = F3(
+	function (a, b, c) {
+		return {$: 'ChangeDragStateF', a: a, b: b, c: c};
 	});
 var $author$project$MusicCreator$Drag = F2(
 	function (a, b) {
@@ -10663,6 +11013,271 @@ var $author$project$MusicCreator$DragF = F3(
 	function (a, b, c) {
 		return {$: 'DragF', a: a, b: b, c: c};
 	});
+var $author$project$MusicCreator$ifDraggedNote = function (list) {
+	return A2(
+		$elm$core$List$any,
+		function (_v0) {
+			var name = _v0.a;
+			var a = _v0.b;
+			return _Utils_eq(a.dragState, $author$project$MusicCreator$Dragging);
+		},
+		list);
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$outlined = F3(
+	function (style, outlineClr, stencil) {
+		var lineStyle = function () {
+			if (style.$ === 'NoLine') {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				return $elm$core$Maybe$Just(
+					_Utils_Tuple2(style, outlineClr));
+			}
+		}();
+		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Inked, $elm$core$Maybe$Nothing, lineStyle, stencil);
+	});
+var $elm$core$Basics$clamp = F3(
+	function (low, high, number) {
+		return (_Utils_cmp(number, low) < 0) ? low : ((_Utils_cmp(number, high) > 0) ? high : number);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$ssa = function (n) {
+	return A3($elm$core$Basics$clamp, 0, 1, n);
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$ssc = function (n) {
+	return A3($elm$core$Basics$clamp, 0, 255, n);
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$rgba = F4(
+	function (r, g, b, a) {
+		return A4(
+			$MacCASOutreach$graphicsvg$GraphicSVG$RGBA,
+			$MacCASOutreach$graphicsvg$GraphicSVG$ssc(r),
+			$MacCASOutreach$graphicsvg$GraphicSVG$ssc(g),
+			$MacCASOutreach$graphicsvg$GraphicSVG$ssc(b),
+			$MacCASOutreach$graphicsvg$GraphicSVG$ssa(a));
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$Solid = function (a) {
+	return {$: 'Solid', a: a};
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$solid = function (th) {
+	return $MacCASOutreach$graphicsvg$GraphicSVG$Solid(th);
+};
+var $elm$core$List$takeReverse = F3(
+	function (n, list, kept) {
+		takeReverse:
+		while (true) {
+			if (n <= 0) {
+				return kept;
+			} else {
+				if (!list.b) {
+					return kept;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs,
+						$temp$kept = A2($elm$core$List$cons, x, kept);
+					n = $temp$n;
+					list = $temp$list;
+					kept = $temp$kept;
+					continue takeReverse;
+				}
+			}
+		}
+	});
+var $elm$core$List$takeTailRec = F2(
+	function (n, list) {
+		return $elm$core$List$reverse(
+			A3($elm$core$List$takeReverse, n, list, _List_Nil));
+	});
+var $elm$core$List$takeFast = F3(
+	function (ctr, n, list) {
+		if (n <= 0) {
+			return _List_Nil;
+		} else {
+			var _v0 = _Utils_Tuple2(n, list);
+			_v0$1:
+			while (true) {
+				_v0$5:
+				while (true) {
+					if (!_v0.b.b) {
+						return list;
+					} else {
+						if (_v0.b.b.b) {
+							switch (_v0.a) {
+								case 1:
+									break _v0$1;
+								case 2:
+									var _v2 = _v0.b;
+									var x = _v2.a;
+									var _v3 = _v2.b;
+									var y = _v3.a;
+									return _List_fromArray(
+										[x, y]);
+								case 3:
+									if (_v0.b.b.b.b) {
+										var _v4 = _v0.b;
+										var x = _v4.a;
+										var _v5 = _v4.b;
+										var y = _v5.a;
+										var _v6 = _v5.b;
+										var z = _v6.a;
+										return _List_fromArray(
+											[x, y, z]);
+									} else {
+										break _v0$5;
+									}
+								default:
+									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
+										var _v7 = _v0.b;
+										var x = _v7.a;
+										var _v8 = _v7.b;
+										var y = _v8.a;
+										var _v9 = _v8.b;
+										var z = _v9.a;
+										var _v10 = _v9.b;
+										var w = _v10.a;
+										var tl = _v10.b;
+										return (ctr > 1000) ? A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
+									} else {
+										break _v0$5;
+									}
+							}
+						} else {
+							if (_v0.a === 1) {
+								break _v0$1;
+							} else {
+								break _v0$5;
+							}
+						}
+					}
+				}
+				return list;
+			}
+			var _v1 = _v0.b;
+			var x = _v1.a;
+			return _List_fromArray(
+				[x]);
+		}
+	});
+var $elm$core$List$take = F2(
+	function (n, list) {
+		return A3($elm$core$List$takeFast, 0, n, list);
+	});
+var $author$project$MusicCreator$assistBox = function (model) {
+	var xList = function (list) {
+		return A2(
+			$elm$core$List$map,
+			function (z) {
+				return A2($author$project$MusicCreator$makeScoreNoteX, z, model.sizeofNote);
+			},
+			A2(
+				$elm$core$List$range,
+				0,
+				$elm$core$List$length(list)));
+	};
+	var ifSelectNoteDrage = $author$project$MusicCreator$ifDraggedNote(
+		$elm$core$Dict$toList(model.selectNoteDict));
+	var ifSelectDynaDrag = $author$project$MusicCreator$ifDraggedNote(
+		$elm$core$Dict$toList(model.selectDynamicDict));
+	var ifScoreNoteDrag = $author$project$MusicCreator$ifDraggedNote(model.scoreNoteList);
+	var ifScoreDynaDrage = $author$project$MusicCreator$ifDraggedNote(
+		$author$project$MusicCreator$createdynamicList(model.scoreNoteList));
+	var getpost = function (list) {
+		return A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v1, def) {
+					var name = _v1.a;
+					var a = _v1.b;
+					return _Utils_eq(a.dragState, $author$project$MusicCreator$Dragging) ? a.pos : def;
+				}),
+			_Utils_Tuple2(0, 0),
+			list);
+	};
+	var pos = ifScoreNoteDrag ? getpost(model.scoreNoteList) : (ifSelectNoteDrage ? getpost(
+		$elm$core$Dict$toList(model.selectNoteDict)) : (ifSelectDynaDrag ? getpost(
+		$elm$core$Dict$toList(model.selectDynamicDict)) : (ifScoreDynaDrage ? getpost(
+		$author$project$MusicCreator$createdynamicList(model.scoreNoteList)) : _Utils_Tuple2(99999, 99999))));
+	var x = pos.a;
+	var y = pos.b;
+	var disFxyTab = function () {
+		var listLength = $elm$core$List$length(model.scoreNoteList) - 1;
+		return A2(
+			$elm$core$List$map,
+			function (_v0) {
+				var a = _v0.a;
+				var b = _v0.b;
+				return $elm$core$Basics$sqrt(
+					A2($elm$core$Basics$pow, x - a, 2) + A2($elm$core$Basics$pow, y - b, 2));
+			},
+			A2(
+				$elm$core$List$map,
+				function (z) {
+					return _Utils_Tuple2(
+						A2($author$project$MusicCreator$makeScoreNoteX, z, model.sizeofNote),
+						0);
+				},
+				A2($elm$core$List$range, 0, listLength)));
+	}();
+	var targetValueHelper = function (condition) {
+		var list = ifScoreNoteDrag ? A2(
+			$elm$core$List$take,
+			$elm$core$List$length(model.scoreNoteList) - 1,
+			model.scoreNoteList) : model.scoreNoteList;
+		var filter1 = A2(
+			$elm$core$List$map,
+			function (z) {
+				return A3(condition, list, x, y) ? z : 9999;
+			},
+			disFxyTab);
+		return A3($elm$core$List$foldl, $elm$core$Basics$min, 99999, filter1);
+	};
+	var targetValue = targetValueHelper($author$project$MusicCreator$insertCondition30);
+	var drawBox = A3(
+		$elm$core$List$map2,
+		F2(
+			function (x1, b) {
+				return _Utils_eq(b, targetValue) ? A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_Tuple2(x1, 0),
+					A3(
+						$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
+						$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
+						A4(
+							$MacCASOutreach$graphicsvg$GraphicSVG$rgba,
+							50,
+							62,
+							168,
+							$elm$core$Basics$sin((5 * model.time) - 0.5)),
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.sizeofNote, 100))) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil);
+			}),
+		xList(disFxyTab),
+		disFxyTab);
+	return $MacCASOutreach$graphicsvg$GraphicSVG$group(drawBox);
+};
 var $author$project$MusicCreator$bar = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 	_List_fromArray(
 		[
@@ -10699,6 +11314,24 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth = function (stencil) {
 	} else {
 		var a = stencil;
 		return a;
+	}
+};
+var $author$project$MusicCreator$ifdottedNote = function (b) {
+	switch (b.$) {
+		case 'HalfND':
+			return true;
+		case 'QuarterND':
+			return true;
+		case 'EighthND':
+			return true;
+		case 'HalfRD':
+			return true;
+		case 'QuarterRD':
+			return true;
+		case 'EighthRD':
+			return true;
+		default:
+			return false;
 	}
 };
 var $elm$core$Tuple$pair = F2(
@@ -10781,32 +11414,6 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$text = function (str) {
 var $elm$core$Basics$abs = function (n) {
 	return (n < 0) ? (-n) : n;
 };
-var $author$project$MusicCreator$ifRest = function (notes) {
-	switch (notes.$) {
-		case 'Empty':
-			return false;
-		case 'WholeN':
-			return false;
-		case 'HalfN':
-			return false;
-		case 'QuarterN':
-			return false;
-		case 'EighthN':
-			return false;
-		case 'SixteenthN':
-			return false;
-		case 'WholeR':
-			return true;
-		case 'HalfR':
-			return true;
-		case 'QuarterR':
-			return true;
-		case 'EighthR':
-			return true;
-		default:
-			return true;
-	}
-};
 var $elm$core$Bitwise$and = _Bitwise_and;
 var $elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
 var $elm$core$String$repeatHelp = F3(
@@ -10882,6 +11489,9 @@ var $author$project$MusicCreator$toElmMusicPitch = F2(
 		return $author$project$MusicCreator$ifRest(note) ? 'Rest' : pick(0);
 	});
 var $author$project$MusicCreator$codeHelper = function (listOfNote) {
+	var ifdotted = function (b) {
+		return $author$project$MusicCreator$ifdottedNote(b.note) ? ' |> dot 1' : '';
+	};
 	var toElmMusicCodeRaw = A2(
 		$elm$core$List$indexedMap,
 		$elm$core$Tuple$pair,
@@ -10890,7 +11500,7 @@ var $author$project$MusicCreator$codeHelper = function (listOfNote) {
 			function (_v1) {
 				var name = _v1.a;
 				var b = _v1.b;
-				return $author$project$MusicCreator$noteToString(b.note) + (' ' + A2($author$project$MusicCreator$toElmMusicPitch, b.pos, b.note));
+				return $author$project$MusicCreator$noteToString(b.note) + (' ' + (A2($author$project$MusicCreator$toElmMusicPitch, b.pos, b.note) + ifdotted(b)));
 			},
 			listOfNote));
 	var toElmMusicCode = function (list) {
@@ -10967,16 +11577,16 @@ var $author$project$MusicCreator$code = function (listOfNote) {
 					$author$project$MusicCreator$clearEmpty(listOfNote)))
 			]));
 };
-var $MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown = F2(
+var $MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDownAt = F2(
 	function (msg, shape) {
-		return A2($MacCASOutreach$graphicsvg$GraphicSVG$MouseDown, msg, shape);
+		return A2($MacCASOutreach$graphicsvg$GraphicSVG$MouseDownAt, msg, shape);
 	});
 var $MacCASOutreach$graphicsvg$GraphicSVG$scale = F2(
 	function (s, shape) {
 		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Scale, s, s, shape);
 	});
 var $author$project$MusicCreator$drawAndPop = F4(
-	function (listOfNote, scaleSize, f, t) {
+	function (list, scaleSize, f, t) {
 		var ifscale = function (b) {
 			return _Utils_eq(b.dragState, $author$project$MusicCreator$Released) ? scaleSize : 1;
 		};
@@ -10990,7 +11600,7 @@ var $author$project$MusicCreator$drawAndPop = F4(
 						_List_fromArray(
 							[
 								A2(
-								$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown,
+								$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDownAt,
 								A2($author$project$MusicCreator$ChangeDragStateF, name, t),
 								A2(
 									$MacCASOutreach$graphicsvg$GraphicSVG$move,
@@ -11001,7 +11611,7 @@ var $author$project$MusicCreator$drawAndPop = F4(
 										f(b.f))))
 							]));
 				},
-				listOfNote));
+				list));
 	});
 var $MacCASOutreach$graphicsvg$GraphicSVG$bold = function (stencil) {
 	if (stencil.$ === 'Text') {
@@ -11072,6 +11682,48 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$ghost = function (stencil) {
 		$elm$core$Maybe$Nothing,
 		stencil);
 };
+var $MacCASOutreach$graphicsvg$GraphicSVG$italic = function (stencil) {
+	if (stencil.$ === 'Text') {
+		var _v1 = stencil.a;
+		var si = _v1.a;
+		var bo = _v1.b;
+		var i = _v1.c;
+		var u = _v1.d;
+		var s = _v1.e;
+		var sel = _v1.f;
+		var f = _v1.g;
+		var c = _v1.h;
+		var str = stencil.b;
+		return A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
+			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, bo, true, u, s, sel, f, c),
+			str);
+	} else {
+		var a = stencil;
+		return a;
+	}
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$serif = function (stencil) {
+	if (stencil.$ === 'Text') {
+		var _v1 = stencil.a;
+		var si = _v1.a;
+		var bo = _v1.b;
+		var i = _v1.c;
+		var u = _v1.d;
+		var s = _v1.e;
+		var sel = _v1.f;
+		var f = _v1.g;
+		var c = _v1.h;
+		var str = stencil.b;
+		return A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
+			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, bo, i, u, s, sel, $MacCASOutreach$graphicsvg$GraphicSVG$Serif, c),
+			str);
+	} else {
+		var a = stencil;
+		return a;
+	}
+};
 var $author$project$MusicCreator$drawDynamic = function (dynamic) {
 	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
@@ -11084,14 +11736,16 @@ var $author$project$MusicCreator$drawDynamic = function (dynamic) {
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$MacCASOutreach$graphicsvg$GraphicSVG$black,
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$size,
-						10,
-						$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
-							$MacCASOutreach$graphicsvg$GraphicSVG$centered(
-								$MacCASOutreach$graphicsvg$GraphicSVG$bold(
-									$MacCASOutreach$graphicsvg$GraphicSVG$text(
-										$author$project$MusicCreator$dynamicToString(dynamic))))))))
+					$MacCASOutreach$graphicsvg$GraphicSVG$serif(
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$size,
+							10,
+							$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
+								$MacCASOutreach$graphicsvg$GraphicSVG$centered(
+									$MacCASOutreach$graphicsvg$GraphicSVG$italic(
+										$MacCASOutreach$graphicsvg$GraphicSVG$bold(
+											$MacCASOutreach$graphicsvg$GraphicSVG$text(
+												$author$project$MusicCreator$dynamicToString(dynamic))))))))))
 			]));
 };
 var $author$project$MusicCreator$Flip = {$: 'Flip'};
@@ -11130,6 +11784,10 @@ var $author$project$MusicCreator$drawExtraLine = F2(
 					A2($author$project$MusicCreator$drawExtraLine, newPos, state)
 				])) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil)) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil);
 	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown = F2(
+	function (msg, shape) {
+		return A2($MacCASOutreach$graphicsvg$GraphicSVG$MouseDown, msg, shape);
+	});
 var $MacCASOutreach$graphicsvg$GraphicSVG$rotate = F2(
 	function (theta, shape) {
 		return A2($MacCASOutreach$graphicsvg$GraphicSVG$Rotate, theta, shape);
@@ -11138,6 +11796,12 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$Pull = F2(
 	function (a, b) {
 		return {$: 'Pull', a: a, b: b};
 	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$Circle = function (a) {
+	return {$: 'Circle', a: a};
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$circle = function (r) {
+	return $MacCASOutreach$graphicsvg$GraphicSVG$Circle(r);
+};
 var $MacCASOutreach$graphicsvg$GraphicSVG$BezierPath = F2(
 	function (a, b) {
 		return {$: 'BezierPath', a: a, b: b};
@@ -11176,102 +11840,110 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$oval = F2(
 var $MacCASOutreach$graphicsvg$GraphicSVG$square = function (r) {
 	return A2($MacCASOutreach$graphicsvg$GraphicSVG$Rect, r, r);
 };
-var $author$project$MusicCreator$eighthN = function (flip) {
-	var flag = $MacCASOutreach$graphicsvg$GraphicSVG$group(
-		_List_fromArray(
-			[
-				A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-				$MacCASOutreach$graphicsvg$GraphicSVG$black,
-				A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$curve,
-					_Utils_Tuple2(23.088, 48.202),
-					_List_fromArray(
-						[
-							A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
-							_Utils_Tuple2(23.493, 48.202),
-							_Utils_Tuple2(23.898, 48.202)),
-							A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
-							_Utils_Tuple2(26.854, 38.301),
-							_Utils_Tuple2(33.890, 32)),
-							A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
-							_Utils_Tuple2(39.335, 26.123),
-							_Utils_Tuple2(39.021, 18.767)),
-							A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
-							_Utils_Tuple2(38.575, 12.972),
-							_Utils_Tuple2(36.050, 8.7763)),
-							A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
-							_Utils_Tuple2(35.240, 8.5063),
-							_Utils_Tuple2(34.430, 8.2362)),
-							A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
-							_Utils_Tuple2(34.565, 8.9113),
-							_Utils_Tuple2(34.700, 9.5864)),
-							A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
-							_Utils_Tuple2(36.770, 15.057),
-							_Utils_Tuple2(36.320, 22.008)),
-							A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
-							_Utils_Tuple2(34.534, 31.649),
-							_Utils_Tuple2(24.708, 32.810)),
-							A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
-							_Utils_Tuple2(23.898, 32.945),
-							_Utils_Tuple2(23.088, 33.080)),
-							A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
-							_Utils_Tuple2(23.223, 40.236),
-							_Utils_Tuple2(23.088, 48.202))
-						])))
-			]));
-	var note = function () {
-		var flagNor = A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(-14.0, 0),
-			flag);
-		var flagFlip = $MacCASOutreach$graphicsvg$GraphicSVG$mirrorX(
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(-18, 0),
-				flagNor));
-		return $MacCASOutreach$graphicsvg$GraphicSVG$group(
+var $author$project$MusicCreator$eighthN = F2(
+	function (flip, dot) {
+		var flag = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 			_List_fromArray(
 				[
 					A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
-					$elm$core$Basics$degrees(25),
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
 					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$scale,
-						0.9,
+						$MacCASOutreach$graphicsvg$GraphicSVG$curve,
+						_Utils_Tuple2(23.088, 48.202),
+						_List_fromArray(
+							[
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
+								_Utils_Tuple2(23.493, 48.202),
+								_Utils_Tuple2(23.898, 48.202)),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
+								_Utils_Tuple2(26.854, 38.301),
+								_Utils_Tuple2(33.890, 32)),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
+								_Utils_Tuple2(39.335, 26.123),
+								_Utils_Tuple2(39.021, 18.767)),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
+								_Utils_Tuple2(38.575, 12.972),
+								_Utils_Tuple2(36.050, 8.7763)),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
+								_Utils_Tuple2(35.240, 8.5063),
+								_Utils_Tuple2(34.430, 8.2362)),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
+								_Utils_Tuple2(34.565, 8.9113),
+								_Utils_Tuple2(34.700, 9.5864)),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
+								_Utils_Tuple2(36.770, 15.057),
+								_Utils_Tuple2(36.320, 22.008)),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
+								_Utils_Tuple2(34.534, 31.649),
+								_Utils_Tuple2(24.708, 32.810)),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
+								_Utils_Tuple2(23.898, 32.945),
+								_Utils_Tuple2(23.088, 33.080)),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$Pull,
+								_Utils_Tuple2(23.223, 40.236),
+								_Utils_Tuple2(23.088, 48.202))
+							])))
+				]));
+		var note = function () {
+			var flagNor = A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-14.0, 0),
+				flag);
+			var flagFlip = $MacCASOutreach$graphicsvg$GraphicSVG$mirrorX(
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_Tuple2(-18, 0),
+					flagNor));
+			return $MacCASOutreach$graphicsvg$GraphicSVG$group(
+				_List_fromArray(
+					[
+						A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
+						$elm$core$Basics$degrees(25),
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+							0.9,
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+								$MacCASOutreach$graphicsvg$GraphicSVG$black,
+								A2($MacCASOutreach$graphicsvg$GraphicSVG$oval, 23, 15)))),
+						A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$move,
+						_Utils_Tuple2(9.0, 26),
 						A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 							$MacCASOutreach$graphicsvg$GraphicSVG$black,
-							A2($MacCASOutreach$graphicsvg$GraphicSVG$oval, 23, 15)))),
-					A2(
+							A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 2, 46))),
+						_Utils_eq(flip, $author$project$MusicCreator$Flip) ? flagFlip : flagNor
+					]));
+		}();
+		return $MacCASOutreach$graphicsvg$GraphicSVG$group(
+			_List_fromArray(
+				[
+					$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
+					$MacCASOutreach$graphicsvg$GraphicSVG$square(20)),
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.5, note),
+					dot ? A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(9.0, 26),
+					_Utils_Tuple2(9, 1),
 					A2(
 						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 						$MacCASOutreach$graphicsvg$GraphicSVG$black,
-						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 2, 46))),
-					_Utils_eq(flip, $author$project$MusicCreator$Flip) ? flagFlip : flagNor
+						$MacCASOutreach$graphicsvg$GraphicSVG$circle(1.5))) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil)
 				]));
-	}();
-	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
-		_List_fromArray(
-			[
-				$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
-				$MacCASOutreach$graphicsvg$GraphicSVG$square(20)),
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.5, note)
-			]));
-};
-var $author$project$MusicCreator$eighthR = function () {
+	});
+var $author$project$MusicCreator$eighthR = function (dot) {
 	var note = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
@@ -11330,14 +12002,21 @@ var $author$project$MusicCreator$eighthR = function () {
 			[
 				$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
 				$MacCASOutreach$graphicsvg$GraphicSVG$square(20)),
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.18, note)
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.18, note),
+				dot ? A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(5, 1),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					$MacCASOutreach$graphicsvg$GraphicSVG$circle(1.5))) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil)
 			]));
-}();
+};
 var $MacCASOutreach$graphicsvg$GraphicSVG$subtract = F2(
 	function (shape1, shape2) {
 		return A2($MacCASOutreach$graphicsvg$GraphicSVG$AlphaMask, shape1, shape2);
 	});
-var $author$project$MusicCreator$halfN = function () {
+var $author$project$MusicCreator$halfN = function (dot) {
 	var note = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
@@ -11368,10 +12047,17 @@ var $author$project$MusicCreator$halfN = function () {
 			[
 				$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
 				$MacCASOutreach$graphicsvg$GraphicSVG$square(20)),
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.45, note)
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.45, note),
+				dot ? A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(9, 1),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					$MacCASOutreach$graphicsvg$GraphicSVG$circle(1.5))) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil)
 			]));
-}();
-var $author$project$MusicCreator$halfR = function () {
+};
+var $author$project$MusicCreator$halfR = function (dot) {
 	var note = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
@@ -11392,22 +12078,17 @@ var $author$project$MusicCreator$halfR = function () {
 			[
 				$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
 				$MacCASOutreach$graphicsvg$GraphicSVG$square(20)),
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.5, note)
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.5, note),
+				dot ? A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(9, -0.5),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					$MacCASOutreach$graphicsvg$GraphicSVG$circle(1.5))) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil)
 			]));
-}();
-var $MacCASOutreach$graphicsvg$GraphicSVG$outlined = F3(
-	function (style, outlineClr, stencil) {
-		var lineStyle = function () {
-			if (style.$ === 'NoLine') {
-				return $elm$core$Maybe$Nothing;
-			} else {
-				return $elm$core$Maybe$Just(
-					_Utils_Tuple2(style, outlineClr));
-			}
-		}();
-		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Inked, $elm$core$Maybe$Nothing, lineStyle, stencil);
-	});
-var $author$project$MusicCreator$quarterN = function () {
+};
+var $author$project$MusicCreator$quarterN = function (dot) {
 	var note = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
@@ -11434,10 +12115,17 @@ var $author$project$MusicCreator$quarterN = function () {
 			[
 				$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
 				$MacCASOutreach$graphicsvg$GraphicSVG$square(20)),
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.5, note)
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.5, note),
+				dot ? A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(9, 1),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					$MacCASOutreach$graphicsvg$GraphicSVG$circle(1.5))) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil)
 			]));
-}();
-var $author$project$MusicCreator$quarterR = function () {
+};
+var $author$project$MusicCreator$quarterR = function (dot) {
 	var note = A2(
 		$MacCASOutreach$graphicsvg$GraphicSVG$scale,
 		3,
@@ -11498,9 +12186,16 @@ var $author$project$MusicCreator$quarterR = function () {
 			[
 				$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
 				$MacCASOutreach$graphicsvg$GraphicSVG$square(20)),
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.25, note)
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.25, note),
+				dot ? A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(9, 1),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					$MacCASOutreach$graphicsvg$GraphicSVG$circle(1.5))) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil)
 			]));
-}();
+};
 var $author$project$MusicCreator$sixteenthN = function (flip) {
 	var flag2 = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
@@ -11631,12 +12326,6 @@ var $author$project$MusicCreator$sixteenthN = function (flip) {
 				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.5, note)
 			]));
 };
-var $MacCASOutreach$graphicsvg$GraphicSVG$Circle = function (a) {
-	return {$: 'Circle', a: a};
-};
-var $MacCASOutreach$graphicsvg$GraphicSVG$circle = function (r) {
-	return $MacCASOutreach$graphicsvg$GraphicSVG$Circle(r);
-};
 var $author$project$MusicCreator$sixteenthR = function () {
 	var note = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
@@ -11741,12 +12430,6 @@ var $author$project$MusicCreator$sixteenthR = function () {
 				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.18, note)
 			]));
 }();
-var $MacCASOutreach$graphicsvg$GraphicSVG$Solid = function (a) {
-	return {$: 'Solid', a: a};
-};
-var $MacCASOutreach$graphicsvg$GraphicSVG$solid = function (th) {
-	return $MacCASOutreach$graphicsvg$GraphicSVG$Solid(th);
-};
 var $author$project$MusicCreator$wholeN = function () {
 	var note = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
@@ -11795,40 +12478,43 @@ var $author$project$MusicCreator$wholeR = function () {
 				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.5, note)
 			]));
 }();
-var $MacCASOutreach$graphicsvg$GraphicSVG$yellow = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 237, 212, 0, 1);
 var $author$project$MusicCreator$whichNote = F2(
 	function (notes, flip) {
 		switch (notes.$) {
 			case 'Empty':
-				return $MacCASOutreach$graphicsvg$GraphicSVG$group(
-					_List_fromArray(
-						[
-							A3(
-							$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
-							$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
-							$MacCASOutreach$graphicsvg$GraphicSVG$yellow,
-							$MacCASOutreach$graphicsvg$GraphicSVG$square(20))
-						]));
+				return $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil);
 			case 'WholeN':
 				return $author$project$MusicCreator$wholeN;
 			case 'HalfN':
-				return $author$project$MusicCreator$halfN;
+				return $author$project$MusicCreator$halfN(false);
 			case 'QuarterN':
-				return $author$project$MusicCreator$quarterN;
+				return $author$project$MusicCreator$quarterN(false);
 			case 'EighthN':
-				return $author$project$MusicCreator$eighthN(flip);
+				return A2($author$project$MusicCreator$eighthN, flip, false);
 			case 'SixteenthN':
 				return $author$project$MusicCreator$sixteenthN(flip);
 			case 'WholeR':
 				return $author$project$MusicCreator$wholeR;
 			case 'HalfR':
-				return $author$project$MusicCreator$halfR;
+				return $author$project$MusicCreator$halfR(false);
 			case 'QuarterR':
-				return $author$project$MusicCreator$quarterR;
+				return $author$project$MusicCreator$quarterR(false);
 			case 'EighthR':
-				return $author$project$MusicCreator$eighthR;
-			default:
+				return $author$project$MusicCreator$eighthR(false);
+			case 'SixteenthR':
 				return $author$project$MusicCreator$sixteenthR;
+			case 'HalfND':
+				return $author$project$MusicCreator$halfN(true);
+			case 'QuarterND':
+				return $author$project$MusicCreator$quarterN(true);
+			case 'EighthND':
+				return A2($author$project$MusicCreator$eighthN, flip, true);
+			case 'HalfRD':
+				return $author$project$MusicCreator$halfR(true);
+			case 'QuarterRD':
+				return $author$project$MusicCreator$quarterR(true);
+			default:
+				return $author$project$MusicCreator$eighthR(true);
 		}
 	});
 var $author$project$MusicCreator$drawNotesWithExtraLinePop = F2(
@@ -11879,6 +12565,15 @@ var $author$project$MusicCreator$drawNotesWithExtraLinePop = F2(
 				listOfNote));
 	});
 var $author$project$MusicCreator$drawNotesWithExtraLine = function (listOfNote) {
+	var ifRotateB = F2(
+		function (pos, note) {
+			return (pos.b >= 0) && (!$author$project$MusicCreator$ifRest(note));
+		});
+	var moveDynamic = function (b) {
+		var x = A2(ifRotateB, b.pos, b.note) ? (b.pos.a - 3) : b.pos.a;
+		var dynamic = b._function.dynamic;
+		return _Utils_eq(dynamic.dragState, $author$project$MusicCreator$Released) ? ((b.pos.b >= 10.5) ? _Utils_Tuple2(x, -23) : (((b.pos.b >= 0) && (b.pos.b <= 10.5)) ? _Utils_Tuple2(x, b.pos.b - 33) : (((b.pos.b <= 0) && (_Utils_cmp(b.pos.b, -11) > -1)) ? _Utils_Tuple2(x, -23) : _Utils_Tuple2(x, b.pos.b - 12)))) : dynamic.pos;
+	};
 	var ifRotate = F2(
 		function (pos, note) {
 			return ((pos.b >= 0) && (!$author$project$MusicCreator$ifRest(note))) ? $MacCASOutreach$graphicsvg$GraphicSVG$rotate(
@@ -11911,7 +12606,14 @@ var $author$project$MusicCreator$drawNotesWithExtraLine = function (listOfNote) 
 									A2(
 										$author$project$MusicCreator$whichNote,
 										b.note,
-										ifFlip(b.pos)))))
+										ifFlip(b.pos))))),
+							A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDownAt,
+							A2($author$project$MusicCreator$ChangeDragStateF, name, $author$project$MusicCreator$Dynamic),
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$move,
+								moveDynamic(b),
+								$author$project$MusicCreator$drawDynamic(b._function.dynamic.f)))
 						]));
 			},
 			listOfNote));
@@ -11937,6 +12639,122 @@ var $elm$core$List$drop = F2(
 			}
 		}
 	});
+var $ianmackenzie$elm_units$Angle$cos = function (_v0) {
+	var angle = _v0.a;
+	return $elm$core$Basics$cos(angle);
+};
+var $ianmackenzie$elm_geometry$Geometry$Types$Direction2d = function (a) {
+	return {$: 'Direction2d', a: a};
+};
+var $ianmackenzie$elm_geometry$Vector2d$direction = function (_v0) {
+	var v = _v0.a;
+	var largestComponent = A2(
+		$elm$core$Basics$max,
+		$elm$core$Basics$abs(v.x),
+		$elm$core$Basics$abs(v.y));
+	if (!largestComponent) {
+		return $elm$core$Maybe$Nothing;
+	} else {
+		var scaledY = v.y / largestComponent;
+		var scaledX = v.x / largestComponent;
+		var scaledLength = $elm$core$Basics$sqrt((scaledX * scaledX) + (scaledY * scaledY));
+		return $elm$core$Maybe$Just(
+			$ianmackenzie$elm_geometry$Geometry$Types$Direction2d(
+				{x: scaledX / scaledLength, y: scaledY / scaledLength}));
+	}
+};
+var $ianmackenzie$elm_geometry$LineSegment2d$endpoints = function (_v0) {
+	var endpoints_ = _v0.a;
+	return endpoints_;
+};
+var $ianmackenzie$elm_geometry$Geometry$Types$Vector2d = function (a) {
+	return {$: 'Vector2d', a: a};
+};
+var $ianmackenzie$elm_geometry$Vector2d$from = F2(
+	function (_v0, _v1) {
+		var p1 = _v0.a;
+		var p2 = _v1.a;
+		return $ianmackenzie$elm_geometry$Geometry$Types$Vector2d(
+			{x: p2.x - p1.x, y: p2.y - p1.y});
+	});
+var $ianmackenzie$elm_geometry$LineSegment2d$vector = function (lineSegment) {
+	var _v0 = $ianmackenzie$elm_geometry$LineSegment2d$endpoints(lineSegment);
+	var p1 = _v0.a;
+	var p2 = _v0.b;
+	return A2($ianmackenzie$elm_geometry$Vector2d$from, p1, p2);
+};
+var $ianmackenzie$elm_geometry$LineSegment2d$direction = function (givenSegment) {
+	return $ianmackenzie$elm_geometry$Vector2d$direction(
+		$ianmackenzie$elm_geometry$LineSegment2d$vector(givenSegment));
+};
+var $ianmackenzie$elm_units$Quantity$Quantity = function (a) {
+	return {$: 'Quantity', a: a};
+};
+var $elm$core$Basics$atan2 = _Basics_atan2;
+var $ianmackenzie$elm_geometry$Direction2d$toAngle = function (_v0) {
+	var d = _v0.a;
+	return $ianmackenzie$elm_units$Quantity$Quantity(
+		A2($elm$core$Basics$atan2, d.y, d.x));
+};
+var $author$project$Line2dAssist$findOppSide = F2(
+	function (line1, num) {
+		var _v0 = $ianmackenzie$elm_geometry$LineSegment2d$direction(line1);
+		if (_v0.$ === 'Just') {
+			var a = _v0.a;
+			return $elm$core$Basics$abs(
+				num / $ianmackenzie$elm_units$Angle$cos(
+					$ianmackenzie$elm_geometry$Direction2d$toAngle(a)));
+		} else {
+			return 0;
+		}
+	});
+var $elm$core$List$partition = F2(
+	function (pred, list) {
+		var step = F2(
+			function (x, _v0) {
+				var trues = _v0.a;
+				var falses = _v0.b;
+				return pred(x) ? _Utils_Tuple2(
+					A2($elm$core$List$cons, x, trues),
+					falses) : _Utils_Tuple2(
+					trues,
+					A2($elm$core$List$cons, x, falses));
+			});
+		return A3(
+			$elm$core$List$foldr,
+			step,
+			_Utils_Tuple2(_List_Nil, _List_Nil),
+			list);
+	});
+var $elm_community$list_extra$List$Extra$gatherWith = F2(
+	function (testFn, list) {
+		var helper = F2(
+			function (scattered, gathered) {
+				if (!scattered.b) {
+					return $elm$core$List$reverse(gathered);
+				} else {
+					var toGather = scattered.a;
+					var population = scattered.b;
+					var _v1 = A2(
+						$elm$core$List$partition,
+						testFn(toGather),
+						population);
+					var gathering = _v1.a;
+					var remaining = _v1.b;
+					return A2(
+						helper,
+						remaining,
+						A2(
+							$elm$core$List$cons,
+							_Utils_Tuple2(toGather, gathering),
+							gathered));
+				}
+			});
+		return A2(helper, list, _List_Nil);
+	});
+var $elm_community$list_extra$List$Extra$gatherEquals = function (list) {
+	return A2($elm_community$list_extra$List$Extra$gatherWith, $elm$core$Basics$eq, list);
+};
 var $MacCASOutreach$graphicsvg$GraphicSVG$Path = function (a) {
 	return {$: 'Path', a: a};
 };
@@ -11946,8 +12764,8 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$line = F2(
 			_List_fromArray(
 				[p1, p2]));
 	});
-var $author$project$MusicCreator$groupedNote = F2(
-	function (p1, p2) {
+var $author$project$MusicCreator$groupedNote = F3(
+	function (dot, p1, p2) {
 		var shiftP1 = (_Utils_cmp(p2.b, p1.b) > 0) ? _Utils_Tuple2(p1.a + 4, p1.b) : _Utils_Tuple2(p1.a - 4, p1.b);
 		var note = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 			_List_fromArray(
@@ -12032,12 +12850,28 @@ var $author$project$MusicCreator$groupedNote = F2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
 					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1.5),
 					$MacCASOutreach$graphicsvg$GraphicSVG$black,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$line, shiftP1, p2))
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$line, shiftP1, p2)),
+					dot ? ((_Utils_cmp(p2.b, p1.b) > 0) ? A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_Tuple2(9, 1),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$move,
+						p1,
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+							$MacCASOutreach$graphicsvg$GraphicSVG$black,
+							$MacCASOutreach$graphicsvg$GraphicSVG$circle(1.5)))) : A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_Tuple2(-9, -2),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$move,
+						p1,
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+							$MacCASOutreach$graphicsvg$GraphicSVG$black,
+							$MacCASOutreach$graphicsvg$GraphicSVG$circle(1.5))))) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil)
 				]));
 	});
-var $ianmackenzie$elm_units$Quantity$Quantity = function (a) {
-	return {$: 'Quantity', a: a};
-};
 var $ianmackenzie$elm_geometry$Vector2d$cross = F2(
 	function (_v0, _v1) {
 		var v2 = _v0.a;
@@ -12049,20 +12883,6 @@ var $ianmackenzie$elm_geometry$Vector2d$dot = F2(
 		var v2 = _v0.a;
 		var v1 = _v1.a;
 		return $ianmackenzie$elm_units$Quantity$Quantity((v1.x * v2.x) + (v1.y * v2.y));
-	});
-var $ianmackenzie$elm_geometry$LineSegment2d$endpoints = function (_v0) {
-	var endpoints_ = _v0.a;
-	return endpoints_;
-};
-var $ianmackenzie$elm_geometry$Geometry$Types$Vector2d = function (a) {
-	return {$: 'Vector2d', a: a};
-};
-var $ianmackenzie$elm_geometry$Vector2d$from = F2(
-	function (_v0, _v1) {
-		var p1 = _v0.a;
-		var p2 = _v1.a;
-		return $ianmackenzie$elm_geometry$Geometry$Types$Vector2d(
-			{x: p2.x - p1.x, y: p2.y - p1.y});
 	});
 var $ianmackenzie$elm_geometry$Geometry$Types$Point2d = function (a) {
 	return {$: 'Point2d', a: a};
@@ -12106,12 +12926,6 @@ var $ianmackenzie$elm_units$Quantity$ratio = F2(
 		var y = _v1.a;
 		return x / y;
 	});
-var $ianmackenzie$elm_geometry$LineSegment2d$vector = function (lineSegment) {
-	var _v0 = $ianmackenzie$elm_geometry$LineSegment2d$endpoints(lineSegment);
-	var p1 = _v0.a;
-	var p2 = _v0.b;
-	return A2($ianmackenzie$elm_geometry$Vector2d$from, p1, p2);
-};
 var $ianmackenzie$elm_units$Quantity$zero = $ianmackenzie$elm_units$Quantity$Quantity(0);
 var $ianmackenzie$elm_geometry$LineSegment2d$intersectionPoint = F2(
 	function (lineSegment1, lineSegment2) {
@@ -12195,6 +13009,32 @@ var $author$project$Line2dAssist$line = F2(
 			$author$project$Line2dAssist$point(p1),
 			$author$project$Line2dAssist$point(p2));
 	});
+var $elm_community$list_extra$List$Extra$foldl1 = F2(
+	function (func, list) {
+		if (!list.b) {
+			return $elm$core$Maybe$Nothing;
+		} else {
+			var x = list.a;
+			var xs = list.b;
+			return $elm$core$Maybe$Just(
+				A3($elm$core$List$foldl, func, x, xs));
+		}
+	});
+var $elm_community$list_extra$List$Extra$maximumWith = F2(
+	function (comparator, list) {
+		return A2(
+			$elm_community$list_extra$List$Extra$foldl1,
+			F2(
+				function (x, y) {
+					var _v0 = A2(comparator, x, y);
+					if (_v0.$ === 'GT') {
+						return x;
+					} else {
+						return y;
+					}
+				}),
+			list);
+	});
 var $ianmackenzie$elm_geometry$LineSegment2d$midpoint = function (lineSegment) {
 	return A2($ianmackenzie$elm_geometry$LineSegment2d$interpolate, lineSegment, 0.5);
 };
@@ -12230,6 +13070,21 @@ var $author$project$Line2dAssist$midPoint = F2(
 			$ianmackenzie$elm_geometry$LineSegment2d$midpoint(
 				A2($author$project$Line2dAssist$line, p1, p2)));
 	});
+var $elm_community$list_extra$List$Extra$minimumWith = F2(
+	function (comparator, list) {
+		return A2(
+			$elm_community$list_extra$List$Extra$foldl1,
+			F2(
+				function (x, y) {
+					var _v0 = A2(comparator, x, y);
+					if (_v0.$ === 'LT') {
+						return x;
+					} else {
+						return y;
+					}
+				}),
+			list);
+	});
 var $author$project$MusicCreator$noteAndName = function (list) {
 	return A2(
 		$elm$core$List$map,
@@ -12239,6 +13094,12 @@ var $author$project$MusicCreator$noteAndName = function (list) {
 			return _Utils_Tuple2(name, a.note);
 		},
 		list);
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$Polygon = function (a) {
+	return {$: 'Polygon', a: a};
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$polygon = function (ptList) {
+	return $MacCASOutreach$graphicsvg$GraphicSVG$Polygon(ptList);
 };
 var $ianmackenzie$elm_geometry$LineSegment2d$mapEndpoints = F2(
 	function (_function, lineSegment) {
@@ -12270,135 +13131,6 @@ var $author$project$Line2dAssist$scale = F2(
 			x,
 			line1);
 	});
-var $elm$core$List$takeReverse = F3(
-	function (n, list, kept) {
-		takeReverse:
-		while (true) {
-			if (n <= 0) {
-				return kept;
-			} else {
-				if (!list.b) {
-					return kept;
-				} else {
-					var x = list.a;
-					var xs = list.b;
-					var $temp$n = n - 1,
-						$temp$list = xs,
-						$temp$kept = A2($elm$core$List$cons, x, kept);
-					n = $temp$n;
-					list = $temp$list;
-					kept = $temp$kept;
-					continue takeReverse;
-				}
-			}
-		}
-	});
-var $elm$core$List$takeTailRec = F2(
-	function (n, list) {
-		return $elm$core$List$reverse(
-			A3($elm$core$List$takeReverse, n, list, _List_Nil));
-	});
-var $elm$core$List$takeFast = F3(
-	function (ctr, n, list) {
-		if (n <= 0) {
-			return _List_Nil;
-		} else {
-			var _v0 = _Utils_Tuple2(n, list);
-			_v0$1:
-			while (true) {
-				_v0$5:
-				while (true) {
-					if (!_v0.b.b) {
-						return list;
-					} else {
-						if (_v0.b.b.b) {
-							switch (_v0.a) {
-								case 1:
-									break _v0$1;
-								case 2:
-									var _v2 = _v0.b;
-									var x = _v2.a;
-									var _v3 = _v2.b;
-									var y = _v3.a;
-									return _List_fromArray(
-										[x, y]);
-								case 3:
-									if (_v0.b.b.b.b) {
-										var _v4 = _v0.b;
-										var x = _v4.a;
-										var _v5 = _v4.b;
-										var y = _v5.a;
-										var _v6 = _v5.b;
-										var z = _v6.a;
-										return _List_fromArray(
-											[x, y, z]);
-									} else {
-										break _v0$5;
-									}
-								default:
-									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
-										var _v7 = _v0.b;
-										var x = _v7.a;
-										var _v8 = _v7.b;
-										var y = _v8.a;
-										var _v9 = _v8.b;
-										var z = _v9.a;
-										var _v10 = _v9.b;
-										var w = _v10.a;
-										var tl = _v10.b;
-										return (ctr > 1000) ? A2(
-											$elm$core$List$cons,
-											x,
-											A2(
-												$elm$core$List$cons,
-												y,
-												A2(
-													$elm$core$List$cons,
-													z,
-													A2(
-														$elm$core$List$cons,
-														w,
-														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
-											$elm$core$List$cons,
-											x,
-											A2(
-												$elm$core$List$cons,
-												y,
-												A2(
-													$elm$core$List$cons,
-													z,
-													A2(
-														$elm$core$List$cons,
-														w,
-														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
-									} else {
-										break _v0$5;
-									}
-							}
-						} else {
-							if (_v0.a === 1) {
-								break _v0$1;
-							} else {
-								break _v0$5;
-							}
-						}
-					}
-				}
-				return list;
-			}
-			var _v1 = _v0.b;
-			var x = _v1.a;
-			return _List_fromArray(
-				[x]);
-		}
-	});
-var $elm$core$List$take = F2(
-	function (n, list) {
-		return A3($elm$core$List$takeFast, 0, n, list);
-	});
-var $ianmackenzie$elm_geometry$Geometry$Types$Direction2d = function (a) {
-	return {$: 'Direction2d', a: a};
-};
 var $ianmackenzie$elm_geometry$Direction2d$negativeY = $ianmackenzie$elm_geometry$Geometry$Types$Direction2d(
 	{x: 0, y: -1});
 var $ianmackenzie$elm_geometry$Point2d$translateBy = F2(
@@ -12520,12 +13252,88 @@ var $author$project$MusicCreator$drawgroup = function (list) {
 	};
 	var posList = A2(
 		$elm$core$List$map,
-		function (_v11) {
-			var name = _v11.a;
-			var a = _v11.b;
+		function (_v21) {
+			var name = _v21.a;
+			var a = _v21.b;
 			return _Utils_Tuple2(a.pos.a, a.pos.b);
 		},
 		$author$project$MusicCreator$clearEmpty(list));
+	var lowpos = function () {
+		var _v18 = A2(
+			$elm_community$list_extra$List$Extra$minimumWith,
+			F2(
+				function (_v19, _v20) {
+					var x = _v19.a;
+					var y = _v19.b;
+					var x1 = _v20.a;
+					var y1 = _v20.b;
+					return A2($elm$core$Basics$compare, y, y1);
+				}),
+			posList);
+		if (_v18.$ === 'Just') {
+			var a = _v18.a;
+			return a.b;
+		} else {
+			return 0;
+		}
+	}();
+	var ifDecrese = function () {
+		var countPitch = A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v17, def) {
+					var x = _v17.a;
+					var y = _v17.b;
+					return (y <= 0) ? (def + 1) : (def - 1);
+				}),
+			0,
+			posList);
+		return countPitch > 0;
+	}();
+	var pos1ConsiderP = F2(
+		function (p, hight) {
+			return ifDecrese ? _Utils_Tuple2(p.a + 3.2, p.b + hight) : _Utils_Tuple2(p.a - 4.8, p.b - hight);
+		});
+	var pos2ConsiderP = F2(
+		function (p, hight) {
+			return ifDecrese ? _Utils_Tuple2(p.a + 4.8, p.b + hight) : _Utils_Tuple2(p.a - 3.3, p.b - hight);
+		});
+	var if2samelist = $elm_community$list_extra$List$Extra$gatherEquals(
+		A2(
+			$elm$core$List$map,
+			function (_v16) {
+				var x = _v16.a;
+				var y = _v16.b;
+				return y;
+			},
+			posList));
+	var ifbeemhorizontal = A2(
+		$elm$core$List$any,
+		function (_v15) {
+			var x = _v15.a;
+			var y = _v15.b;
+			return $elm$core$List$length(y) > 0;
+		},
+		if2samelist);
+	var highpos = function () {
+		var _v12 = A2(
+			$elm_community$list_extra$List$Extra$maximumWith,
+			F2(
+				function (_v13, _v14) {
+					var x = _v13.a;
+					var y = _v13.b;
+					var x1 = _v14.a;
+					var y1 = _v14.b;
+					return A2($elm$core$Basics$compare, y, y1);
+				}),
+			posList);
+		if (_v12.$ === 'Just') {
+			var a = _v12.a;
+			return a.b;
+		} else {
+			return 0;
+		}
+	}();
 	var pos2 = function () {
 		var _v10 = A2(
 			$elm$core$List$drop,
@@ -12533,41 +13341,36 @@ var $author$project$MusicCreator$drawgroup = function (list) {
 			posList);
 		if (_v10.b && (!_v10.b.b)) {
 			var a = _v10.a;
-			return a;
+			return _Utils_Tuple2(
+				a.a,
+				function () {
+					if (ifbeemhorizontal) {
+						return ifDecrese ? highpos : lowpos;
+					} else {
+						return ifDecrese ? ((_Utils_cmp(highpos, a.b) > 0) ? (highpos - 2) : (highpos + 2)) : ((_Utils_cmp(lowpos, a.b) < 0) ? (lowpos + 2) : (lowpos - 2));
+					}
+				}());
 		} else {
 			return _Utils_Tuple2(0, 0);
 		}
 	}();
 	var pos1 = function () {
-		var _v9 = A2($elm$core$List$take, 1, posList);
-		if (_v9.b && (!_v9.b.b)) {
-			var a = _v9.a;
-			return a;
+		var _v8 = A2($elm$core$List$take, 1, posList);
+		if (_v8.b && (!_v8.b.b)) {
+			var a = _v8.a;
+			return _Utils_Tuple2(
+				a.a,
+				function () {
+					if (ifbeemhorizontal) {
+						return ifDecrese ? highpos : lowpos;
+					} else {
+						return ifDecrese ? ((_Utils_cmp(highpos, pos2.b) > 0) ? (highpos + 2) : (highpos - 2)) : ((_Utils_cmp(lowpos, pos2.b) < 0) ? (lowpos - 2) : (lowpos + 2));
+					}
+				}());
 		} else {
 			return _Utils_Tuple2(0, 0);
 		}
 	}();
-	var ifDecrese = function () {
-		var countPitch = A3(
-			$elm$core$List$foldl,
-			F2(
-				function (_v8, def) {
-					var x = _v8.a;
-					var y = _v8.b;
-					return (y <= 0) ? (def + 1) : (def - 1);
-				}),
-			0,
-			posList);
-		return (countPitch > 0) ? true : false;
-	}();
-	var pos1ConsiderP = F2(
-		function (p, hight) {
-			return ifDecrese ? _Utils_Tuple2(p.a + 3.5, p.b + hight) : _Utils_Tuple2(p.a - 4.6, p.b - hight);
-		});
-	var pos2ConsiderP = F2(
-		function (p, hight) {
-			return ifDecrese ? _Utils_Tuple2(p.a + 4.5, p.b + hight) : _Utils_Tuple2(p.a - 3.3, p.b - hight);
-		});
 	var topBarLine = A2(
 		$author$project$Line2dAssist$scale,
 		A2(
@@ -12610,33 +13413,81 @@ var $author$project$MusicCreator$drawgroup = function (list) {
 				var _v7 = _v6.b;
 				var p2 = _v7.a;
 				var ifEnd = _v7.b;
-				return ifEnd ? A3(
-					$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
-					$MacCASOutreach$graphicsvg$GraphicSVG$solid(4),
+				return ifEnd ? A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$MacCASOutreach$graphicsvg$GraphicSVG$black,
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$line,
-						maybepoint(p1),
-						maybepoint(p2))) : ((!_Utils_eq(p1, p2)) ? A3(
-					$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
-					$MacCASOutreach$graphicsvg$GraphicSVG$solid(4),
+					$MacCASOutreach$graphicsvg$GraphicSVG$polygon(
+						_List_fromArray(
+							[
+								_Utils_Tuple2(
+								maybepoint(p1).a,
+								maybepoint(p1).b + A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+								_Utils_Tuple2(
+								maybepoint(p2).a,
+								maybepoint(p2).b + A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+								_Utils_Tuple2(
+								maybepoint(p2).a,
+								maybepoint(p2).b - A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+								_Utils_Tuple2(
+								maybepoint(p1).a,
+								maybepoint(p1).b - A2($author$project$Line2dAssist$findOppSide, topBarLine, 2))
+							]))) : ((!_Utils_eq(p1, p2)) ? A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$MacCASOutreach$graphicsvg$GraphicSVG$black,
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$line,
-						maybepoint(p1),
-						maybepoint(
-							A2($author$project$Line2dAssist$midPoint, p1, p2)))) : A3(
-					$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
-					$MacCASOutreach$graphicsvg$GraphicSVG$solid(4),
+					$MacCASOutreach$graphicsvg$GraphicSVG$polygon(
+						_List_fromArray(
+							[
+								_Utils_Tuple2(
+								maybepoint(p1).a,
+								maybepoint(p1).b + A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+								_Utils_Tuple2(
+								maybepoint(
+									A2($author$project$Line2dAssist$midPoint, p1, p2)).a,
+								maybepoint(
+									A2($author$project$Line2dAssist$midPoint, p1, p2)).b + A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+								_Utils_Tuple2(
+								maybepoint(
+									A2($author$project$Line2dAssist$midPoint, p1, p2)).a,
+								maybepoint(
+									A2($author$project$Line2dAssist$midPoint, p1, p2)).b - A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+								_Utils_Tuple2(
+								maybepoint(p1).a,
+								maybepoint(p1).b - A2($author$project$Line2dAssist$findOppSide, topBarLine, 2))
+							]))) : A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 					$MacCASOutreach$graphicsvg$GraphicSVG$black,
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$line,
-						maybepoint(p1),
-						maybepoint(
-							A2(
-								$author$project$Line2dAssist$midPoint,
-								p1,
-								shiftLeft(p1))))));
+					$MacCASOutreach$graphicsvg$GraphicSVG$polygon(
+						_List_fromArray(
+							[
+								_Utils_Tuple2(
+								maybepoint(p1).a,
+								maybepoint(p1).b + A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+								_Utils_Tuple2(
+								maybepoint(
+									A2(
+										$author$project$Line2dAssist$midPoint,
+										p1,
+										shiftLeft(p1))).a,
+								maybepoint(
+									A2(
+										$author$project$Line2dAssist$midPoint,
+										p1,
+										shiftLeft(p1))).b + A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+								_Utils_Tuple2(
+								maybepoint(
+									A2(
+										$author$project$Line2dAssist$midPoint,
+										p1,
+										shiftLeft(p1))).a,
+								maybepoint(
+									A2(
+										$author$project$Line2dAssist$midPoint,
+										p1,
+										shiftLeft(p1))).b - A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+								_Utils_Tuple2(
+								maybepoint(p1).a,
+								maybepoint(p1).b - A2($author$project$Line2dAssist$findOppSide, topBarLine, 2))
+							]))));
 			},
 			secondBarLineHelper1(list));
 	}();
@@ -12656,6 +13507,9 @@ var $author$project$MusicCreator$drawgroup = function (list) {
 			}();
 			return A2($author$project$Line2dAssist$scale, lineP, 20);
 		};
+		var ifdotted = function (a) {
+			return _Utils_eq(a.note, $author$project$MusicCreator$EighthND);
+		};
 		var defaultPos = $author$project$Line2dAssist$point(
 			_Utils_Tuple2(0, 0));
 		var staffPos = function (b) {
@@ -12668,34 +13522,63 @@ var $author$project$MusicCreator$drawgroup = function (list) {
 						topBarLine,
 						maybeStaff(b))));
 		};
+		var moveDynamic = F2(
+			function (a, b) {
+				return _Utils_eq(a._function.dynamic.dragState, $author$project$MusicCreator$Dragging) ? a._function.dynamic.pos : (ifDecrese ? ((_Utils_cmp(a.pos.b, -14) > -1) ? _Utils_Tuple2(a.pos.a, -23) : _Utils_Tuple2(a.pos.a, a.pos.b - 12)) : _Utils_Tuple2(
+					a.pos.a - 3,
+					staffPos(b).b - 12));
+			});
 		return A3(
 			$elm$core$List$map2,
 			F2(
 				function (_v5, b) {
 					var name = _v5.a;
 					var a = _v5.b;
-					return A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown,
-						$author$project$MusicCreator$ChangeDragState(name),
-						A2(
-							$author$project$MusicCreator$groupedNote,
-							b,
-							staffPos(b)));
+					return $MacCASOutreach$graphicsvg$GraphicSVG$group(
+						_List_fromArray(
+							[
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown,
+								$author$project$MusicCreator$ChangeDragState(name),
+								A3(
+									$author$project$MusicCreator$groupedNote,
+									ifdotted(a),
+									b,
+									staffPos(b))),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDownAt,
+								A2($author$project$MusicCreator$ChangeDragStateF, name, $author$project$MusicCreator$Dynamic),
+								A2(
+									$MacCASOutreach$graphicsvg$GraphicSVG$move,
+									A2(moveDynamic, a, b),
+									$author$project$MusicCreator$drawDynamic(a._function.dynamic.f)))
+							]));
 				}),
-			noteList,
+			$author$project$MusicCreator$clearEmpty(list),
 			posList);
 	}();
 	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
-				A3(
-				$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
-				$MacCASOutreach$graphicsvg$GraphicSVG$solid(4),
-				$MacCASOutreach$graphicsvg$GraphicSVG$black,
 				A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$line,
-					A2(pos1ConsiderP, pos1, 24),
-					A2(pos2ConsiderP, pos2, 24))),
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$black,
+				$MacCASOutreach$graphicsvg$GraphicSVG$polygon(
+					_List_fromArray(
+						[
+							_Utils_Tuple2(
+							A2(pos1ConsiderP, pos1, 24).a,
+							A2(pos1ConsiderP, pos1, 24).b - A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+							_Utils_Tuple2(
+							A2(pos2ConsiderP, pos2, 24).a,
+							A2(pos2ConsiderP, pos2, 24).b - A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+							_Utils_Tuple2(
+							A2(pos2ConsiderP, pos2, 24).a,
+							A2(pos2ConsiderP, pos2, 24).b + A2($author$project$Line2dAssist$findOppSide, topBarLine, 2)),
+							_Utils_Tuple2(
+							A2(pos1ConsiderP, pos1, 24).a,
+							A2(pos1ConsiderP, pos1, 24).b + A2($author$project$Line2dAssist$findOppSide, topBarLine, 2))
+						]))),
 				$MacCASOutreach$graphicsvg$GraphicSVG$group(drawSecondLine),
 				$MacCASOutreach$graphicsvg$GraphicSVG$group(drawNote)
 			]));
@@ -12732,7 +13615,7 @@ var $author$project$MusicCreator$groupNoteList = F2(
 			list);
 		var ifGroupSingles = F2(
 			function (s1, s2) {
-				return ((_Utils_eq(s1.note, $author$project$MusicCreator$EighthN) || _Utils_eq(s1.note, $author$project$MusicCreator$SixteenthN)) && (_Utils_eq(s2.note, $author$project$MusicCreator$EighthN) || _Utils_eq(s2.note, $author$project$MusicCreator$SixteenthN))) ? true : false;
+				return ((_Utils_eq(s1.note, $author$project$MusicCreator$EighthND) || (_Utils_eq(s1.note, $author$project$MusicCreator$EighthN) || _Utils_eq(s1.note, $author$project$MusicCreator$SixteenthN))) && (_Utils_eq(s2.note, $author$project$MusicCreator$EighthND) || (_Utils_eq(s2.note, $author$project$MusicCreator$EighthN) || _Utils_eq(s2.note, $author$project$MusicCreator$SixteenthN)))) ? true : false;
 			});
 		var groupping = function (x) {
 			groupping:
@@ -12848,16 +13731,6 @@ var $author$project$MusicCreator$groupNoteList = F2(
 		};
 		return groupping(toGroupNoteTypeList);
 	});
-var $author$project$MusicCreator$ifDraggedNote = function (list) {
-	return A2(
-		$elm$core$List$any,
-		function (_v0) {
-			var name = _v0.a;
-			var a = _v0.b;
-			return _Utils_eq(a.dragState, $author$project$MusicCreator$Dragging);
-		},
-		list);
-};
 var $author$project$MusicCreator$drawNotesWithExtraLineWithGroup = F3(
 	function (model, listOfNote, ts) {
 		var ifRotate = F2(
@@ -12953,36 +13826,6 @@ var $author$project$MusicCreator$drawTS = function (ts) {
 		return $author$project$MusicCreator$ts44;
 	} else {
 		return $author$project$MusicCreator$ts34;
-	}
-};
-var $MacCASOutreach$graphicsvg$GraphicSVG$darkBlue = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 32, 74, 135, 1);
-var $MacCASOutreach$graphicsvg$GraphicSVG$lightBlue = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 114, 159, 207, 1);
-var $author$project$MusicCreator$drawTrashCan = function (model) {
-	var _v0 = model.trashState;
-	if (_v0.$ === 'Open') {
-		return $MacCASOutreach$graphicsvg$GraphicSVG$group(
-			_List_fromArray(
-				[
-					A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					model.trashPos,
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-						$MacCASOutreach$graphicsvg$GraphicSVG$lightBlue,
-						$MacCASOutreach$graphicsvg$GraphicSVG$square(model.trashSize)))
-				]));
-	} else {
-		return $MacCASOutreach$graphicsvg$GraphicSVG$group(
-			_List_fromArray(
-				[
-					A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					model.trashPos,
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-						$MacCASOutreach$graphicsvg$GraphicSVG$darkBlue,
-						$MacCASOutreach$graphicsvg$GraphicSVG$square(model.trashSize)))
-				]));
 	}
 };
 var $MacCASOutreach$graphicsvg$GraphicSVG$NoLine = {$: 'NoLine'};
@@ -13281,170 +14124,99 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$addOutline = F3(
 			}
 		}
 	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$lightOrange = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 252, 175, 62, 1);
-var $elm$core$List$repeatHelp = F3(
-	function (result, n, value) {
-		repeatHelp:
-		while (true) {
-			if (n <= 0) {
-				return result;
-			} else {
-				var $temp$result = A2($elm$core$List$cons, value, result),
-					$temp$n = n - 1,
-					$temp$value = value;
-				result = $temp$result;
-				n = $temp$n;
-				value = $temp$value;
-				continue repeatHelp;
-			}
-		}
-	});
-var $elm$core$List$repeat = F2(
-	function (n, value) {
-		return A3($elm$core$List$repeatHelp, _List_Nil, n, value);
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$serif = function (stencil) {
-	if (stencil.$ === 'Text') {
-		var _v1 = stencil.a;
-		var si = _v1.a;
-		var bo = _v1.b;
-		var i = _v1.c;
-		var u = _v1.d;
-		var s = _v1.e;
-		var sel = _v1.f;
-		var f = _v1.g;
-		var c = _v1.h;
-		var str = stencil.b;
-		return A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
-			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, bo, i, u, s, sel, $MacCASOutreach$graphicsvg$GraphicSVG$Serif, c),
-			str);
-	} else {
-		var a = stencil;
-		return a;
-	}
-};
-var $author$project$MusicCreator$frameForSelectedNote = function () {
-	var restText = A2($elm$core$List$repeat, 5, 'Rest');
-	var noteText = A2($elm$core$List$repeat, 5, 'Note');
-	var durationText = _List_fromArray(
-		['whole', 'half', 'quarter', 'eighth', 'sixteenth']);
-	var displayText = F4(
-		function (list, x, y, adx) {
-			return A3(
-				$elm$core$List$map2,
-				F2(
-					function (a, b) {
-						return A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$move,
-							_Utils_Tuple2((-x) + (adx * b), y),
-							A2(
-								$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-								$MacCASOutreach$graphicsvg$GraphicSVG$black,
-								A2(
-									$MacCASOutreach$graphicsvg$GraphicSVG$size,
-									2.2,
-									$MacCASOutreach$graphicsvg$GraphicSVG$serif(
-										$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
-											$MacCASOutreach$graphicsvg$GraphicSVG$text(a))))));
-					}),
-				list,
-				A2(
-					$elm$core$List$range,
-					0,
-					$elm$core$List$length(list)));
-		});
-	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
-		_List_fromArray(
-			[
-				A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(-100, 27),
-				A3(
-					$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
-					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
-					$MacCASOutreach$graphicsvg$GraphicSVG$lightOrange,
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-						$MacCASOutreach$graphicsvg$GraphicSVG$white,
-						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 45, 40)))),
-				$MacCASOutreach$graphicsvg$GraphicSVG$group(
-				A4(displayText, durationText, 120, 26.5, 7.5)),
-				$MacCASOutreach$graphicsvg$GraphicSVG$group(
-				A4(displayText, noteText, 120, 24, 7.5)),
-				$MacCASOutreach$graphicsvg$GraphicSVG$group(
-				A4(displayText, durationText, 120, 14, 7.5)),
-				$MacCASOutreach$graphicsvg$GraphicSVG$group(
-				A4(displayText, restText, 120, 12, 7.5))
-			]));
-}();
-var $MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseMoveAt = F2(
-	function (msg, shape) {
-		return A2($MacCASOutreach$graphicsvg$GraphicSVG$MoveOverAt, msg, shape);
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseUp = F2(
-	function (msg, shape) {
-		return A2($MacCASOutreach$graphicsvg$GraphicSVG$MouseUp, msg, shape);
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$scaleX = F2(
-	function (s, shape) {
-		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Scale, s, 1, shape);
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$scaleY = F2(
-	function (s, shape) {
-		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Scale, 1, s, shape);
-	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$darkGray = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 186, 189, 182, 1);
 var $MacCASOutreach$graphicsvg$GraphicSVG$gray = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 211, 215, 207, 1);
-var $author$project$MusicCreator$score = $MacCASOutreach$graphicsvg$GraphicSVG$group(
+var $MacCASOutreach$graphicsvg$GraphicSVG$lightGray = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 238, 238, 236, 1);
+var $MacCASOutreach$graphicsvg$GraphicSVG$RoundRect = F3(
+	function (a, b, c) {
+		return {$: 'RoundRect', a: a, b: b, c: c};
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$roundedRect = F3(
+	function (w, h, r) {
+		return A3($MacCASOutreach$graphicsvg$GraphicSVG$RoundRect, w, h, r);
+	});
+var $author$project$MusicCreator$trashCanClosed = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 	_List_fromArray(
 		[
-			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(0, 49),
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-				$MacCASOutreach$graphicsvg$GraphicSVG$gray,
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 192, 0.5))),
-			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(0, 14),
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-				$MacCASOutreach$graphicsvg$GraphicSVG$black,
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 192, 0.5))),
-			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(0, 7),
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-				$MacCASOutreach$graphicsvg$GraphicSVG$black,
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 192, 0.5))),
-			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+			A3(
+			$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+			$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
 			$MacCASOutreach$graphicsvg$GraphicSVG$black,
-			A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 192, 0.5)),
-			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(0, -7),
 			A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$darkGray,
+				A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 24, 26, 3))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(0, 17),
+			A3(
+				$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
+				$MacCASOutreach$graphicsvg$GraphicSVG$solid(2),
 				$MacCASOutreach$graphicsvg$GraphicSVG$black,
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 192, 0.5))),
+				A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 10, 6, 1))),
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(0, -14),
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+			_Utils_Tuple2(0, 14.5),
+			A3(
+				$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+				$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
 				$MacCASOutreach$graphicsvg$GraphicSVG$black,
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 192, 0.5))),
-			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(0, -35),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$gray,
+					A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 30, 5, 2.25)))),
+			A3(
+			$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+			$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
+			$MacCASOutreach$graphicsvg$GraphicSVG$black,
 			A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-				$MacCASOutreach$graphicsvg$GraphicSVG$gray,
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 192, 0.5)))
+				$MacCASOutreach$graphicsvg$GraphicSVG$darkGray,
+				$MacCASOutreach$graphicsvg$GraphicSVG$polygon(
+					_List_fromArray(
+						[
+							_Utils_Tuple2(12, 9),
+							_Utils_Tuple2(-12, 9),
+							_Utils_Tuple2(-15, 13),
+							_Utils_Tuple2(15, 13)
+						])))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(-7.5, -2),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$lightGray,
+				A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 2, 16, 1))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(-2.5, -2),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$lightGray,
+				A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 2, 16, 1))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(2.5, -2),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$lightGray,
+				A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 2, 16, 1))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(7.5, -2),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$lightGray,
+				A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 2, 16, 1)))
 		]));
+var $MacCASOutreach$graphicsvg$GraphicSVG$clip = F2(
+	function (shape1, shape2) {
+		return A2($MacCASOutreach$graphicsvg$GraphicSVG$Clip, shape1, shape2);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$rectangle = F2(
+	function (w, h) {
+		return A2($MacCASOutreach$graphicsvg$GraphicSVG$Rect, w, h);
+	});
 var $author$project$MusicCreator$treble = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 	_List_fromArray(
 		[
@@ -13631,6 +14403,333 @@ var $author$project$MusicCreator$treble = $MacCASOutreach$graphicsvg$GraphicSVG$
 						_Utils_Tuple2(-1.092, 1.7297))
 					])))
 		]));
+var $author$project$MusicCreator$trashCanOpen = $MacCASOutreach$graphicsvg$GraphicSVG$group(
+	_List_fromArray(
+		[
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(2, 14),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
+				$elm$core$Basics$degrees(-45),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+					0.2,
+					A2($author$project$MusicCreator$eighthN, $author$project$MusicCreator$UnFlip, false)))),
+			A3(
+			$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+			$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
+			$MacCASOutreach$graphicsvg$GraphicSVG$black,
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$darkGray,
+				A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 24, 26, 3))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(18, 4),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
+				$elm$core$Basics$degrees(-155),
+				$MacCASOutreach$graphicsvg$GraphicSVG$mirrorX(
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.2, $author$project$MusicCreator$treble)))),
+			A3(
+			$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+			$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
+			$MacCASOutreach$graphicsvg$GraphicSVG$black,
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$darkGray,
+				$MacCASOutreach$graphicsvg$GraphicSVG$polygon(
+					_List_fromArray(
+						[
+							_Utils_Tuple2(12, 9),
+							_Utils_Tuple2(-12, 9),
+							_Utils_Tuple2(-15, 13),
+							_Utils_Tuple2(15, 13)
+						])))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(-7.5, -2),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$lightGray,
+				A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 2, 16, 1))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(-2.5, -2),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$lightGray,
+				A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 2, 16, 1))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(2.5, -2),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$lightGray,
+				A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 2, 16, 1))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(7.5, -2),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$lightGray,
+				A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 2, 16, 1))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(16.8, -12),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
+				$elm$core$Basics$degrees(10),
+				$MacCASOutreach$graphicsvg$GraphicSVG$mirrorX(
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+						0.2,
+						$author$project$MusicCreator$quarterN(false))))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(6, -12),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
+				$elm$core$Basics$degrees(-20),
+				$MacCASOutreach$graphicsvg$GraphicSVG$mirrorX(
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+						0.2,
+						$author$project$MusicCreator$sixteenthN($author$project$MusicCreator$UnFlip))))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(17, 15),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
+				$elm$core$Basics$degrees(-60),
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.3, $author$project$MusicCreator$wholeR))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(17, -2),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
+				$elm$core$Basics$degrees(60),
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.3, $author$project$MusicCreator$wholeR))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(23, 5),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
+				$elm$core$Basics$degrees(30),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+					0.1,
+					$author$project$MusicCreator$quarterR(false)))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(25, -8),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+				0.1,
+				$author$project$MusicCreator$eighthR(false))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(-2, 2),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
+				$elm$core$Basics$degrees(20),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$clip,
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$move,
+						_Utils_Tuple2(0, 17),
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+							$MacCASOutreach$graphicsvg$GraphicSVG$white,
+							A2($MacCASOutreach$graphicsvg$GraphicSVG$rectangle, 32, 9))),
+					$MacCASOutreach$graphicsvg$GraphicSVG$group(
+						_List_fromArray(
+							[
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$move,
+								_Utils_Tuple2(0, 17),
+								A3(
+									$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
+									$MacCASOutreach$graphicsvg$GraphicSVG$solid(2),
+									$MacCASOutreach$graphicsvg$GraphicSVG$black,
+									A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 10, 6, 1))),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$move,
+								_Utils_Tuple2(0, 14.5),
+								A3(
+									$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+									$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
+									$MacCASOutreach$graphicsvg$GraphicSVG$black,
+									A2(
+										$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+										$MacCASOutreach$graphicsvg$GraphicSVG$gray,
+										A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 30, 5, 2.25)))),
+								A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$move,
+								_Utils_Tuple2(0, 12.5),
+								A2(
+									$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+									$MacCASOutreach$graphicsvg$GraphicSVG$black,
+									A2($MacCASOutreach$graphicsvg$GraphicSVG$rectangle, 29.5, 2)))
+							])))))
+		]));
+var $author$project$MusicCreator$drawTrashCan = function (model) {
+	var _v0 = model.trashState;
+	if (_v0.$ === 'Open') {
+		return $MacCASOutreach$graphicsvg$GraphicSVG$group(
+			_List_fromArray(
+				[
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					model.trashPos,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.7, $author$project$MusicCreator$trashCanOpen))
+				]));
+	} else {
+		return $MacCASOutreach$graphicsvg$GraphicSVG$group(
+			_List_fromArray(
+				[
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					model.trashPos,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.7, $author$project$MusicCreator$trashCanClosed))
+				]));
+	}
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$lightOrange = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 252, 175, 62, 1);
+var $elm$core$List$repeatHelp = F3(
+	function (result, n, value) {
+		repeatHelp:
+		while (true) {
+			if (n <= 0) {
+				return result;
+			} else {
+				var $temp$result = A2($elm$core$List$cons, value, result),
+					$temp$n = n - 1,
+					$temp$value = value;
+				result = $temp$result;
+				n = $temp$n;
+				value = $temp$value;
+				continue repeatHelp;
+			}
+		}
+	});
+var $elm$core$List$repeat = F2(
+	function (n, value) {
+		return A3($elm$core$List$repeatHelp, _List_Nil, n, value);
+	});
+var $author$project$MusicCreator$frameForSelectedNote = function () {
+	var restText = A2($elm$core$List$repeat, 5, 'Rest');
+	var noteText = A2($elm$core$List$repeat, 5, 'Note');
+	var durationText = _List_fromArray(
+		['whole', 'half', 'quarter', 'eighth', 'sixteenth']);
+	var displayText = F4(
+		function (list, x, y, adx) {
+			return A3(
+				$elm$core$List$map2,
+				F2(
+					function (a, b) {
+						return A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$move,
+							_Utils_Tuple2((-x) + (adx * b), y),
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+								$MacCASOutreach$graphicsvg$GraphicSVG$black,
+								A2(
+									$MacCASOutreach$graphicsvg$GraphicSVG$size,
+									2.2,
+									$MacCASOutreach$graphicsvg$GraphicSVG$serif(
+										$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
+											$MacCASOutreach$graphicsvg$GraphicSVG$text(a))))));
+					}),
+				list,
+				A2(
+					$elm$core$List$range,
+					0,
+					$elm$core$List$length(list)));
+		});
+	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
+		_List_fromArray(
+			[
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-95, 27),
+				A3(
+					$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
+					$MacCASOutreach$graphicsvg$GraphicSVG$lightOrange,
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						$MacCASOutreach$graphicsvg$GraphicSVG$white,
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 65, 40))))
+			]));
+}();
+var $MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseMoveAt = F2(
+	function (msg, shape) {
+		return A2($MacCASOutreach$graphicsvg$GraphicSVG$MoveOverAt, msg, shape);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseUp = F2(
+	function (msg, shape) {
+		return A2($MacCASOutreach$graphicsvg$GraphicSVG$MouseUp, msg, shape);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$scaleX = F2(
+	function (s, shape) {
+		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Scale, s, 1, shape);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$scaleY = F2(
+	function (s, shape) {
+		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Scale, 1, s, shape);
+	});
+var $author$project$MusicCreator$score = $MacCASOutreach$graphicsvg$GraphicSVG$group(
+	_List_fromArray(
+		[
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(0, 49),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$gray,
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 390, 0.5))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(0, 14),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$black,
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 390, 0.5))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(0, 7),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$black,
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 390, 0.5))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+			$MacCASOutreach$graphicsvg$GraphicSVG$black,
+			A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 390, 0.5)),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(0, -7),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$black,
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 390, 0.5))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(0, -14),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$black,
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 390, 0.5))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(0, -35),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$gray,
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 390, 0.5)))
+		]));
 var $author$project$MusicCreator$getDraggedNote = function (list) {
 	var emptyLastnote = $author$project$MusicCreator$defselectNoteRec;
 	return A3(
@@ -13666,8 +14765,20 @@ var $author$project$MusicCreator$noteToStringWArt = function (notes) {
 			return 'a quarter rest';
 		case 'EighthR':
 			return 'an eighth rest';
-		default:
+		case 'SixteenthR':
 			return 'a sixteenthR rest';
+		case 'HalfND':
+			return 'a dotted half note';
+		case 'QuarterND':
+			return 'a dotted quarter note';
+		case 'EighthND':
+			return 'a dotted eighth note';
+		case 'HalfRD':
+			return 'a dotted half rest';
+		case 'QuarterRD':
+			return 'a dotted quarter rest';
+		default:
+			return 'a dotted eighth rest';
 	}
 };
 var $author$project$MusicCreator$warning = function (model) {
@@ -13822,11 +14933,11 @@ var $author$project$MusicCreator$myShapes = function (model) {
 			$author$project$MusicCreator$code(model.scoreNoteList)),
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(45, 0),
+			_Utils_Tuple2(90, 0),
 			A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 0.3, $author$project$MusicCreator$bar)),
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(-38, 2.1),
+			_Utils_Tuple2(-90, 2.1),
 			A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$scaleX,
 				1.2,
@@ -13839,7 +14950,7 @@ var $author$project$MusicCreator$myShapes = function (model) {
 			$author$project$MusicCreator$scaleNote,
 			A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(-65, 0),
+				_Utils_Tuple2(-165, 0),
 				$author$project$MusicCreator$drawTS(model.timeSignature))),
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$scale,
@@ -13863,6 +14974,10 @@ var $author$project$MusicCreator$myShapes = function (model) {
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$scale,
 			$author$project$MusicCreator$scaleNote,
+			$author$project$MusicCreator$assistBox(model)),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+			$author$project$MusicCreator$scaleNote,
 			A2(
 				$author$project$MusicCreator$drawNotesWithExtraLinePop,
 				$elm$core$Dict$toList(model.selectNoteDict),
@@ -13880,10 +14995,6 @@ var $author$project$MusicCreator$myShapes = function (model) {
 				1,
 				$author$project$MusicCreator$drawDynamic,
 				$author$project$MusicCreator$Dynamic)),
-			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$scale,
-			$author$project$MusicCreator$scaleNote,
-			A4($author$project$MusicCreator$drawAndPop, model.dynamicList, 1, $author$project$MusicCreator$drawDynamic, $author$project$MusicCreator$Dynamic)),
 			$MacCASOutreach$graphicsvg$GraphicSVG$group(
 			A2(
 				$elm$core$List$map,
@@ -13944,9 +15055,13 @@ var $author$project$MusicCreator$myShapes = function (model) {
 					} else {
 						return A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseUp,
-							A2($author$project$MusicCreator$ChangeDragStateF, name, $author$project$MusicCreator$Dynamic),
+							A3(
+								$author$project$MusicCreator$ChangeDragStateF,
+								name,
+								$author$project$MusicCreator$Dynamic,
+								_Utils_Tuple2(0, 0)),
 							A2(
-								$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown,
+								$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDownAt,
 								A2($author$project$MusicCreator$ChangeDragStateF, name, $author$project$MusicCreator$Dynamic),
 								A2(
 									$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseMoveAt,
@@ -13955,7 +15070,35 @@ var $author$project$MusicCreator$myShapes = function (model) {
 										A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height)))));
 					}
 				},
-				$elm$core$Dict$toList(model.selectDynamicDict)))
+				$elm$core$Dict$toList(model.selectDynamicDict))),
+			$MacCASOutreach$graphicsvg$GraphicSVG$group(
+			A2(
+				$elm$core$List$map,
+				function (_v6) {
+					var name = _v6.a;
+					var b = _v6.b;
+					var _v7 = b.dragState;
+					if (_v7.$ === 'Released') {
+						return $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil);
+					} else {
+						return A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseUp,
+							A3(
+								$author$project$MusicCreator$ChangeDragStateF,
+								name,
+								$author$project$MusicCreator$Dynamic,
+								_Utils_Tuple2(0, 0)),
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDownAt,
+								A2($author$project$MusicCreator$ChangeDragStateF, name, $author$project$MusicCreator$Dynamic),
+								A2(
+									$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseMoveAt,
+									A2($author$project$MusicCreator$DragF, name, $author$project$MusicCreator$Dynamic),
+									$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
+										A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height)))));
+					}
+				},
+				$author$project$MusicCreator$createdynamicList(model.scoreNoteList)))
 		]);
 };
 var $author$project$MusicCreator$view = function (model) {
