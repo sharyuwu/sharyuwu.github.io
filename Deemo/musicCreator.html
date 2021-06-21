@@ -26,23 +26,24 @@
         music.events.forEach(function (event) {
           const time = startTime + event.time
           console.log(event.volume)
+          
           player.queueWaveTable(
             audioContext,
             audioContext.destination,
             window[info.variable],
             time,
             event.pitch,
-            event.duration * 0.5,
-            event.volume
+            event.duration * 0.25,
+            event.volume,
           )
           player.queueWaveTable(
             audioContext,
             audioContext.destination,
             window[info.variable],
-            time,
+            time+(event.duration * 0.25),
             event.pitch,
-            event.duration * 0.5,
-            0
+            event.duration * (1-0.25),
+            -1,
           )
         })
       })

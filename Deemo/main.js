@@ -8638,10 +8638,18 @@ var $author$project$MusicCreator$GotNewWidth = F2(
 var $author$project$MusicCreatorDef$Released = {$: 'Released'};
 var $author$project$MusicCreatorDef$Ts44 = {$: 'Ts44'};
 var $author$project$DragBarAssit$lowestTemp = 40;
+var $author$project$DragBarAssit$barW = 40;
+var $author$project$DragBarAssit$highestTemp = 218;
+var $author$project$DragBarAssit$scaleTemp = 0.5;
+var $author$project$DragBarAssit$ratio = (($author$project$DragBarAssit$barW - 5) * $author$project$DragBarAssit$scaleTemp) / ($author$project$DragBarAssit$highestTemp - $author$project$DragBarAssit$lowestTemp);
+var $author$project$DragBarAssit$findPos = function (num) {
+	return (num - $author$project$DragBarAssit$lowestTemp) * $author$project$DragBarAssit$ratio;
+};
+var $author$project$DragBarAssit$initTempo = 100;
 var $author$project$MusicCreatorDef$defDragBarCircle = {
 	dragState: $author$project$MusicCreatorDef$Released,
-	posX: 0,
-	tempo: $elm$core$Basics$round($author$project$DragBarAssit$lowestTemp),
+	posX: $author$project$DragBarAssit$findPos($author$project$DragBarAssit$initTempo),
+	tempo: $elm$core$Basics$round($author$project$DragBarAssit$initTempo),
 	zoomCircle: 1
 };
 var $elm$browser$Browser$Dom$getViewport = _Browser_withWindow(_Browser_getViewport);
@@ -10685,10 +10693,6 @@ var $author$project$MusicCreatorToMusic$creatorToMusic = F2(
 				]));
 	});
 var $author$project$DragBarAssit$originalPosX = 30;
-var $author$project$DragBarAssit$barW = 40;
-var $author$project$DragBarAssit$highestTemp = 218;
-var $author$project$DragBarAssit$scaleTemp = 0.5;
-var $author$project$DragBarAssit$ratio = (($author$project$DragBarAssit$barW - 5) * $author$project$DragBarAssit$scaleTemp) / ($author$project$DragBarAssit$highestTemp - $author$project$DragBarAssit$lowestTemp);
 var $author$project$DragBarAssit$currentTemp = function (num) {
 	return $author$project$DragBarAssit$lowestTemp + $elm$core$Basics$round((num - $author$project$DragBarAssit$originalPosX) / $author$project$DragBarAssit$ratio);
 };
@@ -10699,9 +10703,6 @@ var $author$project$MusicCreator$extractDragState = F3(
 			def,
 			A2($elm$core$Dict$get, nameOfNote, dict)).dragState;
 	});
-var $author$project$DragBarAssit$findPos = function (num) {
-	return (num - $author$project$DragBarAssit$lowestTemp) * $author$project$DragBarAssit$ratio;
-};
 var $author$project$InputKeyAssist$posKey = _List_fromArray(
 	['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']);
 var $author$project$InputKeyAssist$getKey = function (keys) {
