@@ -32,8 +32,17 @@
             window[info.variable],
             time,
             event.pitch,
-            event.duration,
+            event.duration * 0.5,
             event.volume
+          )
+          player.queueWaveTable(
+            audioContext,
+            audioContext.destination,
+            window[info.variable],
+            time,
+            event.pitch,
+            event.duration * 0.5,
+            0
           )
         })
       })
