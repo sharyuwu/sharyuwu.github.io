@@ -11,8 +11,13 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 - ShapeCreator [ShapeCreator](/Deemo/ShapeCreator.html)
 - Spaceship [Spaceship](/Deemo/spaceshipScene.html)
 - RubeGoldberg [RubeGoldberg](/Deemo/RubeGoldberg.html)
-- RubeGoldberg [musicCreator](/Deemo/musicCreator.html)
-  
+- musicCreator [musicCreator](/Deemo/musicCreator.html)
+- musicCreator [Slur](/Deemo/musicCreator/indexSlur.html)
+- musicCreator [Staccatissimo](/Deemo/musicCreator/indexstaccarissimo.html)
+- musicCreator [Staccato](/Deemo/musicCreator/indexStaccato.html)
+- musicCreator [Standard](/Deemo/musicCreator/indexstandard.html)
+- musicCreator [Tenuto](/Deemo/musicCreator/indexTenuto.html)
+
 - For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
 ### Image
