@@ -10875,7 +10875,7 @@ var $author$project$MusicCreatorToMusic$toMusicArticulation = function (articula
 		case 'Staccato':
 			return 0.4;
 		case 'Staccatissimo':
-			return 0.25;
+			return 0.20;
 		case 'Fermata':
 			return 4;
 		case 'Tenuto':
@@ -10963,19 +10963,19 @@ var $author$project$MusicCreatorToMusic$toMusicVolume = F2(
 		var _v0 = dynamic.f;
 		switch (_v0.$) {
 			case 'PP':
-				return (1 / 96) * 31;
+				return 0;
 			case 'P':
-				return (1 / 96) * 42;
+				return 0.5;
 			case 'MP':
-				return (1 / 96) * 53;
+				return 0.8;
 			case 'MF':
-				return (1 / 96) * 64;
+				return 1.25;
 			case 'F':
-				return (1 / 96) * 80;
+				return 1.5;
 			case 'FF':
-				return 1;
+				return 1.8;
 			default:
-				return $author$project$MusicCreatorDef$ifRest(note) ? (-1) : ((1 / 96) * 80);
+				return $author$project$MusicCreatorDef$ifRest(note) ? (-1) : 1;
 		}
 	});
 var $author$project$MusicCreatorToMusic$creatorToMusicNote = function (note) {
@@ -11175,7 +11175,7 @@ var $author$project$PlayBack$getMusicIntstrument = function (_v0) {
 var $author$project$PlayBack$instrumentToMIDINumber = function (instrument) {
 	switch (instrument.$) {
 		case 'Piano':
-			return 5;
+			return 11;
 		case 'AcousticNylonGuitar':
 			return 248;
 		case 'AcousticSteelGuitar':
@@ -11183,7 +11183,7 @@ var $author$project$PlayBack$instrumentToMIDINumber = function (instrument) {
 		case 'Bass':
 			return 369;
 		case 'Violin':
-			return 452;
+			return 449;
 		case 'Trumpet':
 			return 620;
 		case 'Sitar':
@@ -11294,7 +11294,7 @@ var $author$project$PlayBack$pitchToMIDINumber = function (pitch) {
 			return $author$project$PlayBack$pitchToMIDINumber(higherPitch) - 12;
 	}
 };
-var $author$project$PlayBack$standardVolume = (1 / 96) * 80;
+var $author$project$MusicDef$standardVolume = 1;
 var $author$project$PlayBack$seqNotesToMEvents = F5(
 	function (currentTime, tempo, notes, accidentalDict, previousVolume) {
 		var metro = 60 / (tempo.bpm * 0.25);
@@ -11327,7 +11327,7 @@ var $author$project$PlayBack$seqNotesToMEvents = F5(
 				noteRecord.accidental,
 				accidentalDict) : accidentalDict;
 			var ifHold = (noteRecord.articulation > 1) ? noteRecord.articulation : 1;
-			var clampedVolume = (!_Utils_eq(noteRecord.volume, $author$project$PlayBack$standardVolume)) ? A3($elm$core$Basics$clamp, -1.0, 1.0, noteRecord.volume) : A3($elm$core$Basics$clamp, -1.0, 1.0, previousVolume);
+			var clampedVolume = (!_Utils_eq(noteRecord.volume, $author$project$MusicDef$standardVolume)) ? A3($elm$core$Basics$clamp, -1.0, 4, noteRecord.volume) : A3($elm$core$Basics$clamp, -1.0, 4, previousVolume);
 			var nextVolume = _Utils_eq(clampedVolume, -1) ? previousVolume : clampedVolume;
 			return A2(
 				$elm$core$List$cons,
@@ -11361,7 +11361,7 @@ var $author$project$PlayBack$musicToMEvents = F3(
 				tempo,
 				notes,
 				$elm$core$Dict$fromList(_List_Nil),
-				$author$project$PlayBack$standardVolume);
+				$author$project$MusicDef$standardVolume);
 		};
 		var mEventsList = A3(
 			$elm$core$List$foldl,
