@@ -8635,6 +8635,7 @@ var $author$project$MusicCreator$GotNewWidth = F2(
 	function (a, b) {
 		return {$: 'GotNewWidth', a: a, b: b};
 	});
+var $author$project$MusicDef$Piano = {$: 'Piano'};
 var $author$project$MusicCreatorDef$Released = {$: 'Released'};
 var $author$project$DragBarAssit$lowestTemp = 40;
 var $author$project$DragBarAssit$barW = 40;
@@ -9298,6 +9299,7 @@ var $author$project$MusicCreator$init = _Utils_Tuple2(
 		dragState: $author$project$MusicCreatorDef$Released,
 		height: 0,
 		ifswitch: false,
+		instrument: $author$project$MusicDef$Piano,
 		pos: _Utils_Tuple2(0, 0),
 		scoreNoteList: $author$project$MusicCreator$scoreNote(20),
 		selectAccidentalsDict: $elm$core$Dict$fromList($author$project$MusicCreator$selectAccidentals),
@@ -10846,7 +10848,6 @@ var $author$project$MusicDef$Music = F3(
 	function (a, b, c) {
 		return {$: 'Music', a: a, b: b, c: c};
 	});
-var $author$project$MusicDef$Piano = {$: 'Piano'};
 var $author$project$MusicDef$BlankScreen = {$: 'BlankScreen'};
 var $author$project$MusicDef$Note = F7(
 	function (a, b, c, d, e, f, g) {
@@ -10971,9 +10972,9 @@ var $author$project$MusicCreatorToMusic$toMusicVolume = F2(
 			case 'MF':
 				return 1.25;
 			case 'F':
-				return 1.5;
-			case 'FF':
 				return 1.8;
+			case 'FF':
+				return 2.3;
 			default:
 				return $author$project$MusicCreatorDef$ifRest(note) ? (-1) : 1;
 		}
@@ -11002,11 +11003,11 @@ var $author$project$MusicCreatorToMusic$creatorToMusicTimeSigniture = function (
 			return $author$project$MusicDef$TwoFour;
 	}
 };
-var $author$project$MusicCreatorToMusic$creatorToMusic = F2(
-	function (ts, noteList) {
+var $author$project$MusicCreatorToMusic$creatorToMusic = F3(
+	function (instrument, ts, noteList) {
 		return A3(
 			$author$project$MusicDef$Music,
-			$author$project$MusicDef$Piano,
+			instrument,
 			$author$project$MusicCreatorToMusic$creatorToMusicTimeSigniture(ts),
 			_List_fromArray(
 				[
@@ -11176,20 +11177,20 @@ var $author$project$PlayBack$instrumentToMIDINumber = function (instrument) {
 	switch (instrument.$) {
 		case 'Piano':
 			return 11;
-		case 'AcousticNylonGuitar':
-			return 248;
-		case 'AcousticSteelGuitar':
-			return 262;
+		case 'Recorder':
+			return 781;
+		case 'Flute':
+			return 774;
 		case 'Bass':
 			return 369;
 		case 'Violin':
 			return 449;
 		case 'Trumpet':
-			return 620;
+			return 617;
 		case 'Sitar':
 			return 1124;
 		default:
-			return 1218;
+			return 278;
 	}
 };
 var $elm$json$Json$Encode$list = F2(
@@ -12409,6 +12410,13 @@ var $author$project$MusicCreator$update = F2(
 						model,
 						{height: height, width: width}),
 					$elm$core$Platform$Cmd$none);
+			case 'ChangeInstrument':
+				var instrument = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{instrument: instrument}),
+					$elm$core$Platform$Cmd$none);
 			case 'TapList':
 				var lyricName = msg.a;
 				var noteName = msg.b;
@@ -13023,8 +13031,9 @@ var $author$project$MusicCreator$update = F2(
 						return a;
 					},
 					model.scoreNoteList);
-				var myMusic = A2(
+				var myMusic = A3(
 					$author$project$MusicCreatorToMusic$creatorToMusic,
+					model.instrument,
 					$author$project$MusicCreator$whichTimeSigniture(model.timeSignature),
 					music);
 				return _Utils_Tuple2(
@@ -13189,6 +13198,9 @@ var $author$project$MusicCreator$ChangeDragStateF = F3(
 	function (a, b, c) {
 		return {$: 'ChangeDragStateF', a: a, b: b, c: c};
 	});
+var $author$project$MusicCreator$ChangeInstrument = function (a) {
+	return {$: 'ChangeInstrument', a: a};
+};
 var $author$project$MusicCreator$ChangeTapDragBar = {$: 'ChangeTapDragBar'};
 var $author$project$MusicCreator$Drag = F2(
 	function (a, b) {
@@ -14838,6 +14850,39 @@ var $author$project$DrawMusic$drawDynamic = function (dynamic) {
 									$MacCASOutreach$graphicsvg$GraphicSVG$italic(
 										$MacCASOutreach$graphicsvg$GraphicSVG$bold(
 											$MacCASOutreach$graphicsvg$GraphicSVG$text(dynamicString)))))))))
+			]));
+};
+var $author$project$DrawMusic$drawInstrument = function (instrument) {
+	var instrumentString = function () {
+		switch (instrument.$) {
+			case 'Piano':
+				return 'Piano';
+			case 'Recorder':
+				return 'Recorder';
+			case 'Flute':
+				return 'Flute';
+			case 'Bass':
+				return 'Bass';
+			case 'Violin':
+				return 'Violin';
+			case 'Trumpet':
+				return 'Trumpet';
+			case 'Sitar':
+				return 'Sitar';
+			default:
+				return 'ElectricGuitar';
+		}
+	}();
+	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
+		_List_fromArray(
+			[
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$black,
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$size,
+					3,
+					$MacCASOutreach$graphicsvg$GraphicSVG$text(instrumentString)))
 			]));
 };
 var $author$project$MusicCreatorDef$Flip = {$: 'Flip'};
@@ -18091,6 +18136,43 @@ var $author$project$DrawMusic$score = $MacCASOutreach$graphicsvg$GraphicSVG$grou
 				$MacCASOutreach$graphicsvg$GraphicSVG$gray,
 				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 470, 0.5)))
 		]));
+var $author$project$MusicDef$ElectricGuitar = {$: 'ElectricGuitar'};
+var $author$project$MusicDef$Flute = {$: 'Flute'};
+var $author$project$MusicDef$Recorder = {$: 'Recorder'};
+var $author$project$MusicDef$Sitar = {$: 'Sitar'};
+var $author$project$MusicDef$Trumpet = {$: 'Trumpet'};
+var $author$project$MusicDef$Violin = {$: 'Violin'};
+var $author$project$MusicCreator$selecInstrument = _List_fromArray(
+	[
+		{
+		instrument: $author$project$MusicDef$Piano,
+		pos: _Utils_Tuple2(0, 50)
+	},
+		{
+		instrument: $author$project$MusicDef$Flute,
+		pos: _Utils_Tuple2(15, 50)
+	},
+		{
+		instrument: $author$project$MusicDef$Violin,
+		pos: _Utils_Tuple2(0, 55)
+	},
+		{
+		instrument: $author$project$MusicDef$Trumpet,
+		pos: _Utils_Tuple2(30, 55)
+	},
+		{
+		instrument: $author$project$MusicDef$Sitar,
+		pos: _Utils_Tuple2(0, 45)
+	},
+		{
+		instrument: $author$project$MusicDef$ElectricGuitar,
+		pos: _Utils_Tuple2(15, 45)
+	},
+		{
+		instrument: $author$project$MusicDef$Recorder,
+		pos: _Utils_Tuple2(15, 55)
+	}
+	]);
 var $author$project$MusicCreator$getDraggedNote = function (list) {
 	var emptyLastnote = $author$project$MusicCreatorDef$defselectNoteRec;
 	return A3(
@@ -18290,6 +18372,19 @@ var $author$project$MusicCreator$warningEachBeat = function (model) {
 var $author$project$MusicCreator$myShapes = function (model) {
 	return _List_fromArray(
 		[
+			$MacCASOutreach$graphicsvg$GraphicSVG$group(
+			A2(
+				$elm$core$List$map,
+				function (a) {
+					return A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
+						$author$project$MusicCreator$ChangeInstrument(a.instrument),
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$move,
+							a.pos,
+							$author$project$DrawMusic$drawInstrument(a.instrument)));
+				},
+				$author$project$MusicCreator$selecInstrument)),
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
 			$author$project$MusicCreator$PlaySound,
