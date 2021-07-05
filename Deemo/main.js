@@ -11192,7 +11192,7 @@ var $author$project$PlayBack$adjustPitch = function (instrument) {
 		case 'Bass':
 			return -12;
 		case 'Tuba':
-			return 12;
+			return -12;
 		default:
 			return 0;
 	}
@@ -11264,7 +11264,7 @@ var $author$project$PlayBack$instrumentToMIDINumber = function (instrument) {
 		case 'Marimba':
 			return 126;
 		case 'Cello':
-			return 467;
+			return 468;
 		case 'Tuba':
 			return 632;
 		default:
