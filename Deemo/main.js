@@ -14181,10 +14181,10 @@ var $author$project$MusicCreator$update = F2(
 						model,
 						{
 							clef: $author$project$MusicCreator$instrumentClef(
-								A2($author$project$MusicCreator$newInstrument, model.instrument, 1)),
+								A2($author$project$MusicCreator$newInstrument, model.instrument, -1)),
 							instrument: A2($author$project$MusicCreator$newInstrument, model.instrument, -1),
 							range: $author$project$MusicCreator$instrumentRange(
-								A2($author$project$MusicCreator$newInstrument, model.instrument, 1))
+								A2($author$project$MusicCreator$newInstrument, model.instrument, -1))
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 'TimesignitureUp':
