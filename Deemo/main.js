@@ -9265,6 +9265,10 @@ var $author$project$MusicCreator$selectNoteList = _List_fromArray(
 	]);
 var $author$project$MusicCreator$init = _Utils_Tuple2(
 	{
+		clearBNoZoom: 1,
+		clearBYesZoom: 1,
+		clearBZoom: 1,
+		clearNotes: false,
 		clef: $author$project$MusicDef$TrebleClef,
 		dragState: $author$project$MusicCreatorDef$Released,
 		height: 0,
@@ -9316,6 +9320,9 @@ var $author$project$MusicCreator$subscriptions = function (model) {
 var $author$project$MusicCreatorDef$Accidental = {$: 'Accidental'};
 var $author$project$MusicCreatorDef$Articulation = {$: 'Articulation'};
 var $MacCASOutreach$graphicsvg$GraphicSVG$EllieApp$Backspace = {$: 'Backspace'};
+var $author$project$MusicCreator$ClearBNoZoom = {$: 'ClearBNoZoom'};
+var $author$project$MusicCreator$ClearBYesZoom = {$: 'ClearBYesZoom'};
+var $author$project$MusicCreator$ClearBZoom = {$: 'ClearBZoom'};
 var $MacCASOutreach$graphicsvg$GraphicSVG$EllieApp$Delete = {$: 'Delete'};
 var $author$project$MusicCreatorDef$Dragging = {$: 'Dragging'};
 var $author$project$MusicCreatorDef$Dynamic = {$: 'Dynamic'};
@@ -11710,19 +11717,19 @@ var $author$project$MusicCreatorToMusic$toMusicVolume = F2(
 		var _v0 = dynamic.f;
 		switch (_v0.$) {
 			case 'PP':
-				return 0;
+				return 0.05;
 			case 'P':
-				return 0.5;
+				return 0.1;
 			case 'MP':
-				return 0.8;
+				return 0.4;
 			case 'MF':
-				return 1.25;
+				return 0.6;
 			case 'F':
-				return 1.8;
+				return 0.8;
 			case 'FF':
-				return 2.3;
+				return 0.99;
 			default:
-				return $author$project$MusicCreatorDef$ifRest(note) ? (-1) : 1;
+				return $author$project$MusicCreatorDef$ifRest(note) ? (-1) : 0.55;
 		}
 	});
 var $author$project$MusicCreatorToMusic$creatorToMusicNote = F2(
@@ -12251,7 +12258,7 @@ var $author$project$PlayBack$pitchToMIDINumber = function (pitch) {
 			return $author$project$PlayBack$pitchToMIDINumber(higherPitch) - 12;
 	}
 };
-var $author$project$MusicDef$standardVolume = 1;
+var $author$project$MusicDef$standardVolume = 0.55;
 var $author$project$PlayBack$seqNotesToMEvents = F5(
 	function (currentTime, tempo, notes, accidentalDict, previousVolume) {
 		var metro = 60 / (tempo.bpm * 0.25);
@@ -13393,6 +13400,14 @@ var $author$project$MusicCreator$update = F2(
 							scoreNoteList: A3($author$project$MusicCreator$updateLyricSelected, model.scoreNoteList, lyricName, noteName)
 						}),
 					$elm$core$Platform$Cmd$none);
+			case 'ClearSelectLyric':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							scoreNoteList: $author$project$MusicCreator$clearSelect(model.scoreNoteList)
+						}),
+					$elm$core$Platform$Cmd$none);
 			case 'SelectSlur':
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -14209,18 +14224,39 @@ var $author$project$MusicCreator$update = F2(
 					_Utils_update(
 						model,
 						{
+							clearBNoZoom: _Utils_eq(obj, $author$project$MusicCreator$ClearBNoZoom) ? 1.4 : 1,
+							clearBYesZoom: _Utils_eq(obj, $author$project$MusicCreator$ClearBYesZoom) ? 1.4 : 1,
+							clearBZoom: _Utils_eq(obj, $author$project$MusicCreator$ClearBZoom) ? 1.1 : 1,
 							instrumentDown: _Utils_eq(obj, $author$project$MusicCreator$InstrumentZoomDown) ? 1.4 : 1,
 							instrumentUp: _Utils_eq(obj, $author$project$MusicCreator$InstrumentZoomUp) ? 1.4 : 1,
 							tmDn: _Utils_eq(obj, $author$project$MusicCreator$TmDn) ? 1.4 : 1,
 							tmUp: _Utils_eq(obj, $author$project$MusicCreator$TmUp) ? 1.4 : 1
 						}),
 					$elm$core$Platform$Cmd$none);
-			default:
+			case 'ZoomDnObj':
 				var obj = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{instrumentDown: 1, instrumentUp: 1, tmDn: 1, tmUp: 1}),
+						{clearBNoZoom: 1, clearBYesZoom: 1, clearBZoom: 1, instrumentDown: 1, instrumentUp: 1, tmDn: 1, tmUp: 1}),
+					$elm$core$Platform$Cmd$none);
+			case 'TapClearButton':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{clearNotes: true}),
+					$elm$core$Platform$Cmd$none);
+			case 'ClearButtonYes':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{clearNotes: false, scoreNoteList: _List_Nil}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{clearNotes: false}),
 					$elm$core$Platform$Cmd$none);
 		}
 	});
@@ -14236,6 +14272,7 @@ var $author$project$MusicCreator$ChangeDragStateF = F3(
 		return {$: 'ChangeDragStateF', a: a, b: b, c: c};
 	});
 var $author$project$MusicCreator$ChangeTapDragBar = {$: 'ChangeTapDragBar'};
+var $author$project$MusicCreator$ClearSelectLyric = {$: 'ClearSelectLyric'};
 var $author$project$MusicCreator$Drag = F2(
 	function (a, b) {
 		return {$: 'Drag', a: a, b: b};
@@ -14494,299 +14531,9 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$Circle = function (a) {
 var $MacCASOutreach$graphicsvg$GraphicSVG$circle = function (r) {
 	return $MacCASOutreach$graphicsvg$GraphicSVG$Circle(r);
 };
-var $author$project$MusicCreatorFunctions$accidentalToString = function (accidental) {
-	switch (accidental.$) {
-		case 'Sharp':
-			return 'sharp';
-		case 'Flat':
-			return 'flat';
-		case 'Natural':
-			return 'natural';
-		default:
-			return '';
-	}
-};
-var $author$project$MusicCreatorFunctions$articulationToString = function (articulation) {
-	switch (articulation.$) {
-		case 'Staccato':
-			return 'staccato';
-		case 'Staccatissimo':
-			return 'staccatissimo';
-		case 'Fermata':
-			return 'fermata';
-		case 'Tenuto':
-			return 'tenuto';
-		case 'Accent':
-			return 'accent';
-		case 'Slur':
-			return 'slur';
-		case 'Tie':
-			return 'tie';
-		default:
-			return '';
-	}
-};
-var $author$project$MusicCreatorFunctions$dynamicToString = function (dynamic) {
-	switch (dynamic.$) {
-		case 'PP':
-			return 'pianissimo';
-		case 'P':
-			return 'piano';
-		case 'MP':
-			return 'mezzoPiano';
-		case 'MF':
-			return 'mezzoForte';
-		case 'F':
-			return 'forte';
-		case 'FF':
-			return 'fortissimo';
-		default:
-			return '';
-	}
-};
-var $author$project$MusicCreatorFunctions$ifdottedNote = function (b) {
-	switch (b.$) {
-		case 'HalfND':
-			return true;
-		case 'QuarterND':
-			return true;
-		case 'EighthND':
-			return true;
-		case 'HalfRD':
-			return true;
-		case 'QuarterRD':
-			return true;
-		case 'EighthRD':
-			return true;
-		default:
-			return false;
-	}
-};
-var $author$project$InputKeyAssist$lyricToString = function (list) {
-	var stringList = A2(
-		$elm$core$List$map,
-		function (a) {
-			return a.word;
-		},
-		list);
-	return $elm$core$String$concat(stringList);
-};
-var $author$project$MusicCreatorFunctions$pitchToString = function (pitch) {
-	switch (pitch.$) {
-		case 'Do':
-			return 'Do';
-		case 'Re':
-			return 'Re';
-		case 'Mi':
-			return 'Mi';
-		case 'Fa':
-			return 'Fa';
-		case 'Sol':
-			return 'Sol';
-		case 'La':
-			return 'La';
-		case 'Ti':
-			return 'Ti';
-		case 'Rest':
-			return 'Rest';
-		case 'OctaveUp':
-			var p = pitch.a;
-			return $author$project$MusicCreatorFunctions$pitchToString(p) + ' |> OctaveUp';
-		default:
-			var p = pitch.a;
-			return $author$project$MusicCreatorFunctions$pitchToString(p) + ' |> OctaveDown';
-	}
-};
-var $MacCASOutreach$graphicsvg$GraphicSVG$Face = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {$: 'Face', a: a, b: b, c: c, d: d, e: e, f: f, g: g, h: h};
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$Text = F2(
-	function (a, b) {
-		return {$: 'Text', a: a, b: b};
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$selectable = function (stencil) {
-	if (stencil.$ === 'Text') {
-		var _v1 = stencil.a;
-		var si = _v1.a;
-		var bo = _v1.b;
-		var i = _v1.c;
-		var u = _v1.d;
-		var s = _v1.e;
-		var sel = _v1.f;
-		var f = _v1.g;
-		var c = _v1.h;
-		var str = stencil.b;
-		return A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
-			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, bo, i, u, s, true, f, c),
-			str);
-	} else {
-		var a = stencil;
-		return a;
-	}
-};
-var $MacCASOutreach$graphicsvg$GraphicSVG$Serif = {$: 'Serif'};
-var $MacCASOutreach$graphicsvg$GraphicSVG$serif = function (stencil) {
-	if (stencil.$ === 'Text') {
-		var _v1 = stencil.a;
-		var si = _v1.a;
-		var bo = _v1.b;
-		var i = _v1.c;
-		var u = _v1.d;
-		var s = _v1.e;
-		var sel = _v1.f;
-		var f = _v1.g;
-		var c = _v1.h;
-		var str = stencil.b;
-		return A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
-			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, bo, i, u, s, sel, $MacCASOutreach$graphicsvg$GraphicSVG$Serif, c),
-			str);
-	} else {
-		var a = stencil;
-		return a;
-	}
-};
-var $MacCASOutreach$graphicsvg$GraphicSVG$size = F2(
-	function (sze, stencil) {
-		if (stencil.$ === 'Text') {
-			var _v1 = stencil.a;
-			var si = _v1.a;
-			var bo = _v1.b;
-			var i = _v1.c;
-			var u = _v1.d;
-			var s = _v1.e;
-			var sel = _v1.f;
-			var f = _v1.g;
-			var c = _v1.h;
-			var str = stencil.b;
-			return A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$Text,
-				A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, sze, bo, i, u, s, sel, f, c),
-				str);
-		} else {
-			var a = stencil;
-			return a;
-		}
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$AlignLeft = {$: 'AlignLeft'};
-var $MacCASOutreach$graphicsvg$GraphicSVG$text = function (str) {
-	return A2(
-		$MacCASOutreach$graphicsvg$GraphicSVG$Text,
-		A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, 12, false, false, false, false, false, $MacCASOutreach$graphicsvg$GraphicSVG$Serif, $MacCASOutreach$graphicsvg$GraphicSVG$AlignLeft),
-		str);
-};
-var $author$project$MusicCreator$codeHelper = F2(
-	function (clef, listOfNote) {
-		var ifdotted = function (b) {
-			return $author$project$MusicCreatorFunctions$ifdottedNote(b.note) ? ' |> dot 1' : '';
-		};
-		var addLyric = function (lyric) {
-			return (lyric !== '') ? (' ' + ('|> sing ' + ('\"' + (lyric + '\"')))) : '';
-		};
-		var addDynamic = function (dynamic) {
-			return (!_Utils_eq(dynamic, $author$project$MusicCreatorDef$NoDynamic)) ? (' ' + ('|> ' + $author$project$MusicCreatorFunctions$dynamicToString(dynamic))) : '';
-		};
-		var addArticulation = function (articulation) {
-			return (!_Utils_eq(articulation, $author$project$MusicCreatorDef$NoArticulation)) ? (' ' + ('|> ' + $author$project$MusicCreatorFunctions$articulationToString(articulation))) : '';
-		};
-		var addAccidental = function (accidental) {
-			return (!_Utils_eq(accidental, $author$project$MusicCreatorDef$NoAccidental)) ? (' ' + ('|> ' + $author$project$MusicCreatorFunctions$accidentalToString(accidental))) : '';
-		};
-		var toElmMusicCodeRaw = function () {
-			var toCode = function (b) {
-				return $author$project$MusicCreatorFunctions$pitchToString(
-					A3($author$project$MusicCreatorFunctions$toMusicPitch, b.pos, b.note, clef));
-			};
-			return A2(
-				$elm$core$List$indexedMap,
-				$elm$core$Tuple$pair,
-				A2(
-					$elm$core$List$map,
-					function (_v1) {
-						var name = _v1.a;
-						var b = _v1.b;
-						return $author$project$MusicCreatorFunctions$noteToString(b.note) + (' ' + (toCode(b) + (ifdotted(b) + (addAccidental(b._function.accidental.f) + (addDynamic(b._function.dynamic.f) + (addArticulation(b._function.articulation.f) + addLyric(
-							$author$project$InputKeyAssist$lyricToString(b._function.lyric))))))));
-					},
-					listOfNote));
-		}();
-		var toElmMusicCode = function (list) {
-			return A2(
-				$elm$core$List$append,
-				list,
-				_List_fromArray(
-					['    ]']));
-		}(
-			A2(
-				$elm$core$List$map,
-				function (_v0) {
-					var index = _v0.a;
-					var codeX = _v0.b;
-					return (!index) ? ('    ' + codeX) : ('  , ' + codeX);
-				},
-				toElmMusicCodeRaw));
-		return A3(
-			$elm$core$List$map2,
-			F2(
-				function (a, b) {
-					return A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$move,
-						_Utils_Tuple2(-10, 20 - (3.5 * b)),
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-							$MacCASOutreach$graphicsvg$GraphicSVG$black,
-							$MacCASOutreach$graphicsvg$GraphicSVG$selectable(
-								A2(
-									$MacCASOutreach$graphicsvg$GraphicSVG$size,
-									3,
-									$MacCASOutreach$graphicsvg$GraphicSVG$serif(
-										$MacCASOutreach$graphicsvg$GraphicSVG$text(a))))));
-				}),
-			toElmMusicCode,
-			A2(
-				$elm$core$List$range,
-				0,
-				$elm$core$List$length(toElmMusicCode)));
-	});
-var $author$project$MusicCreator$code = F2(
-	function (clef, listOfNote) {
-		return $MacCASOutreach$graphicsvg$GraphicSVG$group(
-			_List_fromArray(
-				[
-					A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(-15, 25),
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-						$MacCASOutreach$graphicsvg$GraphicSVG$black,
-						$MacCASOutreach$graphicsvg$GraphicSVG$selectable(
-							A2(
-								$MacCASOutreach$graphicsvg$GraphicSVG$size,
-								3,
-								$MacCASOutreach$graphicsvg$GraphicSVG$serif(
-									$MacCASOutreach$graphicsvg$GraphicSVG$text('Measure')))))),
-					A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(-9, 20),
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-						$MacCASOutreach$graphicsvg$GraphicSVG$black,
-						$MacCASOutreach$graphicsvg$GraphicSVG$selectable(
-							A2(
-								$MacCASOutreach$graphicsvg$GraphicSVG$size,
-								3,
-								$MacCASOutreach$graphicsvg$GraphicSVG$serif(
-									$MacCASOutreach$graphicsvg$GraphicSVG$text('[')))))),
-					$MacCASOutreach$graphicsvg$GraphicSVG$group(
-					A2(
-						$author$project$MusicCreator$codeHelper,
-						clef,
-						$author$project$MusicCreator$clearEmpty(listOfNote)))
-				]));
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$darkRed = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 164, 0, 0, 1);
+var $author$project$MusicCreator$ClearButtonNo = {$: 'ClearButtonNo'};
+var $author$project$MusicCreator$ClearButtonYes = {$: 'ClearButtonYes'};
+var $author$project$MusicCreator$TapClearButton = {$: 'TapClearButton'};
 var $MacCASOutreach$graphicsvg$GraphicSVG$NoLine = {$: 'NoLine'};
 var $MacCASOutreach$graphicsvg$GraphicSVG$blank = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 0, 0, 0, 0);
 var $MacCASOutreach$graphicsvg$GraphicSVG$subtract = F2(
@@ -15088,12 +14835,895 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$addOutline = F3(
 			}
 		}
 	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$gray = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 211, 215, 207, 1);
-var $author$project$DragBarAssit$moveY = 30;
+var $MacCASOutreach$graphicsvg$GraphicSVG$Face = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {$: 'Face', a: a, b: b, c: c, d: d, e: e, f: f, g: g, h: h};
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$Text = F2(
+	function (a, b) {
+		return {$: 'Text', a: a, b: b};
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$bold = function (stencil) {
+	if (stencil.$ === 'Text') {
+		var _v1 = stencil.a;
+		var si = _v1.a;
+		var bo = _v1.b;
+		var i = _v1.c;
+		var u = _v1.d;
+		var s = _v1.e;
+		var sel = _v1.f;
+		var f = _v1.g;
+		var c = _v1.h;
+		var str = stencil.b;
+		return A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
+			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, true, i, u, s, sel, f, c),
+			str);
+	} else {
+		var a = stencil;
+		return a;
+	}
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$lightGray = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 238, 238, 236, 1);
+var $MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent = F2(
+	function (alpha, shape) {
+		switch (shape.$) {
+			case 'ForeignObject':
+				var w = shape.a;
+				var h = shape.b;
+				var htm = shape.c;
+				return A3($MacCASOutreach$graphicsvg$GraphicSVG$ForeignObject, w, h, htm);
+			case 'Move':
+				var s = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$Move,
+					s,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'Rotate':
+				var r = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$Rotate,
+					r,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'Scale':
+				var sx = shape.a;
+				var sy = shape.b;
+				var sh = shape.c;
+				return A3(
+					$MacCASOutreach$graphicsvg$GraphicSVG$Scale,
+					sx,
+					sy,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'Skew':
+				var skx = shape.a;
+				var sky = shape.b;
+				var sh = shape.c;
+				return A3(
+					$MacCASOutreach$graphicsvg$GraphicSVG$Skew,
+					skx,
+					sky,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'Transformed':
+				var tm = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$Transformed,
+					tm,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'Group':
+				var list = shape.a;
+				return $MacCASOutreach$graphicsvg$GraphicSVG$Group(
+					A2(
+						$elm$core$List$map,
+						$MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent(alpha),
+						list));
+			case 'GroupOutline':
+				var cmbndshp = shape.a;
+				return $MacCASOutreach$graphicsvg$GraphicSVG$GroupOutline(
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, cmbndshp));
+			case 'Link':
+				var s = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$Link,
+					s,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'AlphaMask':
+				var reg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$AlphaMask,
+					reg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'Clip':
+				var reg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$Clip,
+					reg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'Everything':
+				return $MacCASOutreach$graphicsvg$GraphicSVG$Everything;
+			case 'Notathing':
+				return $MacCASOutreach$graphicsvg$GraphicSVG$Notathing;
+			case 'Tap':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$Tap,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'TapAt':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$TapAt,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'EnterShape':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$EnterShape,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'EnterAt':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$EnterAt,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'Exit':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$Exit,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'ExitAt':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$ExitAt,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'MouseDown':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$MouseDown,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'MouseDownAt':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$MouseDownAt,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'MouseUp':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$MouseUp,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'MouseUpAt':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$MouseUpAt,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'MoveOverAt':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$MoveOverAt,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'TouchStart':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$TouchStart,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'TouchEnd':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$TouchEnd,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'TouchStartAt':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$TouchStartAt,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'TouchEndAt':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$TouchEndAt,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'TouchMoveAt':
+				var userMsg = shape.a;
+				var sh = shape.b;
+				return A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$TouchMoveAt,
+					userMsg,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
+			case 'GraphPaper':
+				var s = shape.a;
+				var th = shape.b;
+				var _v9 = shape.c;
+				var r = _v9.a;
+				var g = _v9.b;
+				var b = _v9.c;
+				var a = _v9.d;
+				return A3(
+					$MacCASOutreach$graphicsvg$GraphicSVG$GraphPaper,
+					s,
+					th,
+					A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, r, g, b, a * alpha));
+			default:
+				if (shape.a.$ === 'Just') {
+					if (shape.b.$ === 'Just') {
+						var _v4 = shape.a.a;
+						var r = _v4.a;
+						var g = _v4.b;
+						var b = _v4.c;
+						var a = _v4.d;
+						var _v5 = shape.b.a;
+						var lineType = _v5.a;
+						var _v6 = _v5.b;
+						var sr = _v6.a;
+						var sg = _v6.b;
+						var sb = _v6.c;
+						var sa = _v6.d;
+						var st = shape.c;
+						return A3(
+							$MacCASOutreach$graphicsvg$GraphicSVG$Inked,
+							$elm$core$Maybe$Just(
+								A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, r, g, b, a * alpha)),
+							$elm$core$Maybe$Just(
+								_Utils_Tuple2(
+									lineType,
+									A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, sr, sg, sb, sa * alpha))),
+							st);
+					} else {
+						var _v7 = shape.a.a;
+						var r = _v7.a;
+						var g = _v7.b;
+						var b = _v7.c;
+						var a = _v7.d;
+						var _v8 = shape.b;
+						var st = shape.c;
+						return A3(
+							$MacCASOutreach$graphicsvg$GraphicSVG$Inked,
+							$elm$core$Maybe$Just(
+								A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, r, g, b, a * alpha)),
+							$elm$core$Maybe$Nothing,
+							st);
+					}
+				} else {
+					if (shape.b.$ === 'Just') {
+						var _v1 = shape.a;
+						var _v2 = shape.b.a;
+						var lineType = _v2.a;
+						var _v3 = _v2.b;
+						var sr = _v3.a;
+						var sg = _v3.b;
+						var sb = _v3.c;
+						var sa = _v3.d;
+						var st = shape.c;
+						return A3(
+							$MacCASOutreach$graphicsvg$GraphicSVG$Inked,
+							$elm$core$Maybe$Nothing,
+							$elm$core$Maybe$Just(
+								_Utils_Tuple2(
+									lineType,
+									A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, sr, sg, sb, sa * alpha))),
+							st);
+					} else {
+						var _v10 = shape.a;
+						var _v11 = shape.b;
+						var st = shape.c;
+						return shape;
+					}
+				}
+		}
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$notifyEnter = F2(
+	function (msg, shape) {
+		return A2($MacCASOutreach$graphicsvg$GraphicSVG$EnterShape, msg, shape);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$notifyLeave = F2(
+	function (msg, shape) {
+		return A2($MacCASOutreach$graphicsvg$GraphicSVG$Exit, msg, shape);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$notifyTap = F2(
+	function (msg, shape) {
+		return A2($MacCASOutreach$graphicsvg$GraphicSVG$Tap, msg, shape);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$rgb = F3(
+	function (r, g, b) {
+		return A4(
+			$MacCASOutreach$graphicsvg$GraphicSVG$RGBA,
+			$MacCASOutreach$graphicsvg$GraphicSVG$ssc(r),
+			$MacCASOutreach$graphicsvg$GraphicSVG$ssc(g),
+			$MacCASOutreach$graphicsvg$GraphicSVG$ssc(b),
+			1);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$RoundRect = F3(
+	function (a, b, c) {
+		return {$: 'RoundRect', a: a, b: b, c: c};
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$roundedRect = F3(
+	function (w, h, r) {
+		return A3($MacCASOutreach$graphicsvg$GraphicSVG$RoundRect, w, h, r);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$Sansserif = {$: 'Sansserif'};
+var $MacCASOutreach$graphicsvg$GraphicSVG$sansserif = function (stencil) {
+	if (stencil.$ === 'Text') {
+		var _v1 = stencil.a;
+		var si = _v1.a;
+		var bo = _v1.b;
+		var i = _v1.c;
+		var u = _v1.d;
+		var s = _v1.e;
+		var sel = _v1.f;
+		var f = _v1.g;
+		var c = _v1.h;
+		var str = stencil.b;
+		return A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
+			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, bo, i, u, s, sel, $MacCASOutreach$graphicsvg$GraphicSVG$Sansserif, c),
+			str);
+	} else {
+		var a = stencil;
+		return a;
+	}
+};
 var $MacCASOutreach$graphicsvg$GraphicSVG$scale = F2(
 	function (s, shape) {
 		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Scale, s, s, shape);
 	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$size = F2(
+	function (sze, stencil) {
+		if (stencil.$ === 'Text') {
+			var _v1 = stencil.a;
+			var si = _v1.a;
+			var bo = _v1.b;
+			var i = _v1.c;
+			var u = _v1.d;
+			var s = _v1.e;
+			var sel = _v1.f;
+			var f = _v1.g;
+			var c = _v1.h;
+			var str = stencil.b;
+			return A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$Text,
+				A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, sze, bo, i, u, s, sel, f, c),
+				str);
+		} else {
+			var a = stencil;
+			return a;
+		}
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$AlignLeft = {$: 'AlignLeft'};
+var $MacCASOutreach$graphicsvg$GraphicSVG$Serif = {$: 'Serif'};
+var $MacCASOutreach$graphicsvg$GraphicSVG$text = function (str) {
+	return A2(
+		$MacCASOutreach$graphicsvg$GraphicSVG$Text,
+		A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, 12, false, false, false, false, false, $MacCASOutreach$graphicsvg$GraphicSVG$Serif, $MacCASOutreach$graphicsvg$GraphicSVG$AlignLeft),
+		str);
+};
+var $author$project$MusicCreator$clearNotesButton = function (model) {
+	var yesButton = $MacCASOutreach$graphicsvg$GraphicSVG$group(
+		_List_fromArray(
+			[
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-18, 9),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+					model.clearBYesZoom,
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						A3($MacCASOutreach$graphicsvg$GraphicSVG$rgb, 102, 255, 102),
+						A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 9, 4, 2)))),
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-21, 8),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					$MacCASOutreach$graphicsvg$GraphicSVG$sansserif(
+						$MacCASOutreach$graphicsvg$GraphicSVG$bold(
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$size,
+								3,
+								$MacCASOutreach$graphicsvg$GraphicSVG$text('YES'))))))
+			]));
+	var noButton = $MacCASOutreach$graphicsvg$GraphicSVG$group(
+		_List_fromArray(
+			[
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-5, 9),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+					model.clearBNoZoom,
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						A3($MacCASOutreach$graphicsvg$GraphicSVG$rgb, 255, 0, 0),
+						A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 9, 4, 2)))),
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-7, 8),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					$MacCASOutreach$graphicsvg$GraphicSVG$sansserif(
+						$MacCASOutreach$graphicsvg$GraphicSVG$bold(
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$size,
+								3,
+								$MacCASOutreach$graphicsvg$GraphicSVG$text('NO'))))))
+			]));
+	var warningPop = $MacCASOutreach$graphicsvg$GraphicSVG$group(
+		_List_fromArray(
+			[
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent,
+				0.5,
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$lightGray,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height))),
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(10, 5),
+				A3(
+					$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+					$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						$MacCASOutreach$graphicsvg$GraphicSVG$lightGray,
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 130, 20)))),
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-50, 8),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$black,
+					$MacCASOutreach$graphicsvg$GraphicSVG$sansserif(
+						$MacCASOutreach$graphicsvg$GraphicSVG$bold(
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$size,
+								4,
+								$MacCASOutreach$graphicsvg$GraphicSVG$text('Are you sure you would like to clear all the notes on the score?')))))),
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$notifyLeave,
+				$author$project$MusicCreator$ZoomDnObj($author$project$MusicCreator$ClearBYesZoom),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$notifyEnter,
+					$author$project$MusicCreator$ZoomUpObj($author$project$MusicCreator$ClearBYesZoom),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
+						$author$project$MusicCreator$ClearButtonYes,
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$move,
+							_Utils_Tuple2(25, -12),
+							A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 1.5, yesButton))))),
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$notifyLeave,
+				$author$project$MusicCreator$ZoomDnObj($author$project$MusicCreator$ClearBNoZoom),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$notifyEnter,
+					$author$project$MusicCreator$ZoomUpObj($author$project$MusicCreator$ClearBNoZoom),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
+						$author$project$MusicCreator$ClearButtonNo,
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$move,
+							_Utils_Tuple2(25, -12),
+							A2($MacCASOutreach$graphicsvg$GraphicSVG$scale, 1.5, noButton)))))
+			]));
+	var clearButton = A3(
+		$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+		$MacCASOutreach$graphicsvg$GraphicSVG$solid(1),
+		A3($MacCASOutreach$graphicsvg$GraphicSVG$rgb, 181, 102, 255),
+		$MacCASOutreach$graphicsvg$GraphicSVG$group(
+			_List_fromArray(
+				[
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_Tuple2(-8, 9),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+						model.clearBZoom,
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+							A3($MacCASOutreach$graphicsvg$GraphicSVG$rgb, 230, 204, 255),
+							A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 30, 4, 2)))),
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_Tuple2(-21, 8),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						$MacCASOutreach$graphicsvg$GraphicSVG$black,
+						$MacCASOutreach$graphicsvg$GraphicSVG$sansserif(
+							$MacCASOutreach$graphicsvg$GraphicSVG$bold(
+								A2(
+									$MacCASOutreach$graphicsvg$GraphicSVG$size,
+									3,
+									$MacCASOutreach$graphicsvg$GraphicSVG$text('Clear All the Notes'))))))
+				])));
+	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
+		_List_fromArray(
+			[
+				A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-100, -40),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$notifyLeave,
+					$author$project$MusicCreator$ZoomDnObj($author$project$MusicCreator$ClearBZoom),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$notifyEnter,
+						$author$project$MusicCreator$ZoomUpObj($author$project$MusicCreator$ClearBZoom),
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$notifyTap, $author$project$MusicCreator$TapClearButton, clearButton)))),
+				model.clearNotes ? warningPop : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil)
+			]));
+};
+var $author$project$MusicCreatorFunctions$accidentalToString = function (accidental) {
+	switch (accidental.$) {
+		case 'Sharp':
+			return 'sharp';
+		case 'Flat':
+			return 'flat';
+		case 'Natural':
+			return 'natural';
+		default:
+			return '';
+	}
+};
+var $author$project$MusicCreatorFunctions$articulationToString = function (articulation) {
+	switch (articulation.$) {
+		case 'Staccato':
+			return 'staccato';
+		case 'Staccatissimo':
+			return 'staccatissimo';
+		case 'Fermata':
+			return 'fermata';
+		case 'Tenuto':
+			return 'tenuto';
+		case 'Accent':
+			return 'accent';
+		case 'Slur':
+			return 'slur';
+		case 'Tie':
+			return 'tie';
+		default:
+			return '';
+	}
+};
+var $author$project$MusicCreatorFunctions$dynamicToString = function (dynamic) {
+	switch (dynamic.$) {
+		case 'PP':
+			return 'pianissimo';
+		case 'P':
+			return 'piano';
+		case 'MP':
+			return 'mezzoPiano';
+		case 'MF':
+			return 'mezzoForte';
+		case 'F':
+			return 'forte';
+		case 'FF':
+			return 'fortissimo';
+		default:
+			return '';
+	}
+};
+var $author$project$MusicCreatorFunctions$ifdottedNote = function (b) {
+	switch (b.$) {
+		case 'HalfND':
+			return true;
+		case 'QuarterND':
+			return true;
+		case 'EighthND':
+			return true;
+		case 'HalfRD':
+			return true;
+		case 'QuarterRD':
+			return true;
+		case 'EighthRD':
+			return true;
+		default:
+			return false;
+	}
+};
+var $author$project$InputKeyAssist$lyricToString = function (list) {
+	var stringList = A2(
+		$elm$core$List$map,
+		function (a) {
+			return a.word;
+		},
+		list);
+	return $elm$core$String$concat(stringList);
+};
+var $author$project$MusicCreatorFunctions$pitchToString = function (pitch) {
+	switch (pitch.$) {
+		case 'Do':
+			return 'Do';
+		case 'Re':
+			return 'Re';
+		case 'Mi':
+			return 'Mi';
+		case 'Fa':
+			return 'Fa';
+		case 'Sol':
+			return 'Sol';
+		case 'La':
+			return 'La';
+		case 'Ti':
+			return 'Ti';
+		case 'Rest':
+			return 'Rest';
+		case 'OctaveUp':
+			var p = pitch.a;
+			return $author$project$MusicCreatorFunctions$pitchToString(p) + ' |> raiseOctave';
+		default:
+			var p = pitch.a;
+			return $author$project$MusicCreatorFunctions$pitchToString(p) + ' |> lowerOctave ';
+	}
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$selectable = function (stencil) {
+	if (stencil.$ === 'Text') {
+		var _v1 = stencil.a;
+		var si = _v1.a;
+		var bo = _v1.b;
+		var i = _v1.c;
+		var u = _v1.d;
+		var s = _v1.e;
+		var sel = _v1.f;
+		var f = _v1.g;
+		var c = _v1.h;
+		var str = stencil.b;
+		return A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
+			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, bo, i, u, s, true, f, c),
+			str);
+	} else {
+		var a = stencil;
+		return a;
+	}
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$serif = function (stencil) {
+	if (stencil.$ === 'Text') {
+		var _v1 = stencil.a;
+		var si = _v1.a;
+		var bo = _v1.b;
+		var i = _v1.c;
+		var u = _v1.d;
+		var s = _v1.e;
+		var sel = _v1.f;
+		var f = _v1.g;
+		var c = _v1.h;
+		var str = stencil.b;
+		return A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
+			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, bo, i, u, s, sel, $MacCASOutreach$graphicsvg$GraphicSVG$Serif, c),
+			str);
+	} else {
+		var a = stencil;
+		return a;
+	}
+};
+var $author$project$MusicCreator$codeHelper = F2(
+	function (clef, listOfNote) {
+		var ifdotted = function (b) {
+			return $author$project$MusicCreatorFunctions$ifdottedNote(b.note) ? ' |> dot 1' : '';
+		};
+		var addLyric = function (lyric) {
+			return (lyric !== '') ? (' ' + ('|> sing ' + ('\"' + (lyric + '\"')))) : '';
+		};
+		var addDynamic = function (dynamic) {
+			return (!_Utils_eq(dynamic, $author$project$MusicCreatorDef$NoDynamic)) ? (' ' + ('|> ' + $author$project$MusicCreatorFunctions$dynamicToString(dynamic))) : '';
+		};
+		var addArticulation = function (articulation) {
+			return (!_Utils_eq(articulation, $author$project$MusicCreatorDef$NoArticulation)) ? (' ' + ('|> ' + $author$project$MusicCreatorFunctions$articulationToString(articulation))) : '';
+		};
+		var addAccidental = function (accidental) {
+			return (!_Utils_eq(accidental, $author$project$MusicCreatorDef$NoAccidental)) ? (' ' + ('|> ' + $author$project$MusicCreatorFunctions$accidentalToString(accidental))) : '';
+		};
+		var toElmMusicCodeRaw = function () {
+			var toCode = function (b) {
+				return $author$project$MusicCreatorFunctions$pitchToString(
+					A3($author$project$MusicCreatorFunctions$toMusicPitch, b.pos, b.note, clef));
+			};
+			return A2(
+				$elm$core$List$indexedMap,
+				$elm$core$Tuple$pair,
+				A2(
+					$elm$core$List$map,
+					function (_v1) {
+						var name = _v1.a;
+						var b = _v1.b;
+						return $author$project$MusicCreatorFunctions$noteToString(b.note) + (' ' + (toCode(b) + (ifdotted(b) + (addAccidental(b._function.accidental.f) + (addDynamic(b._function.dynamic.f) + (addArticulation(b._function.articulation.f) + addLyric(
+							$author$project$InputKeyAssist$lyricToString(b._function.lyric))))))));
+					},
+					listOfNote));
+		}();
+		var toElmMusicCode = function (list) {
+			return A2(
+				$elm$core$List$append,
+				list,
+				_List_fromArray(
+					[']]']));
+		}(
+			function (list) {
+				return A2(
+					$elm$core$List$append,
+					list,
+					_List_fromArray(
+						['    ]']));
+			}(
+				A2(
+					$elm$core$List$map,
+					function (_v0) {
+						var index = _v0.a;
+						var codeX = _v0.b;
+						return (!index) ? ('    ' + codeX) : ('  , ' + codeX);
+					},
+					toElmMusicCodeRaw)));
+		return A3(
+			$elm$core$List$map2,
+			F2(
+				function (a, b) {
+					return A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$move,
+						_Utils_Tuple2(-15, 20 - (3.5 * b)),
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+							$MacCASOutreach$graphicsvg$GraphicSVG$black,
+							$MacCASOutreach$graphicsvg$GraphicSVG$selectable(
+								A2(
+									$MacCASOutreach$graphicsvg$GraphicSVG$size,
+									3,
+									$MacCASOutreach$graphicsvg$GraphicSVG$serif(
+										$MacCASOutreach$graphicsvg$GraphicSVG$text(a))))));
+				}),
+			toElmMusicCode,
+			A2(
+				$elm$core$List$range,
+				0,
+				$elm$core$List$length(toElmMusicCode)));
+	});
+var $author$project$MusicCreatorFunctions$instrumentToString = function (instrument) {
+	switch (instrument.$) {
+		case 'Piano':
+			return 'Piano';
+		case 'Recorder':
+			return 'Recorder';
+		case 'Flute':
+			return 'Flute';
+		case 'Bass':
+			return 'Bass';
+		case 'Violin':
+			return 'Violin';
+		case 'Trumpet':
+			return 'Trumpet';
+		case 'Sitar':
+			return 'Sitar';
+		case 'ElectricGuitar':
+			return 'ElectricGuitar';
+		case 'Marimba':
+			return 'Marimba';
+		case 'Cello':
+			return 'Cello';
+		case 'Tuba':
+			return 'Tuba';
+		default:
+			return 'Timpani';
+	}
+};
+var $author$project$MusicCreatorFunctions$tsToString = function (ts) {
+	switch (ts.$) {
+		case 'Ts44':
+			return 'FourFour';
+		case 'Ts34':
+			return 'ThreeFour';
+		default:
+			return 'TwoFour';
+	}
+};
+var $author$project$MusicCreator$code = F5(
+	function (clef, listOfNote, instrument, ts, tempo) {
+		return $MacCASOutreach$graphicsvg$GraphicSVG$group(
+			_List_fromArray(
+				[
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_Tuple2(-15, 45),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						$MacCASOutreach$graphicsvg$GraphicSVG$black,
+						$MacCASOutreach$graphicsvg$GraphicSVG$selectable(
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$size,
+								3,
+								$MacCASOutreach$graphicsvg$GraphicSVG$serif(
+									$MacCASOutreach$graphicsvg$GraphicSVG$text(
+										'tempoInBPM = ' + $elm$core$Debug$toString(tempo))))))),
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_Tuple2(-15, 40),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						$MacCASOutreach$graphicsvg$GraphicSVG$black,
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$size,
+							3,
+							$MacCASOutreach$graphicsvg$GraphicSVG$serif(
+								$MacCASOutreach$graphicsvg$GraphicSVG$text('myMusic = '))))),
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_Tuple2(-15, 35),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						$MacCASOutreach$graphicsvg$GraphicSVG$black,
+						$MacCASOutreach$graphicsvg$GraphicSVG$selectable(
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$size,
+								3,
+								$MacCASOutreach$graphicsvg$GraphicSVG$serif(
+									$MacCASOutreach$graphicsvg$GraphicSVG$text(
+										'Music ' + ($author$project$MusicCreatorFunctions$instrumentToString(instrument) + (' ' + $author$project$MusicCreatorFunctions$tsToString(ts))))))))),
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_Tuple2(-15, 30),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						$MacCASOutreach$graphicsvg$GraphicSVG$black,
+						$MacCASOutreach$graphicsvg$GraphicSVG$selectable(
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$size,
+								3,
+								$MacCASOutreach$graphicsvg$GraphicSVG$serif(
+									$MacCASOutreach$graphicsvg$GraphicSVG$text('[[')))))),
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_Tuple2(-15, 25),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						$MacCASOutreach$graphicsvg$GraphicSVG$black,
+						$MacCASOutreach$graphicsvg$GraphicSVG$selectable(
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$size,
+								3,
+								$MacCASOutreach$graphicsvg$GraphicSVG$serif(
+									$MacCASOutreach$graphicsvg$GraphicSVG$text('Measure [')))))),
+					$MacCASOutreach$graphicsvg$GraphicSVG$group(
+					A2(
+						$author$project$MusicCreator$codeHelper,
+						clef,
+						$author$project$MusicCreator$clearEmpty(listOfNote)))
+				]));
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$darkRed = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 164, 0, 0, 1);
+var $MacCASOutreach$graphicsvg$GraphicSVG$gray = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 211, 215, 207, 1);
+var $author$project$DragBarAssit$moveY = 30;
 var $author$project$DragBarAssit$dragBarCircle = F2(
 	function (pos, zoomCircle) {
 		return $MacCASOutreach$graphicsvg$GraphicSVG$group(
@@ -15140,15 +15770,6 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth = function (stencil) {
 		return a;
 	}
 };
-var $MacCASOutreach$graphicsvg$GraphicSVG$rgb = F3(
-	function (r, g, b) {
-		return A4(
-			$MacCASOutreach$graphicsvg$GraphicSVG$RGBA,
-			$MacCASOutreach$graphicsvg$GraphicSVG$ssc(r),
-			$MacCASOutreach$graphicsvg$GraphicSVG$ssc(g),
-			$MacCASOutreach$graphicsvg$GraphicSVG$ssc(b),
-			1);
-	});
 var $author$project$DragBarAssit$dragbar = F2(
 	function (pos, tempo) {
 		return A2(
@@ -15990,27 +16611,6 @@ var $author$project$MusicCreator$drawClef = function (clef) {
 		return $author$project$DrawMusic$treble;
 	} else {
 		return $author$project$DrawMusic$bass;
-	}
-};
-var $MacCASOutreach$graphicsvg$GraphicSVG$bold = function (stencil) {
-	if (stencil.$ === 'Text') {
-		var _v1 = stencil.a;
-		var si = _v1.a;
-		var bo = _v1.b;
-		var i = _v1.c;
-		var u = _v1.d;
-		var s = _v1.e;
-		var sel = _v1.f;
-		var f = _v1.g;
-		var c = _v1.h;
-		var str = stencil.b;
-		return A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
-			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, true, i, u, s, sel, f, c),
-			str);
-	} else {
-		var a = stencil;
-		return a;
 	}
 };
 var $MacCASOutreach$graphicsvg$GraphicSVG$AlignCentred = {$: 'AlignCentred'};
@@ -16970,289 +17570,9 @@ var $author$project$MusicCreator$displayClickableBar = F2(
 			return $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil);
 		}
 	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent = F2(
-	function (alpha, shape) {
-		switch (shape.$) {
-			case 'ForeignObject':
-				var w = shape.a;
-				var h = shape.b;
-				var htm = shape.c;
-				return A3($MacCASOutreach$graphicsvg$GraphicSVG$ForeignObject, w, h, htm);
-			case 'Move':
-				var s = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$Move,
-					s,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'Rotate':
-				var r = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$Rotate,
-					r,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'Scale':
-				var sx = shape.a;
-				var sy = shape.b;
-				var sh = shape.c;
-				return A3(
-					$MacCASOutreach$graphicsvg$GraphicSVG$Scale,
-					sx,
-					sy,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'Skew':
-				var skx = shape.a;
-				var sky = shape.b;
-				var sh = shape.c;
-				return A3(
-					$MacCASOutreach$graphicsvg$GraphicSVG$Skew,
-					skx,
-					sky,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'Transformed':
-				var tm = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$Transformed,
-					tm,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'Group':
-				var list = shape.a;
-				return $MacCASOutreach$graphicsvg$GraphicSVG$Group(
-					A2(
-						$elm$core$List$map,
-						$MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent(alpha),
-						list));
-			case 'GroupOutline':
-				var cmbndshp = shape.a;
-				return $MacCASOutreach$graphicsvg$GraphicSVG$GroupOutline(
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, cmbndshp));
-			case 'Link':
-				var s = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$Link,
-					s,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'AlphaMask':
-				var reg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$AlphaMask,
-					reg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'Clip':
-				var reg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$Clip,
-					reg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'Everything':
-				return $MacCASOutreach$graphicsvg$GraphicSVG$Everything;
-			case 'Notathing':
-				return $MacCASOutreach$graphicsvg$GraphicSVG$Notathing;
-			case 'Tap':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$Tap,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'TapAt':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$TapAt,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'EnterShape':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$EnterShape,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'EnterAt':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$EnterAt,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'Exit':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$Exit,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'ExitAt':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$ExitAt,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'MouseDown':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$MouseDown,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'MouseDownAt':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$MouseDownAt,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'MouseUp':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$MouseUp,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'MouseUpAt':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$MouseUpAt,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'MoveOverAt':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$MoveOverAt,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'TouchStart':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$TouchStart,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'TouchEnd':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$TouchEnd,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'TouchStartAt':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$TouchStartAt,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'TouchEndAt':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$TouchEndAt,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'TouchMoveAt':
-				var userMsg = shape.a;
-				var sh = shape.b;
-				return A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$TouchMoveAt,
-					userMsg,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent, alpha, sh));
-			case 'GraphPaper':
-				var s = shape.a;
-				var th = shape.b;
-				var _v9 = shape.c;
-				var r = _v9.a;
-				var g = _v9.b;
-				var b = _v9.c;
-				var a = _v9.d;
-				return A3(
-					$MacCASOutreach$graphicsvg$GraphicSVG$GraphPaper,
-					s,
-					th,
-					A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, r, g, b, a * alpha));
-			default:
-				if (shape.a.$ === 'Just') {
-					if (shape.b.$ === 'Just') {
-						var _v4 = shape.a.a;
-						var r = _v4.a;
-						var g = _v4.b;
-						var b = _v4.c;
-						var a = _v4.d;
-						var _v5 = shape.b.a;
-						var lineType = _v5.a;
-						var _v6 = _v5.b;
-						var sr = _v6.a;
-						var sg = _v6.b;
-						var sb = _v6.c;
-						var sa = _v6.d;
-						var st = shape.c;
-						return A3(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Inked,
-							$elm$core$Maybe$Just(
-								A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, r, g, b, a * alpha)),
-							$elm$core$Maybe$Just(
-								_Utils_Tuple2(
-									lineType,
-									A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, sr, sg, sb, sa * alpha))),
-							st);
-					} else {
-						var _v7 = shape.a.a;
-						var r = _v7.a;
-						var g = _v7.b;
-						var b = _v7.c;
-						var a = _v7.d;
-						var _v8 = shape.b;
-						var st = shape.c;
-						return A3(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Inked,
-							$elm$core$Maybe$Just(
-								A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, r, g, b, a * alpha)),
-							$elm$core$Maybe$Nothing,
-							st);
-					}
-				} else {
-					if (shape.b.$ === 'Just') {
-						var _v1 = shape.a;
-						var _v2 = shape.b.a;
-						var lineType = _v2.a;
-						var _v3 = _v2.b;
-						var sr = _v3.a;
-						var sg = _v3.b;
-						var sb = _v3.c;
-						var sa = _v3.d;
-						var st = shape.c;
-						return A3(
-							$MacCASOutreach$graphicsvg$GraphicSVG$Inked,
-							$elm$core$Maybe$Nothing,
-							$elm$core$Maybe$Just(
-								_Utils_Tuple2(
-									lineType,
-									A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, sr, sg, sb, sa * alpha))),
-							st);
-					} else {
-						var _v10 = shape.a;
-						var _v11 = shape.b;
-						var st = shape.c;
-						return shape;
-					}
-				}
-		}
-	});
 var $author$project$InputKeyAssist$moveLyric = F2(
 	function (list, wordSize) {
 		return wordSize * ((($elm$core$List$length(list) / 2) | 0) - 0.5);
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$notifyTap = F2(
-	function (msg, shape) {
-		return A2($MacCASOutreach$graphicsvg$GraphicSVG$Tap, msg, shape);
 	});
 var $MacCASOutreach$graphicsvg$GraphicSVG$yellow = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 237, 212, 0, 1);
 var $author$project$MusicCreator$displayLyricList = F3(
@@ -17549,8 +17869,8 @@ var $author$project$MusicCreator$drawLyric = F3(
 			var posY = A2($elm$core$Basics$min, pos1.b, pos2.b);
 			var ifPointUp = $author$project$MusicCreator$ifGroupNotePointUp(posList);
 			var ifDynamic = function (a) {
-				var condition = _Utils_eq(a._function.dynamic.f, $author$project$MusicCreatorDef$NoDynamic);
-				return condition ? (ifPointUp ? (-12) : 0) : (-12);
+				var condition = !_Utils_eq(a._function.dynamic.f, $author$project$MusicCreatorDef$NoDynamic);
+				return condition ? (ifPointUp ? (-28) : 0) : (-12);
 			};
 			var ifArticulation = function (a) {
 				var condition = (!_Utils_eq(a._function.articulation.f, $author$project$MusicCreatorDef$Fermata)) && (!_Utils_eq(a._function.articulation.f, $author$project$MusicCreatorDef$NoArticulation));
@@ -18854,15 +19174,6 @@ var $author$project$MusicCreatorFunctions$drawTS = function (ts) {
 	}
 };
 var $MacCASOutreach$graphicsvg$GraphicSVG$darkGray = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 186, 189, 182, 1);
-var $MacCASOutreach$graphicsvg$GraphicSVG$lightGray = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 238, 238, 236, 1);
-var $MacCASOutreach$graphicsvg$GraphicSVG$RoundRect = F3(
-	function (a, b, c) {
-		return {$: 'RoundRect', a: a, b: b, c: c};
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$roundedRect = F3(
-	function (w, h, r) {
-		return A3($MacCASOutreach$graphicsvg$GraphicSVG$RoundRect, w, h, r);
-	});
 var $author$project$DrawMusic$trashCanClosed = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 	_List_fromArray(
 		[
@@ -19160,14 +19471,6 @@ var $author$project$DragBarAssit$minus = A2(
 								$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
 									$MacCASOutreach$graphicsvg$GraphicSVG$text('-'))))))
 				]))));
-var $MacCASOutreach$graphicsvg$GraphicSVG$notifyEnter = F2(
-	function (msg, shape) {
-		return A2($MacCASOutreach$graphicsvg$GraphicSVG$EnterShape, msg, shape);
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$notifyLeave = F2(
-	function (msg, shape) {
-		return A2($MacCASOutreach$graphicsvg$GraphicSVG$Exit, msg, shape);
-	});
 var $MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseMoveAt = F2(
 	function (msg, shape) {
 		return A2($MacCASOutreach$graphicsvg$GraphicSVG$MoveOverAt, msg, shape);
@@ -19270,28 +19573,6 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$dashed = function (th) {
 				_Utils_Tuple2(th * 5, th * 2.5)
 			]),
 		th);
-};
-var $MacCASOutreach$graphicsvg$GraphicSVG$Sansserif = {$: 'Sansserif'};
-var $MacCASOutreach$graphicsvg$GraphicSVG$sansserif = function (stencil) {
-	if (stencil.$ === 'Text') {
-		var _v1 = stencil.a;
-		var si = _v1.a;
-		var bo = _v1.b;
-		var i = _v1.c;
-		var u = _v1.d;
-		var s = _v1.e;
-		var sel = _v1.f;
-		var f = _v1.g;
-		var c = _v1.h;
-		var str = stencil.b;
-		return A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
-			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, bo, i, u, s, sel, $MacCASOutreach$graphicsvg$GraphicSVG$Sansserif, c),
-			str);
-	} else {
-		var a = stencil;
-		return a;
-	}
 };
 var $author$project$MusicCreator$selectSlueBox = function (model) {
 	var yesButton = $MacCASOutreach$graphicsvg$GraphicSVG$group(
@@ -19785,7 +20066,7 @@ var $author$project$MusicCreator$warningEachBeat = function (model) {
 		$elm$core$List$foldl,
 		F2(
 			function (a, def) {
-				return $author$project$MusicCreatorFunctions$noteToFraction(a) + def;
+				return ($author$project$MusicCreatorFunctions$noteToFraction(a) * 4) + def;
 			}),
 		0,
 		attemptList);
@@ -19804,7 +20085,7 @@ var $author$project$MusicCreator$warningEachBeat = function (model) {
 						$MacCASOutreach$graphicsvg$GraphicSVG$size,
 						10,
 						$MacCASOutreach$graphicsvg$GraphicSVG$text(
-							$elm$core$Debug$toString(countListbeats)))))
+							$elm$core$Debug$toString(countListbeats) + ' / 4'))))
 			])) : $MacCASOutreach$graphicsvg$GraphicSVG$group(
 		_List_fromArray(
 			[
@@ -19833,6 +20114,11 @@ var $author$project$MusicCreator$myShapes = function (model) {
 		[
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
+			$author$project$MusicCreator$ClearSelectLyric,
+			$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
 			$author$project$MusicCreator$PlaySound,
 			A2(
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
@@ -19843,8 +20129,8 @@ var $author$project$MusicCreator$myShapes = function (model) {
 					$MacCASOutreach$graphicsvg$GraphicSVG$circle(10)))),
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(-100, -30),
-			A2($author$project$MusicCreator$code, model.clef, model.scoreNoteList)),
+			_Utils_Tuple2(-100, -40),
+			A5($author$project$MusicCreator$code, model.clef, model.scoreNoteList, model.instrument, model.timeSignature, model.tempCircle.tempo)),
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$move,
 			_Utils_Tuple2(0, -12.5),
@@ -20052,6 +20338,7 @@ var $author$project$MusicCreator$myShapes = function (model) {
 				$author$project$MusicCreatorDef$Articulation)),
 			A5($author$project$MusicCreator$tapAndPop, $author$project$MusicCreator$selectSlur, 0.8, model.selectSlurFuction, $author$project$DrawMusic$slurIcon, $author$project$MusicCreator$SelectSlur),
 			model.selectSlurFuction ? $author$project$MusicCreator$selectSlueBox(model) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil),
+			$author$project$MusicCreator$clearNotesButton(model),
 			$MacCASOutreach$graphicsvg$GraphicSVG$group(
 			A2(
 				$elm$core$List$map,
