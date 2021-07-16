@@ -10263,22 +10263,32 @@ var $author$project$MusicCreatorFunctions$verifyTie = F2(
 										getYPos(g1)) && A2(verifyAccidential, s._function, g1._function)) ? A2(
 										$elm$core$List$cons,
 										_Utils_Tuple2(name, s),
-										A2(
-											$elm$core$List$cons,
-											_Utils_Tuple2(
-												name1,
-												toTieE(g1)),
-											ifTie(xs))) : A2(
+										ifTie(
+											A2(
+												$elm$core$List$cons,
+												$author$project$MusicCreatorDef$Group(
+													A2(
+														$elm$core$List$cons,
+														_Utils_Tuple2(
+															name1,
+															toTieE(g1)),
+														gs)),
+												xs))) : A2(
 										$elm$core$List$cons,
 										_Utils_Tuple2(
 											name,
 											toSlur(s)),
-										A2(
-											$elm$core$List$cons,
-											_Utils_Tuple2(
-												name1,
-												restore(g1)),
-											ifTie(xs)))) : A2(
+										ifTie(
+											A2(
+												$elm$core$List$cons,
+												$author$project$MusicCreatorDef$Group(
+													A2(
+														$elm$core$List$cons,
+														_Utils_Tuple2(
+															name1,
+															restore(g1)),
+														gs)),
+												xs)))) : A2(
 										$elm$core$List$cons,
 										_Utils_Tuple2(name, s),
 										ifTie(
