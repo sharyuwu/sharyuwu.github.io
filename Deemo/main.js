@@ -20561,18 +20561,8 @@ var $author$project$MusicCreator$warningEachBeat = function (model) {
 				A2(
 					$MacCASOutreach$graphicsvg$GraphicSVG$size,
 					10,
-					$MacCASOutreach$graphicsvg$GraphicSVG$text('Can not fit '))),
-				A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(45, 0),
-				A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-					$MacCASOutreach$graphicsvg$GraphicSVG$black,
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$size,
-						10,
-						$MacCASOutreach$graphicsvg$GraphicSVG$text(
-							$author$project$MusicCreatorFunctions$noteToStringWArt(draggedNote.b.note) + (' ' + $elm$core$Debug$toString(invalidBeat))))))
+					$MacCASOutreach$graphicsvg$GraphicSVG$text(
+						'Split ' + $author$project$MusicCreatorFunctions$noteToStringWArt(draggedNote.b.note))))
 			]));
 };
 var $author$project$MusicCreator$myShapes = function (model) {
