@@ -22182,13 +22182,10 @@ var $author$project$MusicCreator$myShapes = function (model) {
 					$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseUp,
 					$author$project$MusicCreator$ChangeTapDragBar,
 					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$notifyLeave,
-						$author$project$MusicCreator$ChangeTapDragBar,
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseMoveAt,
-							$author$project$MusicCreator$DragBar,
-							$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
-								A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height)))));
+						$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseMoveAt,
+						$author$project$MusicCreator$DragBar,
+						$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
+							A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height))));
 			}
 		}(),
 			A2(
