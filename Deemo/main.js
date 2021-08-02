@@ -21957,6 +21957,90 @@ var $author$project$MusicCreator$myShapes = function (model) {
 				$author$project$MusicCreatorDef$Articulation)),
 			A5($author$project$MusicCreator$tapAndPop, $author$project$MusicCreator$selectSlur, 0.8, model.selectSlurFuction, $author$project$DrawMusic$slurIcon, $author$project$MusicCreator$SelectSlur),
 			model.selectSlurFuction ? $author$project$MusicCreator$selectSlueBox(model) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+			$author$project$MusicCreatorDef$scaleNote,
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(40, 20),
+				$author$project$MusicCreator$warningEachBeat(model))),
+			_Utils_eq(model.expand, $author$project$MusicCreator$Large) ? A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent,
+			0.3,
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$lightBlue,
+				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height))) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_eq(model.widthView, $author$project$MusicCreator$Small) ? _Utils_Tuple2(0, 0) : _Utils_Tuple2(50.5, 0),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-89.5, -13.5),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$white,
+					A3(
+						$MacCASOutreach$graphicsvg$GraphicSVG$roundedRect,
+						$author$project$MusicCreator$viewRectW(model.widthView),
+						100,
+						5)))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(-110, 32),
+			$MacCASOutreach$graphicsvg$GraphicSVG$group(
+				_List_fromArray(
+					[
+						A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$move,
+						_Utils_Tuple2(0, 0),
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+							A4($MacCASOutreach$graphicsvg$GraphicSVG$hsla, 4, 1, 0.5, 0.3),
+							A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 34.5, 6, 2))),
+						A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$move,
+						_Utils_Tuple2(-16.5, -1.5),
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+							$MacCASOutreach$graphicsvg$GraphicSVG$black,
+							$MacCASOutreach$graphicsvg$GraphicSVG$bold(
+								A2(
+									$MacCASOutreach$graphicsvg$GraphicSVG$size,
+									4,
+									A2(
+										$MacCASOutreach$graphicsvg$GraphicSVG$customFont,
+										'Trebuchet MS',
+										$MacCASOutreach$graphicsvg$GraphicSVG$text('5. Your measure!'))))))
+					]))),
+			_Utils_eq(model.expand, $author$project$MusicCreator$Reg) ? A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$clip,
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-89.5, -13.25),
+				$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
+					A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 72, 100, 5))),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-110, -22),
+				A5($author$project$MusicCreator$code, model.clef, model.scoreNoteList, model.instrument, model.timeSignature, model.tempCircle.tempo))) : A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(-110, -22),
+			A5($author$project$MusicCreator$code, model.clef, model.scoreNoteList, model.instrument, model.timeSignature, model.tempCircle.tempo)),
+			_Utils_eq(model.expand, $author$project$MusicCreator$Reg) ? A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
+			$author$project$MusicCreator$SeeCode,
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-89, 32),
+				$author$project$MusicCreator$viewButton('+'))) : A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
+			$author$project$MusicCreator$SeeCode,
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-89, 32),
+				$author$project$MusicCreator$viewButton('-'))),
+			_Utils_eq(model.expand, $author$project$MusicCreator$Reg) ? $author$project$MusicCreator$clearNotesButton(model) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil),
 			$MacCASOutreach$graphicsvg$GraphicSVG$group(
 			A2(
 				$elm$core$List$map,
@@ -22187,91 +22271,7 @@ var $author$project$MusicCreator$myShapes = function (model) {
 						$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
 							A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height))));
 			}
-		}(),
-			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$scale,
-			$author$project$MusicCreatorDef$scaleNote,
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(40, 20),
-				$author$project$MusicCreator$warningEachBeat(model))),
-			_Utils_eq(model.expand, $author$project$MusicCreator$Large) ? A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent,
-			0.3,
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-				$MacCASOutreach$graphicsvg$GraphicSVG$lightBlue,
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height))) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil),
-			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_eq(model.widthView, $author$project$MusicCreator$Small) ? _Utils_Tuple2(0, 0) : _Utils_Tuple2(50.5, 0),
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(-89.5, -13.5),
-				A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-					$MacCASOutreach$graphicsvg$GraphicSVG$white,
-					A3(
-						$MacCASOutreach$graphicsvg$GraphicSVG$roundedRect,
-						$author$project$MusicCreator$viewRectW(model.widthView),
-						100,
-						5)))),
-			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(-110, 32),
-			$MacCASOutreach$graphicsvg$GraphicSVG$group(
-				_List_fromArray(
-					[
-						A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$move,
-						_Utils_Tuple2(0, 0),
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-							A4($MacCASOutreach$graphicsvg$GraphicSVG$hsla, 4, 1, 0.5, 0.3),
-							A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 34.5, 6, 2))),
-						A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$move,
-						_Utils_Tuple2(-16.5, -1.5),
-						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-							$MacCASOutreach$graphicsvg$GraphicSVG$black,
-							$MacCASOutreach$graphicsvg$GraphicSVG$bold(
-								A2(
-									$MacCASOutreach$graphicsvg$GraphicSVG$size,
-									4,
-									A2(
-										$MacCASOutreach$graphicsvg$GraphicSVG$customFont,
-										'Trebuchet MS',
-										$MacCASOutreach$graphicsvg$GraphicSVG$text('5. Your measure!'))))))
-					]))),
-			_Utils_eq(model.expand, $author$project$MusicCreator$Reg) ? A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$clip,
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(-89.5, -13.25),
-				$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
-					A3($MacCASOutreach$graphicsvg$GraphicSVG$roundedRect, 72, 100, 5))),
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(-110, -22),
-				A5($author$project$MusicCreator$code, model.clef, model.scoreNoteList, model.instrument, model.timeSignature, model.tempCircle.tempo))) : A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_Tuple2(-110, -22),
-			A5($author$project$MusicCreator$code, model.clef, model.scoreNoteList, model.instrument, model.timeSignature, model.tempCircle.tempo)),
-			_Utils_eq(model.expand, $author$project$MusicCreator$Reg) ? A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
-			$author$project$MusicCreator$SeeCode,
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(-89, 32),
-				$author$project$MusicCreator$viewButton('+'))) : A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
-			$author$project$MusicCreator$SeeCode,
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(-89, 32),
-				$author$project$MusicCreator$viewButton('-'))),
-			_Utils_eq(model.expand, $author$project$MusicCreator$Reg) ? $author$project$MusicCreator$clearNotesButton(model) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil)
+		}()
 		]);
 };
 var $author$project$MusicCreator$view = function (model) {
