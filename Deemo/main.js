@@ -9294,6 +9294,8 @@ var $author$project$MusicCreator$init = _Utils_Tuple2(
 		sizeofNote: 20,
 		slurList: _List_Nil,
 		tempCircle: $author$project$MusicCreatorDef$defDragBarCircle,
+		tempoMinus: 1,
+		tempoPlus: 1,
 		time: 0,
 		timeSignature: $author$project$MusicCreatorDef$Ts44,
 		tmDn: 1,
@@ -9335,6 +9337,8 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$EllieApp$Enter = {$: 'Enter'};
 var $author$project$MusicCreator$InstrumentZoomDown = {$: 'InstrumentZoomDown'};
 var $author$project$MusicCreator$InstrumentZoomUp = {$: 'InstrumentZoomUp'};
 var $author$project$MusicCreatorDef$Slur = {$: 'Slur'};
+var $author$project$MusicCreator$TempoMinusZ = {$: 'TempoMinusZ'};
+var $author$project$MusicCreator$TempoPlusZ = {$: 'TempoPlusZ'};
 var $author$project$MusicCreator$TmDn = {$: 'TmDn'};
 var $author$project$MusicCreator$TmUp = {$: 'TmUp'};
 var $author$project$MusicCreatorDef$Functions = F5(
@@ -9393,7 +9397,7 @@ var $author$project$MusicCreator$addSlurToScore = function (model) {
 		},
 		model.scoreNoteList);
 };
-var $author$project$MusicCreatorDef$adjectmoveSpeed = 2.6;
+var $author$project$MusicCreatorDef$adjectmoveSpeed = 2.7;
 var $author$project$MusicCreator$Open = {$: 'Open'};
 var $elm$core$Basics$pow = _Basics_pow;
 var $elm$core$Basics$sqrt = _Basics_sqrt;
@@ -14651,6 +14655,8 @@ var $author$project$MusicCreator$update = F2(
 							clearBZoom: _Utils_eq(obj, $author$project$MusicCreator$ClearBZoom) ? 1.5 : 1,
 							instrumentDown: _Utils_eq(obj, $author$project$MusicCreator$InstrumentZoomDown) ? 1.4 : 1,
 							instrumentUp: _Utils_eq(obj, $author$project$MusicCreator$InstrumentZoomUp) ? 1.4 : 1,
+							tempoMinus: _Utils_eq(obj, $author$project$MusicCreator$TempoMinusZ) ? 1.3 : 1,
+							tempoPlus: _Utils_eq(obj, $author$project$MusicCreator$TempoPlusZ) ? 1.3 : 1,
 							tmDn: _Utils_eq(obj, $author$project$MusicCreator$TmDn) ? 1.4 : 1,
 							tmUp: _Utils_eq(obj, $author$project$MusicCreator$TmUp) ? 1.4 : 1
 						}),
@@ -14660,7 +14666,7 @@ var $author$project$MusicCreator$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{clearBNoZoom: 1, clearBYesZoom: 1, clearBZoom: 1, instrumentDown: 1, instrumentUp: 1, tmDn: 1, tmUp: 1}),
+						{clearBNoZoom: 1, clearBYesZoom: 1, clearBZoom: 1, instrumentDown: 1, instrumentUp: 1, tempoMinus: 1, tempoPlus: 1, tmDn: 1, tmUp: 1}),
 					$elm$core$Platform$Cmd$none);
 			case 'TapClearButton':
 				return _Utils_Tuple2(
@@ -20953,31 +20959,41 @@ var $author$project$MusicCreator$drawTrashCan = function (model) {
 				]));
 	}
 };
-var $author$project$DragBarAssit$minus = A2(
-	$MacCASOutreach$graphicsvg$GraphicSVG$move,
-	_Utils_Tuple2($author$project$DragBarAssit$originalPosX, $author$project$DragBarAssit$moveY),
-	A2(
-		$MacCASOutreach$graphicsvg$GraphicSVG$scale,
-		$author$project$DragBarAssit$scaleTemp,
-		$MacCASOutreach$graphicsvg$GraphicSVG$group(
-			_List_fromArray(
-				[
-					A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(-10, -3),
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-						$MacCASOutreach$graphicsvg$GraphicSVG$black,
+var $MacCASOutreach$graphicsvg$GraphicSVG$orange = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 245, 121, 0, 1);
+var $author$project$DragBarAssit$minus = function (scaleSize) {
+	return A2(
+		$MacCASOutreach$graphicsvg$GraphicSVG$move,
+		_Utils_Tuple2($author$project$DragBarAssit$originalPosX, $author$project$DragBarAssit$moveY),
+		A3(
+			$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+			$MacCASOutreach$graphicsvg$GraphicSVG$solid(0.1),
+			$MacCASOutreach$graphicsvg$GraphicSVG$orange,
+			$MacCASOutreach$graphicsvg$GraphicSVG$group(
+				_List_fromArray(
+					[
 						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$size,
-							12,
-							$MacCASOutreach$graphicsvg$GraphicSVG$bold(
-								$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
+						$MacCASOutreach$graphicsvg$GraphicSVG$move,
+						_Utils_Tuple2(-5.5, (-1.5) * scaleSize),
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+							$author$project$DragBarAssit$scaleTemp,
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+								scaleSize,
+								A2(
+									$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+									$MacCASOutreach$graphicsvg$GraphicSVG$black,
 									A2(
-										$MacCASOutreach$graphicsvg$GraphicSVG$customFont,
-										'Trebuchet MS',
-										$MacCASOutreach$graphicsvg$GraphicSVG$text('-')))))))
-				]))));
+										$MacCASOutreach$graphicsvg$GraphicSVG$size,
+										12,
+										$MacCASOutreach$graphicsvg$GraphicSVG$bold(
+											$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
+												A2(
+													$MacCASOutreach$graphicsvg$GraphicSVG$customFont,
+													'Trebuchet MS',
+													$MacCASOutreach$graphicsvg$GraphicSVG$text('-')))))))))
+					]))));
+};
 var $MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseMoveAt = F2(
 	function (msg, shape) {
 		return A2($MacCASOutreach$graphicsvg$GraphicSVG$MoveOverAt, msg, shape);
@@ -20986,31 +21002,40 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseUp = F2(
 	function (msg, shape) {
 		return A2($MacCASOutreach$graphicsvg$GraphicSVG$MouseUp, msg, shape);
 	});
-var $author$project$DragBarAssit$plus = A2(
-	$MacCASOutreach$graphicsvg$GraphicSVG$move,
-	_Utils_Tuple2($author$project$DragBarAssit$originalPosX, $author$project$DragBarAssit$moveY),
-	A2(
-		$MacCASOutreach$graphicsvg$GraphicSVG$scale,
-		$author$project$DragBarAssit$scaleTemp,
-		$MacCASOutreach$graphicsvg$GraphicSVG$group(
-			_List_fromArray(
-				[
-					A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$move,
-					_Utils_Tuple2(40, -2),
-					A2(
-						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-						$MacCASOutreach$graphicsvg$GraphicSVG$black,
+var $author$project$DragBarAssit$plus = function (scaleSize) {
+	return A2(
+		$MacCASOutreach$graphicsvg$GraphicSVG$move,
+		_Utils_Tuple2($author$project$DragBarAssit$originalPosX, $author$project$DragBarAssit$moveY),
+		A3(
+			$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+			$MacCASOutreach$graphicsvg$GraphicSVG$solid(0.1),
+			$MacCASOutreach$graphicsvg$GraphicSVG$orange,
+			$MacCASOutreach$graphicsvg$GraphicSVG$group(
+				_List_fromArray(
+					[
 						A2(
-							$MacCASOutreach$graphicsvg$GraphicSVG$size,
-							10,
-							$MacCASOutreach$graphicsvg$GraphicSVG$bold(
-								$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
+						$MacCASOutreach$graphicsvg$GraphicSVG$move,
+						_Utils_Tuple2(20, (-1) * scaleSize),
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+							scaleSize,
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+								$author$project$DragBarAssit$scaleTemp,
+								A2(
+									$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+									$MacCASOutreach$graphicsvg$GraphicSVG$black,
 									A2(
-										$MacCASOutreach$graphicsvg$GraphicSVG$customFont,
-										'Trebuchet MS',
-										$MacCASOutreach$graphicsvg$GraphicSVG$text('+')))))))
-				]))));
+										$MacCASOutreach$graphicsvg$GraphicSVG$size,
+										10,
+										$MacCASOutreach$graphicsvg$GraphicSVG$bold(
+											$MacCASOutreach$graphicsvg$GraphicSVG$fixedwidth(
+												A2(
+													$MacCASOutreach$graphicsvg$GraphicSVG$customFont,
+													'Trebuchet MS',
+													$MacCASOutreach$graphicsvg$GraphicSVG$text('+')))))))))
+					]))));
+};
 var $author$project$MusicCreatorDef$scaleNote = 0.37;
 var $MacCASOutreach$graphicsvg$GraphicSVG$grey = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 211, 215, 207, 1);
 var $author$project$DrawMusic$score = function (_v0) {
@@ -21826,8 +21851,26 @@ var $author$project$MusicCreator$myShapes = function (model) {
 					$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown,
 					$author$project$MusicCreator$ChangeTapDragBar,
 					A2($author$project$DragBarAssit$dragBarCircle, model.tempCircle.posX, model.tempCircle.zoomCircle)))),
-			A2($MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown, $author$project$MusicCreator$TempoPlus, $author$project$DragBarAssit$plus),
-			A2($MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown, $author$project$MusicCreator$TempoMinus, $author$project$DragBarAssit$minus),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$notifyLeave,
+			$author$project$MusicCreator$ZoomDnObj($author$project$MusicCreator$TempoPlusZ),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$notifyEnter,
+				$author$project$MusicCreator$ZoomUpObj($author$project$MusicCreator$TempoPlusZ),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown,
+					$author$project$MusicCreator$TempoPlus,
+					$author$project$DragBarAssit$plus(model.tempoPlus)))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$notifyLeave,
+			$author$project$MusicCreator$ZoomDnObj($author$project$MusicCreator$TempoMinusZ),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$notifyEnter,
+				$author$project$MusicCreator$ZoomUpObj($author$project$MusicCreator$TempoMinusZ),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$notifyMouseDown,
+					$author$project$MusicCreator$TempoMinus,
+					$author$project$DragBarAssit$minus(model.tempoMinus)))),
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$move,
 			_Utils_Tuple2(29.5, -15.5),
