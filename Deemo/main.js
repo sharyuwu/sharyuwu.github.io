@@ -21732,6 +21732,20 @@ var $author$project$MusicCreator$myShapes = function (model) {
 			$MacCASOutreach$graphicsvg$GraphicSVG$ghost(
 				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height))),
 			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_eq(model.widthView, $author$project$MusicCreator$Small) ? _Utils_Tuple2(0, 0) : _Utils_Tuple2(50.5, 0),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$move,
+				_Utils_Tuple2(-89.5, -13.5),
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+					$MacCASOutreach$graphicsvg$GraphicSVG$white,
+					A3(
+						$MacCASOutreach$graphicsvg$GraphicSVG$roundedRect,
+						$author$project$MusicCreator$viewRectW(model.widthView),
+						100,
+						5)))),
+			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
 			$author$project$MusicCreator$PlaySound,
 			A2(
@@ -21964,27 +21978,31 @@ var $author$project$MusicCreator$myShapes = function (model) {
 				$MacCASOutreach$graphicsvg$GraphicSVG$move,
 				_Utils_Tuple2(40, 20),
 				$author$project$MusicCreator$warningEachBeat(model))),
-			_Utils_eq(model.expand, $author$project$MusicCreator$Large) ? A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent,
-			0.3,
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-				$MacCASOutreach$graphicsvg$GraphicSVG$lightBlue,
-				A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height))) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil),
-			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$move,
-			_Utils_eq(model.widthView, $author$project$MusicCreator$Small) ? _Utils_Tuple2(0, 0) : _Utils_Tuple2(50.5, 0),
-			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(-89.5, -13.5),
-				A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-					$MacCASOutreach$graphicsvg$GraphicSVG$white,
-					A3(
-						$MacCASOutreach$graphicsvg$GraphicSVG$roundedRect,
-						$author$project$MusicCreator$viewRectW(model.widthView),
-						100,
-						5)))),
+			_Utils_eq(model.expand, $author$project$MusicCreator$Large) ? $MacCASOutreach$graphicsvg$GraphicSVG$group(
+			_List_fromArray(
+				[
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent,
+					0.3,
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						$MacCASOutreach$graphicsvg$GraphicSVG$lightBlue,
+						A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, model.width, model.height))),
+					A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$move,
+					_Utils_eq(model.widthView, $author$project$MusicCreator$Small) ? _Utils_Tuple2(0, 0) : _Utils_Tuple2(50.5, 0),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$move,
+						_Utils_Tuple2(-89.5, -13.5),
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+							$MacCASOutreach$graphicsvg$GraphicSVG$white,
+							A3(
+								$MacCASOutreach$graphicsvg$GraphicSVG$roundedRect,
+								$author$project$MusicCreator$viewRectW(model.widthView),
+								100,
+								5))))
+				])) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil),
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$move,
 			_Utils_Tuple2(-110, 32),
