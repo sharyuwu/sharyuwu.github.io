@@ -9280,6 +9280,7 @@ var $author$project$MusicCreator$init = _Utils_Tuple2(
 		instrument: $author$project$MusicDef$Piano,
 		instrumentDown: 1,
 		instrumentUp: 1,
+		playButtonZ: 1,
 		pos: _Utils_Tuple2(0, 0),
 		range: _Utils_Tuple2(36, -36),
 		scoreNoteList: A2(
@@ -9336,6 +9337,7 @@ var $author$project$MusicCreatorDef$Dynamic = {$: 'Dynamic'};
 var $MacCASOutreach$graphicsvg$GraphicSVG$EllieApp$Enter = {$: 'Enter'};
 var $author$project$MusicCreator$InstrumentZoomDown = {$: 'InstrumentZoomDown'};
 var $author$project$MusicCreator$InstrumentZoomUp = {$: 'InstrumentZoomUp'};
+var $author$project$MusicCreator$PlayButtonZ = {$: 'PlayButtonZ'};
 var $author$project$MusicCreatorDef$Slur = {$: 'Slur'};
 var $author$project$MusicCreator$TempoMinusZ = {$: 'TempoMinusZ'};
 var $author$project$MusicCreator$TempoPlusZ = {$: 'TempoPlusZ'};
@@ -14655,6 +14657,7 @@ var $author$project$MusicCreator$update = F2(
 							clearBZoom: _Utils_eq(obj, $author$project$MusicCreator$ClearBZoom) ? 1.5 : 1,
 							instrumentDown: _Utils_eq(obj, $author$project$MusicCreator$InstrumentZoomDown) ? 1.4 : 1,
 							instrumentUp: _Utils_eq(obj, $author$project$MusicCreator$InstrumentZoomUp) ? 1.4 : 1,
+							playButtonZ: _Utils_eq(obj, $author$project$MusicCreator$PlayButtonZ) ? 1.1 : 1,
 							tempoMinus: _Utils_eq(obj, $author$project$MusicCreator$TempoMinusZ) ? 1.3 : 1,
 							tempoPlus: _Utils_eq(obj, $author$project$MusicCreator$TempoPlusZ) ? 1.3 : 1,
 							tmDn: _Utils_eq(obj, $author$project$MusicCreator$TmDn) ? 1.4 : 1,
@@ -14666,7 +14669,7 @@ var $author$project$MusicCreator$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{clearBNoZoom: 1, clearBYesZoom: 1, clearBZoom: 1, instrumentDown: 1, instrumentUp: 1, tempoMinus: 1, tempoPlus: 1, tmDn: 1, tmUp: 1}),
+						{clearBNoZoom: 1, clearBYesZoom: 1, clearBZoom: 1, instrumentDown: 1, instrumentUp: 1, playButtonZ: 1, tempoMinus: 1, tempoPlus: 1, tmDn: 1, tmUp: 1}),
 					$elm$core$Platform$Cmd$none);
 			case 'TapClearButton':
 				return _Utils_Tuple2(
@@ -17336,6 +17339,7 @@ var $author$project$MusicCreator$code = F5(
 							$author$project$MusicCreator$clearEmpty(listOfNote))))
 				]));
 	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$darkRed = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 164, 0, 0, 1);
 var $MacCASOutreach$graphicsvg$GraphicSVG$gray = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 211, 215, 207, 1);
 var $author$project$DragBarAssit$moveY = 5;
 var $author$project$DragBarAssit$dragBarCircle = F2(
@@ -21771,30 +21775,39 @@ var $author$project$MusicCreator$myShapes = function (model) {
 						100,
 						5)))),
 			A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
-			$author$project$MusicCreator$PlaySound,
+			$MacCASOutreach$graphicsvg$GraphicSVG$notifyLeave,
+			$author$project$MusicCreator$ZoomDnObj($author$project$MusicCreator$PlayButtonZ),
 			A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$move,
-				_Utils_Tuple2(-40, -6),
+				$MacCASOutreach$graphicsvg$GraphicSVG$notifyEnter,
+				$author$project$MusicCreator$ZoomUpObj($author$project$MusicCreator$PlayButtonZ),
 				A2(
-					$MacCASOutreach$graphicsvg$GraphicSVG$scale,
-					0.8,
-					$MacCASOutreach$graphicsvg$GraphicSVG$group(
-						_List_fromArray(
-							[
-								A3(
-								$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
-								$MacCASOutreach$graphicsvg$GraphicSVG$solid(0.5),
-								$MacCASOutreach$graphicsvg$GraphicSVG$black,
-								A2(
-									$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-									$MacCASOutreach$graphicsvg$GraphicSVG$white,
-									$MacCASOutreach$graphicsvg$GraphicSVG$circle(5))),
-								A2(
-								$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-								$MacCASOutreach$graphicsvg$GraphicSVG$black,
-								$MacCASOutreach$graphicsvg$GraphicSVG$triangle(3))
-							]))))),
+					$MacCASOutreach$graphicsvg$GraphicSVG$notifyTap,
+					$author$project$MusicCreator$PlaySound,
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$move,
+						_Utils_Tuple2(-40, -6),
+						A2(
+							$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+							model.playButtonZ,
+							A2(
+								$MacCASOutreach$graphicsvg$GraphicSVG$scale,
+								0.8,
+								$MacCASOutreach$graphicsvg$GraphicSVG$group(
+									_List_fromArray(
+										[
+											A3(
+											$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
+											$MacCASOutreach$graphicsvg$GraphicSVG$solid(0.5),
+											(model.playButtonZ === 1) ? $MacCASOutreach$graphicsvg$GraphicSVG$black : $MacCASOutreach$graphicsvg$GraphicSVG$darkRed,
+											A2(
+												$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+												$MacCASOutreach$graphicsvg$GraphicSVG$white,
+												$MacCASOutreach$graphicsvg$GraphicSVG$circle(5))),
+											A2(
+											$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+											(model.playButtonZ === 1) ? $MacCASOutreach$graphicsvg$GraphicSVG$black : $MacCASOutreach$graphicsvg$GraphicSVG$darkRed,
+											$MacCASOutreach$graphicsvg$GraphicSVG$triangle(3))
+										])))))))),
 			A2(
 			$MacCASOutreach$graphicsvg$GraphicSVG$move,
 			_Utils_Tuple2(0, -26),
