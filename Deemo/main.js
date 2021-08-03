@@ -17339,7 +17339,6 @@ var $author$project$MusicCreator$code = F5(
 							$author$project$MusicCreator$clearEmpty(listOfNote))))
 				]));
 	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$darkRed = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 164, 0, 0, 1);
 var $MacCASOutreach$graphicsvg$GraphicSVG$gray = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 211, 215, 207, 1);
 var $author$project$DragBarAssit$moveY = 5;
 var $author$project$DragBarAssit$dragBarCircle = F2(
@@ -20963,7 +20962,6 @@ var $author$project$MusicCreator$drawTrashCan = function (model) {
 				]));
 	}
 };
-var $MacCASOutreach$graphicsvg$GraphicSVG$orange = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 245, 121, 0, 1);
 var $author$project$DragBarAssit$minus = function (scaleSize) {
 	return A2(
 		$MacCASOutreach$graphicsvg$GraphicSVG$move,
@@ -20971,7 +20969,7 @@ var $author$project$DragBarAssit$minus = function (scaleSize) {
 		A3(
 			$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
 			$MacCASOutreach$graphicsvg$GraphicSVG$solid(0.1),
-			$MacCASOutreach$graphicsvg$GraphicSVG$orange,
+			$MacCASOutreach$graphicsvg$GraphicSVG$darkBlue,
 			$MacCASOutreach$graphicsvg$GraphicSVG$group(
 				_List_fromArray(
 					[
@@ -21013,7 +21011,7 @@ var $author$project$DragBarAssit$plus = function (scaleSize) {
 		A3(
 			$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
 			$MacCASOutreach$graphicsvg$GraphicSVG$solid(0.1),
-			$MacCASOutreach$graphicsvg$GraphicSVG$orange,
+			$MacCASOutreach$graphicsvg$GraphicSVG$darkBlue,
 			$MacCASOutreach$graphicsvg$GraphicSVG$group(
 				_List_fromArray(
 					[
@@ -21798,14 +21796,14 @@ var $author$project$MusicCreator$myShapes = function (model) {
 											A3(
 											$MacCASOutreach$graphicsvg$GraphicSVG$addOutline,
 											$MacCASOutreach$graphicsvg$GraphicSVG$solid(0.5),
-											(model.playButtonZ === 1) ? $MacCASOutreach$graphicsvg$GraphicSVG$black : $MacCASOutreach$graphicsvg$GraphicSVG$darkRed,
+											(model.playButtonZ === 1) ? $MacCASOutreach$graphicsvg$GraphicSVG$black : $MacCASOutreach$graphicsvg$GraphicSVG$darkBlue,
 											A2(
 												$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 												$MacCASOutreach$graphicsvg$GraphicSVG$white,
 												$MacCASOutreach$graphicsvg$GraphicSVG$circle(5))),
 											A2(
 											$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-											(model.playButtonZ === 1) ? $MacCASOutreach$graphicsvg$GraphicSVG$black : $MacCASOutreach$graphicsvg$GraphicSVG$darkRed,
+											(model.playButtonZ === 1) ? $MacCASOutreach$graphicsvg$GraphicSVG$black : $MacCASOutreach$graphicsvg$GraphicSVG$darkBlue,
 											$MacCASOutreach$graphicsvg$GraphicSVG$triangle(3))
 										])))))))),
 			A2(
