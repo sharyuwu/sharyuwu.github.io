@@ -10362,15 +10362,15 @@ var $author$project$MusicCreator$changeAccidentalsDragToRealease = F2(
 			function (_v4) {
 				var name = _v4.a;
 				var a = _v4.b;
+				var _function = a._function;
+				var new_function = _Utils_update(
+					_function,
+					{accidental: $author$project$MusicCreatorDef$defselectAccidentalRec});
 				return (_Utils_eq(name, nameOfNote) && (!$author$project$MusicCreatorDef$ifRest(a.note))) ? _Utils_Tuple2(
 					name,
-					A5(
-						$author$project$MusicCreatorDef$SelectNote,
-						a.pos,
-						a.posInit,
-						a.dragState,
-						a.note,
-						A5($author$project$MusicCreatorDef$Functions, a._function.dynamic, a._function.lyric, a._function.articulation, $author$project$MusicCreatorDef$defselectAccidentalRec, a._function.tie))) : _Utils_Tuple2(name, a);
+					_Utils_update(
+						a,
+						{_function: new_function})) : _Utils_Tuple2(name, a);
 			},
 			model.scoreNoteList);
 		var getAccidental = A3(
@@ -10446,13 +10446,11 @@ var $author$project$MusicCreator$changeAccidentalsDragToRealease = F2(
 						var a = _v0.b;
 						return (_Utils_eq(l2, targetValue) && (!$author$project$MusicCreatorDef$ifRest(a.note))) ? _Utils_Tuple2(
 							name,
-							A5(
-								$author$project$MusicCreatorDef$SelectNote,
-								a.pos,
-								a.posInit,
-								a.dragState,
-								a.note,
-								updateF(a))) : _Utils_Tuple2(name, a);
+							_Utils_update(
+								a,
+								{
+									_function: updateF(a)
+								})) : _Utils_Tuple2(name, a);
 					}),
 				newScoreList,
 				distance) : A2(
@@ -10462,13 +10460,11 @@ var $author$project$MusicCreator$changeAccidentalsDragToRealease = F2(
 					var a = _v1.b;
 					return _Utils_Tuple2(
 						name,
-						A5(
-							$author$project$MusicCreatorDef$SelectNote,
-							a.pos,
-							a.posInit,
-							a.dragState,
-							a.note,
-							restoreF(a)));
+						_Utils_update(
+							a,
+							{
+								_function: restoreF(a)
+							}));
 				},
 				model.scoreNoteList));
 		}();
@@ -10490,7 +10486,9 @@ var $author$project$MusicCreator$changeAccidentalsRealeaseToDrag = F2(
 		}();
 		return _Utils_Tuple2(
 			name,
-			A5($author$project$MusicCreatorDef$SelectNote, a.pos, a.posInit, a.dragState, a.note, updateF));
+			_Utils_update(
+				a,
+				{_function: updateF}));
 	});
 var $elm$core$List$member = F2(
 	function (x, xs) {
@@ -10640,7 +10638,9 @@ var $author$project$MusicCreator$changeArticulationRealeaseToDrag = F2(
 		}();
 		return _Utils_Tuple2(
 			name,
-			A5($author$project$MusicCreatorDef$SelectNote, a.pos, a.posInit, a.dragState, a.note, updateF));
+			_Utils_update(
+				a,
+				{_function: updateF}));
 	});
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
@@ -10699,13 +10699,11 @@ var $author$project$MusicCreator$changeDragSelectUpdateAccidentals = F2(
 						var a = _v0.b;
 						return (_Utils_eq(l2, targetValue) && (!$author$project$MusicCreatorDef$ifRest(a.note))) ? _Utils_Tuple2(
 							name,
-							A5(
-								$author$project$MusicCreatorDef$SelectNote,
-								a.pos,
-								a.posInit,
-								a.dragState,
-								a.note,
-								updateF(a))) : _Utils_Tuple2(name, a);
+							_Utils_update(
+								a,
+								{
+									_function: updateF(a)
+								})) : _Utils_Tuple2(name, a);
 					}),
 				model.scoreNoteList,
 				distance);
@@ -10797,13 +10795,11 @@ var $author$project$MusicCreator$changeDragSelectUpdateDynamic = F2(
 						var a = _v0.b;
 						return (_Utils_eq(l2, targetValue) && (!$author$project$MusicCreatorDef$ifRest(a.note))) ? _Utils_Tuple2(
 							name,
-							A5(
-								$author$project$MusicCreatorDef$SelectNote,
-								a.pos,
-								a.posInit,
-								a.dragState,
-								a.note,
-								updateF(a))) : _Utils_Tuple2(name, a);
+							_Utils_update(
+								a,
+								{
+									_function: updateF(a)
+								})) : _Utils_Tuple2(name, a);
 					}),
 				model.scoreNoteList,
 				distance);
@@ -11535,15 +11531,15 @@ var $author$project$MusicCreator$changeDynamicDragToRealease = F2(
 			function (_v4) {
 				var name = _v4.a;
 				var a = _v4.b;
+				var _function = a._function;
+				var new_function = _Utils_update(
+					_function,
+					{dynamic: $author$project$MusicCreatorDef$defselectDynamicRec});
 				return (_Utils_eq(name, nameOfNote) && (!$author$project$MusicCreatorDef$ifRest(a.note))) ? _Utils_Tuple2(
 					name,
-					A5(
-						$author$project$MusicCreatorDef$SelectNote,
-						a.pos,
-						a.posInit,
-						a.dragState,
-						a.note,
-						A5($author$project$MusicCreatorDef$Functions, $author$project$MusicCreatorDef$defselectDynamicRec, a._function.lyric, a._function.articulation, a._function.accidental, a._function.tie))) : _Utils_Tuple2(name, a);
+					_Utils_update(
+						a,
+						{_function: new_function})) : _Utils_Tuple2(name, a);
 			},
 			model.scoreNoteList);
 		var getDynamic = A3(
@@ -11619,13 +11615,11 @@ var $author$project$MusicCreator$changeDynamicDragToRealease = F2(
 						var a = _v0.b;
 						return (_Utils_eq(l2, targetValue) && (!$author$project$MusicCreatorDef$ifRest(a.note))) ? _Utils_Tuple2(
 							name,
-							A5(
-								$author$project$MusicCreatorDef$SelectNote,
-								a.pos,
-								a.posInit,
-								a.dragState,
-								a.note,
-								updateF(a))) : _Utils_Tuple2(name, a);
+							_Utils_update(
+								a,
+								{
+									_function: updateF(a)
+								})) : _Utils_Tuple2(name, a);
 					}),
 				newScoreList,
 				distance) : A2(
@@ -11635,13 +11629,11 @@ var $author$project$MusicCreator$changeDynamicDragToRealease = F2(
 					var a = _v1.b;
 					return _Utils_Tuple2(
 						name,
-						A5(
-							$author$project$MusicCreatorDef$SelectNote,
-							a.pos,
-							a.posInit,
-							a.dragState,
-							a.note,
-							restoreF(a)));
+						_Utils_update(
+							a,
+							{
+								_function: restoreF(a)
+							}));
 				},
 				model.scoreNoteList));
 		}();
@@ -11663,7 +11655,9 @@ var $author$project$MusicCreator$changeDynamicRealeaseToDrag = F2(
 		}();
 		return _Utils_Tuple2(
 			name,
-			A5($author$project$MusicCreatorDef$SelectNote, a.pos, a.posInit, a.dragState, a.note, updateF));
+			_Utils_update(
+				a,
+				{_function: updateF}));
 	});
 var $author$project$InputKeyAssist$clearSelect = function (list) {
 	return A2(
@@ -13521,13 +13515,11 @@ var $author$project$MusicCreator$whileDragScoreUpdateAccidental = F3(
 					if (_v2.$ === 'Dragging') {
 						return _Utils_Tuple2(
 							name,
-							A5(
-								$author$project$MusicCreatorDef$SelectNote,
-								a.pos,
-								a.posInit,
-								a.dragState,
-								a.note,
-								updateAccidental(a)));
+							_Utils_update(
+								a,
+								{
+									_function: updateAccidental(a)
+								}));
 					} else {
 						return _Utils_Tuple2(name, a);
 					}
@@ -13566,13 +13558,11 @@ var $author$project$MusicCreator$whileDragScoreUpdateArticulation = F3(
 					if (_v2.$ === 'Dragging') {
 						return _Utils_Tuple2(
 							name,
-							A5(
-								$author$project$MusicCreatorDef$SelectNote,
-								a.pos,
-								a.posInit,
-								a.dragState,
-								a.note,
-								updateArticulation(a)));
+							_Utils_update(
+								a,
+								{
+									_function: updateArticulation(a)
+								}));
 					} else {
 						return _Utils_Tuple2(name, a);
 					}
@@ -13611,13 +13601,11 @@ var $author$project$MusicCreator$whileDragScoreUpdateDynamic = F3(
 					if (_v2.$ === 'Dragging') {
 						return _Utils_Tuple2(
 							name,
-							A5(
-								$author$project$MusicCreatorDef$SelectNote,
-								a.pos,
-								a.posInit,
-								a.dragState,
-								a.note,
-								updateDynamic(a)));
+							_Utils_update(
+								a,
+								{
+									_function: updateDynamic(a)
+								}));
 					} else {
 						return _Utils_Tuple2(name, a);
 					}
@@ -19909,7 +19897,6 @@ var $author$project$MusicCreator$pointDirctUpdateGroup = function (note) {
 		return $author$project$MusicCreator$ifGroupNotePointUp(posList) ? 1 : (-1);
 	}
 };
-var $MacCASOutreach$graphicsvg$GraphicSVG$yellow = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 237, 212, 0, 1);
 var $author$project$DrawMusic$slur = F3(
 	function (_v0, _v1, pointDir) {
 		var x1 = _v0.a;
@@ -19931,7 +19918,7 @@ var $author$project$DrawMusic$slur = F3(
 					A3(
 						$MacCASOutreach$graphicsvg$GraphicSVG$outlined,
 						$MacCASOutreach$graphicsvg$GraphicSVG$solid(5),
-						$MacCASOutreach$graphicsvg$GraphicSVG$yellow,
+						$MacCASOutreach$graphicsvg$GraphicSVG$blank,
 						A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$curve,
 							_Utils_Tuple2(x1, y1),
