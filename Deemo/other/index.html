@@ -8,7 +8,7 @@
 <body>
   <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
   <script>
-    var app = Elm.MusicCreator.init();
+    var app = Elm.Master.init();
     const AudioContextFunc = window.AudioContext || window.webkitAudioContext
     const audioContext = new AudioContextFunc()
     const player = new WebAudioFontPlayer()
