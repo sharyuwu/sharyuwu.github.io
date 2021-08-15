@@ -20910,7 +20910,6 @@ var $author$project$MusicCreator$drawNotesWithExtraLineWithGroup = F3(
 		return (ifScoreNoteDrag || ifSelectNoteDrage) ? A2($author$project$MusicCreator$drawNotesWithExtraLine, model.scoreNoteList, model.time) : $MacCASOutreach$graphicsvg$GraphicSVG$group(
 			_List_fromArray(
 				[
-					$author$project$MusicCreator$drawSlurAfterSelect(groupList),
 					$author$project$MusicCreator$drawTie(groupList),
 					$MacCASOutreach$graphicsvg$GraphicSVG$group(
 					A2(
@@ -20942,7 +20941,8 @@ var $author$project$MusicCreator$drawNotesWithExtraLineWithGroup = F3(
 							}
 						},
 						groupList)),
-					A3($author$project$MusicCreator$drawLyric, groupList, listOfNote, model.time)
+					A3($author$project$MusicCreator$drawLyric, groupList, listOfNote, model.time),
+					$author$project$MusicCreator$drawSlurAfterSelect(groupList)
 				]));
 	});
 var $author$project$DrawMusic$ts24 = A2(
