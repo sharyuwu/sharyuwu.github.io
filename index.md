@@ -14,6 +14,11 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 - musicCreator [musicCreator](/Deemo/musicCreator.html)
 - Quiz [Quiz](/Deemo/other/index.html)
 
+### Quiz Game Web
+- lesson1 [lesson1](/QuizGame/lesson1.html)
+- lesson2 [lesson2](/QuizGame/lesson2.html)
+- lesson2 [lesson2](/QuizGame/lesson2.html)
+
 
 - For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
