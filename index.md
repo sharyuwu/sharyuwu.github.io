@@ -12,7 +12,7 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 - Spaceship [Spaceship](/Deemo/spaceshipScene.html)
 - RubeGoldberg [RubeGoldberg](/Deemo/RubeGoldberg.html)
 - musicCreator [musicCreator](/Deemo/musicCreator.html)
-- musicCreator [Quiz](/Deemo/other/index.html)
+- Quiz [Quiz](/Deemo/other/index.html)
 
 
 - For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
