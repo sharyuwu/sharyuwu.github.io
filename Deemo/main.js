@@ -12260,7 +12260,15 @@ var $elm$core$Char$fromCode = _Char_fromCode;
 var $author$project$InputKeyAssist$posKey = _List_fromArray(
 	[
 		$elm$core$String$fromChar(
+		$elm$core$Char$fromCode(188)),
+		$elm$core$String$fromChar(
 		$elm$core$Char$fromCode(189)),
+		$elm$core$String$fromChar(
+		$elm$core$Char$fromCode(190)),
+		$elm$core$String$fromChar(
+		$elm$core$Char$fromCode(191)),
+		$elm$core$String$fromChar(
+		$elm$core$Char$fromCode(49)),
 		'a',
 		'b',
 		'c',
@@ -12299,7 +12307,19 @@ var $author$project$InputKeyAssist$getKey = function (keys) {
 					return _Utils_eq(
 						a,
 						$elm$core$String$fromChar(
-							$elm$core$Char$fromCode(189))) ? '\u2013' : a;
+							$elm$core$Char$fromCode(189))) ? '\u2013' : (_Utils_eq(
+						a,
+						$elm$core$String$fromChar(
+							$elm$core$Char$fromCode(188))) ? '\u002C' : (_Utils_eq(
+						a,
+						$elm$core$String$fromChar(
+							$elm$core$Char$fromCode(190))) ? '\u002E' : (_Utils_eq(
+						a,
+						$elm$core$String$fromChar(
+							$elm$core$Char$fromCode(191))) ? '\u003F' : (_Utils_eq(
+						a,
+						$elm$core$String$fromChar(
+							$elm$core$Char$fromCode(49))) ? '\u0021' : a))));
 				} else {
 					return d;
 				}
