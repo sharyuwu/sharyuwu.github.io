@@ -20914,6 +20914,16 @@ var $author$project$MusicCreator$drawgroup = F2(
 	});
 var $author$project$MusicCreator$drawNotesWithExtraLineWithGroup = F3(
 	function (model, listOfNote, ts) {
+		var nonSelect = function (list) {
+			return A2(
+				$elm$core$List$filter,
+				function (_v2) {
+					var name = _v2.a;
+					var n = _v2.b;
+					return _Utils_eq(n.dragState, $author$project$MusicCreatorDef$Released);
+				},
+				list);
+		};
 		var ifSelectNoteDrage = $author$project$MusicCreatorFunctions$ifDraggedNote(
 			$elm$core$Dict$toList(model.selectNoteDict));
 		var ifScoreNoteDrag = $author$project$MusicCreatorFunctions$ifDraggedNote(model.scoreNoteList);
@@ -20926,8 +20936,20 @@ var $author$project$MusicCreator$drawNotesWithExtraLineWithGroup = F3(
 		var ifFlip = function (pos) {
 			return (_Utils_cmp(pos.b, 0 + $author$project$MusicCreatorDef$moveYscore) > -1) ? $author$project$MusicCreatorDef$Flip : $author$project$MusicCreatorDef$UnFlip;
 		};
-		var groupList = A2($author$project$MusicCreatorFunctions$groupNoteList, listOfNote, ts);
-		return (ifScoreNoteDrag || ifSelectNoteDrage) ? A2($author$project$MusicCreator$drawNotesWithExtraLine, model.scoreNoteList, model.time) : $MacCASOutreach$graphicsvg$GraphicSVG$group(
+		var groupList = A2(
+			$author$project$MusicCreatorFunctions$groupNoteList,
+			nonSelect(listOfNote),
+			ts);
+		return (ifScoreNoteDrag || ifSelectNoteDrage) ? $MacCASOutreach$graphicsvg$GraphicSVG$group(
+			_List_fromArray(
+				[
+					A2($author$project$MusicCreator$drawNotesWithExtraLine, model.scoreNoteList, model.time),
+					ifSelectNoteDrage ? A3($author$project$MusicCreator$drawLyric, groupList, listOfNote, model.time) : A3(
+					$author$project$MusicCreator$drawLyric,
+					groupList,
+					nonSelect(listOfNote),
+					model.time)
+				])) : $MacCASOutreach$graphicsvg$GraphicSVG$group(
 			_List_fromArray(
 				[
 					$author$project$MusicCreator$drawTie(groupList),
@@ -24073,6 +24095,7 @@ var $author$project$MusicCreator$attempScoreListWithSelecNote = function (model)
 	return A2(attemptList, 0, model.scoreNoteList);
 };
 var $MacCASOutreach$graphicsvg$GraphicSVG$lightGrey = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 238, 238, 236, 1);
+var $MacCASOutreach$graphicsvg$GraphicSVG$lightYellow = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 255, 233, 79, 1);
 var $author$project$MusicCreatorFunctions$noteToStringWArt = function (notes) {
 	switch (notes.$) {
 		case 'Empty':
@@ -24132,16 +24155,6 @@ var $author$project$MusicCreator$warningEachBeat = function (model) {
 	var draggedNote = $author$project$MusicCreatorFunctions$ifDraggedNote(
 		$elm$core$Dict$toList(model.selectNoteDict)) ? $author$project$MusicCreatorFunctions$getDraggedNote(
 		$elm$core$Dict$toList(model.selectNoteDict)) : $author$project$MusicCreatorFunctions$getDraggedNote(model.scoreNoteList);
-	var valid2 = A2(
-		$author$project$MusicCreatorFunctions$ifMeasureUnfull,
-		function (l) {
-			return A2(
-				$elm$core$List$append,
-				l,
-				_List_fromArray(
-					[draggedNote]));
-		}(model.scoreNoteList),
-		model.timeSignature);
 	var attemptList = $author$project$MusicCreatorFunctions$ifDraggedNote(
 		$elm$core$Dict$toList(model.selectNoteDict)) ? $author$project$MusicCreator$attempScoreListWithSelecNote(model) : $author$project$MusicCreator$attempScoreListWithScoreNote(model);
 	var countListbeats = A3(
@@ -24169,8 +24182,9 @@ var $author$project$MusicCreator$warningEachBeat = function (model) {
 						A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
 							function () {
-								if (valid2) {
-									return $MacCASOutreach$graphicsvg$GraphicSVG$grey;
+								var _v0 = $author$project$MusicCreator$warning(model);
+								if (_v0 === ' ') {
+									return $MacCASOutreach$graphicsvg$GraphicSVG$lightGrey;
 								} else {
 									return $MacCASOutreach$graphicsvg$GraphicSVG$red;
 								}
@@ -24210,7 +24224,7 @@ var $author$project$MusicCreator$warningEachBeat = function (model) {
 						0.7,
 						A2(
 							$MacCASOutreach$graphicsvg$GraphicSVG$filled,
-							$MacCASOutreach$graphicsvg$GraphicSVG$lightGrey,
+							$MacCASOutreach$graphicsvg$GraphicSVG$lightYellow,
 							A3(
 								$MacCASOutreach$graphicsvg$GraphicSVG$roundedRect,
 								5 * $elm$core$String$length(
