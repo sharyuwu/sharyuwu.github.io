@@ -18,7 +18,9 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 - lesson1 [lesson1](/QuizGame/lesson1.html)
 - lesson2 [lesson2](/QuizGame/lesson2.html)
 - lesson3 [lesson3](/QuizGame/lesson3.html)
-
+- lesson6 [lesson6](/QuizGame/lesson6.html)
+- lesson7 [lesson7](/QuizGame/lesson7.html)
+- lesson8 [lesson8](/QuizGame/lesson8.html)
 
 - For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
