@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Main</title>
+  <script src="lesson8.js"></script>
+</head>
+<body>
+  <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
+  <script>
+    var app = Elm.Master.init();
+    const AudioContextFunc = window.AudioContext || window.webkitAudioContext
+    const audioContext = new AudioContextFunc()
+    const player = new WebAudioFontPlayer()
+
+    function accentCut16 (event,info,time) {
+        var newVolume = (event.volume + 0.2) / 16
+        
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration,0.05)
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 17,newVolume )
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 15,newVolume )
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 14,newVolume )
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 13,newVolume)
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 12,newVolume )
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 10,newVolume )
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 9,newVolume )
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 8,newVolume )
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 7,newVolume )
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 6,newVolume)
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 5,0.05 )
+        player.queueWaveTable( audioContext, audioContext.destination, window[info.variable],time,event.pitch,event.duration / 4,0.01 )
+        return false
+      }
+
+    app.ports.play.subscribe(function (music) {
+      const info = player.loader.instrumentInfo(music.instrument)
+      console.log("Instrument name: " + info.title)
+      player.loader.startLoad(audioContext, info.url, info.variable)
+
+      player.loader.waitLoad(function () {
+        player.cancelQueue(audioContext)
+
+        const startTime = audioContext.currentTime + 0.2
+
+        music.events.forEach(function (event) {
+          const time = startTime + event.time
+          console.log(event.volume)
+          const newDuration = event.duration * event.adjDuration
+          console.log(newDuration)
+          var secondVolume = -1
+          
+          if (event.adjDuration == -1) {
+　　　　　　　accentCut16 (event,info,time)
+          } else {
+          　　player.queueWaveTable(
+          　　  audioContext,
+          　　  audioContext.destination,
+          　　  window[info.variable],
+          　　  time,
+          　　  event.pitch,
+          　　  newDuration,
+          　　  event.volume
+          　　)
+              
+          　　player.queueWaveTable(
+          　　  audioContext,
+          　　  audioContext.destination,
+          　　  window[info.variable],
+          　　  time,
+          　　  event.pitch,
+          　　  event.duration,
+          　　  -1
+          　　)
+          }
+        })
+      })
+
+      return false
+    })
+  </script>
+</body>
+</html>
