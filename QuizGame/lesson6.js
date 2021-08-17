@@ -9347,7 +9347,7 @@ var $author$project$PlayBack$mergeTieSlur = function (list) {
 				var _v1 = list.b;
 				var x2 = _v1.a;
 				var xs = _v1.b;
-				if (x1.articulation === 1) {
+				if (x1.articulation === 1.0) {
 					if (_Utils_eq(x1.pitch, x2.pitch) && _Utils_eq(x1.volume, x2.volume)) {
 						var $temp$list = A2(
 							$elm$core$List$cons,
@@ -9368,10 +9368,8 @@ var $author$project$PlayBack$mergeTieSlur = function (list) {
 					return A2(
 						$elm$core$List$cons,
 						x1,
-						A2(
-							$elm$core$List$cons,
-							x2,
-							$author$project$PlayBack$mergeTieSlur(xs)));
+						$author$project$PlayBack$mergeTieSlur(
+							A2($elm$core$List$cons, x2, xs)));
 				}
 			}
 		}
@@ -18996,7 +18994,7 @@ var $author$project$DrawElmMusic$markFunctions = function (music) {
 				return ((!_Utils_eq(note.note.dynamic, $author$project$ElmMusic$DynUnspecified)) && (!_Utils_eq(note.note.dynamic, currentDym))) ? note.note.dynamic : currentDym;
 			};
 			var getNextArt = function (note) {
-				return ((!_Utils_eq(note.note.articulation, $author$project$ElmMusic$ArtUnspecified)) && (!_Utils_eq(note.note.articulation, currentArt))) ? note.note.articulation : currentArt;
+				return ((!_Utils_eq(note.note.articulation, $author$project$ElmMusic$ArtUnspecified)) && (!_Utils_eq(note.note.articulation, currentArt))) ? ((_Utils_eq(note.note.articulation, $author$project$ElmMusic$Tie) || _Utils_eq(note.note.articulation, $author$project$ElmMusic$Slur)) ? currentArt : note.note.articulation) : currentArt;
 			};
 			var getDym = function (note) {
 				return ((!_Utils_eq(note.note.dynamic, $author$project$ElmMusic$DynUnspecified)) && (!_Utils_eq(note.note.dynamic, currentDym))) ? $elm$core$Maybe$Just(note.note.dynamic) : $elm$core$Maybe$Nothing;
@@ -19187,7 +19185,7 @@ var $author$project$DrawElmMusic$markFunctions = function (music) {
 						A2(nextArt, x, currentArt)));
 			}
 		});
-	return A3(scannMusic, music, $author$project$ElmMusic$DynUnspecified, $author$project$ElmMusic$Detache);
+	return A3(scannMusic, music, $author$project$ElmMusic$DynMezzoForte, $author$project$ElmMusic$Detache);
 };
 var $author$project$DrawElmMusic$noteToSpacing = F3(
 	function (ifoneLine, ifFristnote, note) {
