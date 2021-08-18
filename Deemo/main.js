@@ -12428,7 +12428,7 @@ var $author$project$MusicCreator$instrumentRange = function (instrument) {
 		case 'Violin':
 			return _Utils_Tuple2(36, (-36) + 3.5);
 		case 'Trumpet':
-			return _Utils_Tuple2(36 - 3.5, -8);
+			return _Utils_Tuple2(36 - 3.5, (-36) + 3.5);
 		case 'Sitar':
 			return _Utils_Tuple2(15, -36);
 		case 'ElectricGuitar':
@@ -12591,7 +12591,7 @@ var $author$project$PlayBack$adjustPitch = function (instrument) {
 		case 'Bass':
 			return -12;
 		case 'Tuba':
-			return -12;
+			return -24;
 		default:
 			return 0;
 	}
