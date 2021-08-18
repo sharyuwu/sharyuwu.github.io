@@ -9285,7 +9285,7 @@ var $author$project$MusicCreator$init = _Utils_Tuple2(
 		clef: $author$project$MusicDef$TrebleClef,
 		dragState: $author$project$MusicCreatorDef$Released,
 		expand: $author$project$MusicCreator$Reg,
-		focus: 11,
+		focus: 0,
 		height: 0,
 		ifswitch: false,
 		instrument: $author$project$MusicDef$Piano,
@@ -17243,7 +17243,7 @@ var $author$project$MusicCreatorFunctions$articulationToString = function (artic
 		case 'Staccatissimo':
 			return 'staccatissimo';
 		case 'Fermata':
-			return 'fermata';
+			return 'fermata 4';
 		case 'Tenuto':
 			return 'tenuto';
 		case 'Accent':
