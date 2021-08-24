@@ -12,7 +12,7 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 - Spaceship [Spaceship](/Deemo/spaceshipScene.html)
 - RubeGoldberg [RubeGoldberg](/Deemo/RubeGoldberg.html)
 - musicCreator [musicCreator](/Deemo/musicCreator.html)
-- musicCreator2 [musicCreator2](/Deemo/other/index.html)
+- musicCreator2 [musicCreatorMerge](/Deemo/other/index.html)
 
 ### Quiz Game Web
 - lesson1 [lesson1](/QuizGame/lesson1.html)
