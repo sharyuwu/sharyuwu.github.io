@@ -15237,6 +15237,133 @@ var $elm$core$Basics$pi = _Basics_pi;
 var $elm$core$Basics$degrees = function (angleInDegrees) {
 	return (angleInDegrees * $elm$core$Basics$pi) / 180;
 };
+var $MacCASOutreach$graphicsvg$GraphicSVG$AlignCentred = {$: 'AlignCentred'};
+var $MacCASOutreach$graphicsvg$GraphicSVG$Face = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {$: 'Face', a: a, b: b, c: c, d: d, e: e, f: f, g: g, h: h};
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$Text = F2(
+	function (a, b) {
+		return {$: 'Text', a: a, b: b};
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$centered = function (stencil) {
+	if (stencil.$ === 'Text') {
+		var _v1 = stencil.a;
+		var si = _v1.a;
+		var bo = _v1.b;
+		var i = _v1.c;
+		var u = _v1.d;
+		var s = _v1.e;
+		var sel = _v1.f;
+		var f = _v1.g;
+		var c = _v1.h;
+		var str = stencil.b;
+		return A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
+			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, bo, i, u, s, sel, f, $MacCASOutreach$graphicsvg$GraphicSVG$AlignCentred),
+			str);
+	} else {
+		var a = stencil;
+		return a;
+	}
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$rotate = F2(
+	function (theta, shape) {
+		return A2($MacCASOutreach$graphicsvg$GraphicSVG$Rotate, theta, shape);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$scaleX = F2(
+	function (s, shape) {
+		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Scale, s, 1, shape);
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$size = F2(
+	function (sze, stencil) {
+		if (stencil.$ === 'Text') {
+			var _v1 = stencil.a;
+			var si = _v1.a;
+			var bo = _v1.b;
+			var i = _v1.c;
+			var u = _v1.d;
+			var s = _v1.e;
+			var sel = _v1.f;
+			var f = _v1.g;
+			var c = _v1.h;
+			var str = stencil.b;
+			return A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$Text,
+				A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, sze, bo, i, u, s, sel, f, c),
+				str);
+		} else {
+			var a = stencil;
+			return a;
+		}
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$AlignLeft = {$: 'AlignLeft'};
+var $MacCASOutreach$graphicsvg$GraphicSVG$Serif = {$: 'Serif'};
+var $MacCASOutreach$graphicsvg$GraphicSVG$text = function (str) {
+	return A2(
+		$MacCASOutreach$graphicsvg$GraphicSVG$Text,
+		A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, 12, false, false, false, false, false, $MacCASOutreach$graphicsvg$GraphicSVG$Serif, $MacCASOutreach$graphicsvg$GraphicSVG$AlignLeft),
+		str);
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$Polygon = function (a) {
+	return {$: 'Polygon', a: a};
+};
+var $elm$core$Basics$turns = function (angleInTurns) {
+	return (2 * $elm$core$Basics$pi) * angleInTurns;
+};
+var $MacCASOutreach$graphicsvg$GraphicSVG$ptOnCircle = F3(
+	function (r, n, cn) {
+		var angle = $elm$core$Basics$turns(cn / n);
+		return _Utils_Tuple2(
+			r * $elm$core$Basics$cos(angle),
+			r * $elm$core$Basics$sin(angle));
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$ngon = F2(
+	function (n, r) {
+		return $MacCASOutreach$graphicsvg$GraphicSVG$Polygon(
+			A2(
+				$elm$core$List$map,
+				A2(
+					$elm$core$Basics$composeL,
+					A2($MacCASOutreach$graphicsvg$GraphicSVG$ptOnCircle, r, n),
+					$elm$core$Basics$toFloat),
+				A2($elm$core$List$range, 0, n)));
+	});
+var $MacCASOutreach$graphicsvg$GraphicSVG$triangle = function (r) {
+	return A2($MacCASOutreach$graphicsvg$GraphicSVG$ngon, 3, r);
+};
+var $author$project$DrawMusic$firstNoteGuide = $MacCASOutreach$graphicsvg$GraphicSVG$group(
+	_List_fromArray(
+		[
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+			$MacCASOutreach$graphicsvg$GraphicSVG$black,
+			A2($MacCASOutreach$graphicsvg$GraphicSVG$rect, 2, 15)),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(0, -10),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$scaleX,
+				1.5,
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$rotate,
+					$elm$core$Basics$degrees(30),
+					A2(
+						$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+						$MacCASOutreach$graphicsvg$GraphicSVG$black,
+						$MacCASOutreach$graphicsvg$GraphicSVG$triangle(5))))),
+			A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(0, 10),
+			A2(
+				$MacCASOutreach$graphicsvg$GraphicSVG$filled,
+				$MacCASOutreach$graphicsvg$GraphicSVG$black,
+				A2(
+					$MacCASOutreach$graphicsvg$GraphicSVG$size,
+					7.5,
+					$MacCASOutreach$graphicsvg$GraphicSVG$centered(
+						$MacCASOutreach$graphicsvg$GraphicSVG$text('Drop first note')))))
+		]));
 var $author$project$MusicCreatorFunctions$ifDraggedNote = function (list) {
 	return A2(
 		$elm$core$List$any,
@@ -15275,10 +15402,6 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$rgba = F4(
 			$MacCASOutreach$graphicsvg$GraphicSVG$ssc(b),
 			$MacCASOutreach$graphicsvg$GraphicSVG$ssa(a));
 	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$rotate = F2(
-	function (theta, shape) {
-		return A2($MacCASOutreach$graphicsvg$GraphicSVG$Rotate, theta, shape);
-	});
 var $MacCASOutreach$graphicsvg$GraphicSVG$Solid = function (a) {
 	return {$: 'Solid', a: a};
 };
@@ -15286,6 +15409,7 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$solid = function (th) {
 	return $MacCASOutreach$graphicsvg$GraphicSVG$Solid(th);
 };
 var $author$project$MusicCreator$assistBox = function (model) {
+	var lowR = model.range.b;
 	var ifSelectNoteDrage = $author$project$MusicCreatorFunctions$ifDraggedNote(
 		$elm$core$Dict$toList(model.selectNoteDict));
 	var ifSelectDynaDrag = $author$project$MusicCreatorFunctions$ifDraggedNote(
@@ -15304,9 +15428,9 @@ var $author$project$MusicCreator$assistBox = function (model) {
 			return A3(
 				$elm$core$List$foldl,
 				F2(
-					function (_v4, def) {
-						var name = _v4.a;
-						var a = _v4.b;
+					function (_v7, def) {
+						var name = _v7.a;
+						var a = _v7.b;
 						return (_Utils_eq(a.dragState, $author$project$MusicCreatorDef$Dragging) && (!_Utils_eq(a.f, articulation))) ? true : def;
 					}),
 				false,
@@ -15318,13 +15442,14 @@ var $author$project$MusicCreator$assistBox = function (model) {
 	};
 	var ifScoreAccidentalDrag = $author$project$MusicCreatorFunctions$ifDraggedNote(
 		$author$project$MusicCreatorFunctions$createaccidentalList(model.scoreNoteList));
+	var highR = model.range.a;
 	var getpost = function (list) {
 		return A3(
 			$elm$core$List$foldl,
 			F2(
-				function (_v3, def) {
-					var name = _v3.a;
-					var a = _v3.b;
+				function (_v6, def) {
+					var name = _v6.a;
+					var a = _v6.b;
 					return _Utils_eq(a.dragState, $author$project$MusicCreatorDef$Dragging) ? a.pos : def;
 				}),
 			_Utils_Tuple2(0, 0),
@@ -15340,6 +15465,30 @@ var $author$project$MusicCreator$assistBox = function (model) {
 		$author$project$MusicCreatorFunctions$createarticulationList(model.scoreNoteList)) : _Utils_Tuple2(99999, 99999))))))));
 	var x = pos.a;
 	var y = pos.b;
+	var drawGuide = function (list) {
+		var p = function () {
+			if (!list.b) {
+				return _Utils_Tuple2(999, 999);
+			} else {
+				var _v5 = list.a;
+				var name = _v5.a;
+				var n = _v5.b;
+				var xs = list.b;
+				return n.pos;
+			}
+		}();
+		return (ifSelectNoteDrage && A4($author$project$MusicCreator$insertCondition25, list, p.a, p.b, model.range)) ? (A2(
+			$elm$core$List$all,
+			function (_v3) {
+				var name = _v3.a;
+				var n = _v3.b;
+				return _Utils_eq(n.note, $author$project$MusicCreatorDef$Empty);
+			},
+			list) ? A2(
+			$MacCASOutreach$graphicsvg$GraphicSVG$move,
+			_Utils_Tuple2(0, highR),
+			A2($MacCASOutreach$graphicsvg$GraphicSVG$move, p, $author$project$DrawMusic$firstNoteGuide)) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil)) : $MacCASOutreach$graphicsvg$GraphicSVG$group(_List_Nil);
+	};
 	var dragArt = function (articulation) {
 		var ifDrag = function (list) {
 			return A3(
@@ -15392,11 +15541,9 @@ var $author$project$MusicCreator$assistBox = function (model) {
 	};
 	var targetValue = targetValueHelper($author$project$MusicCreator$insertCondition30);
 	var drawBox = function () {
-		var lowR = model.range.b;
 		var ifInvalidSlur = function (name) {
 			return A2($elm$core$List$member, name, model.invalidSlurList);
 		};
-		var highR = model.range.a;
 		return (ifSelectDynaDrag || (ifScoreDynaDrage || (dragArt($author$project$MusicCreatorDef$Slur) || (ifSelectAccidentalDrag || (ifScoreAccidentalDrag || notdragArt($author$project$MusicCreatorDef$Fermata)))))) ? A3(
 			$elm$core$List$map2,
 			F2(
@@ -15468,16 +15615,13 @@ var $author$project$MusicCreator$assistBox = function (model) {
 			},
 			distance);
 	}();
-	return $MacCASOutreach$graphicsvg$GraphicSVG$group(drawBox);
+	return $MacCASOutreach$graphicsvg$GraphicSVG$group(
+		_List_fromArray(
+			[
+				$MacCASOutreach$graphicsvg$GraphicSVG$group(drawBox),
+				drawGuide(model.scoreNoteList)
+			]));
 };
-var $MacCASOutreach$graphicsvg$GraphicSVG$Face = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {$: 'Face', a: a, b: b, c: c, d: d, e: e, f: f, g: g, h: h};
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$Text = F2(
-	function (a, b) {
-		return {$: 'Text', a: a, b: b};
-	});
 var $MacCASOutreach$graphicsvg$GraphicSVG$bold = function (stencil) {
 	if (stencil.$ === 'Text') {
 		var _v1 = stencil.a;
@@ -15760,36 +15904,6 @@ var $MacCASOutreach$graphicsvg$GraphicSVG$oval = F2(
 	function (w, h) {
 		return A2($MacCASOutreach$graphicsvg$GraphicSVG$Oval, w, h);
 	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$size = F2(
-	function (sze, stencil) {
-		if (stencil.$ === 'Text') {
-			var _v1 = stencil.a;
-			var si = _v1.a;
-			var bo = _v1.b;
-			var i = _v1.c;
-			var u = _v1.d;
-			var s = _v1.e;
-			var sel = _v1.f;
-			var f = _v1.g;
-			var c = _v1.h;
-			var str = stencil.b;
-			return A2(
-				$MacCASOutreach$graphicsvg$GraphicSVG$Text,
-				A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, sze, bo, i, u, s, sel, f, c),
-				str);
-		} else {
-			var a = stencil;
-			return a;
-		}
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$AlignLeft = {$: 'AlignLeft'};
-var $MacCASOutreach$graphicsvg$GraphicSVG$Serif = {$: 'Serif'};
-var $MacCASOutreach$graphicsvg$GraphicSVG$text = function (str) {
-	return A2(
-		$MacCASOutreach$graphicsvg$GraphicSVG$Text,
-		A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, 12, false, false, false, false, false, $MacCASOutreach$graphicsvg$GraphicSVG$Serif, $MacCASOutreach$graphicsvg$GraphicSVG$AlignLeft),
-		str);
-};
 var $author$project$DrawMusic$sigma = function (glowAmount) {
 	return A2(
 		$MacCASOutreach$graphicsvg$GraphicSVG$move,
@@ -16145,28 +16259,6 @@ var $author$project$DrawMusic$sigma = function (glowAmount) {
 };
 var $MacCASOutreach$graphicsvg$GraphicSVG$square = function (r) {
 	return A2($MacCASOutreach$graphicsvg$GraphicSVG$Rect, r, r);
-};
-var $MacCASOutreach$graphicsvg$GraphicSVG$AlignCentred = {$: 'AlignCentred'};
-var $MacCASOutreach$graphicsvg$GraphicSVG$centered = function (stencil) {
-	if (stencil.$ === 'Text') {
-		var _v1 = stencil.a;
-		var si = _v1.a;
-		var bo = _v1.b;
-		var i = _v1.c;
-		var u = _v1.d;
-		var s = _v1.e;
-		var sel = _v1.f;
-		var f = _v1.g;
-		var c = _v1.h;
-		var str = stencil.b;
-		return A2(
-			$MacCASOutreach$graphicsvg$GraphicSVG$Text,
-			A8($MacCASOutreach$graphicsvg$GraphicSVG$Face, si, bo, i, u, s, sel, f, $MacCASOutreach$graphicsvg$GraphicSVG$AlignCentred),
-			str);
-	} else {
-		var a = stencil;
-		return a;
-	}
 };
 var $MacCASOutreach$graphicsvg$GraphicSVG$lightBlue = A4($MacCASOutreach$graphicsvg$GraphicSVG$RGBA, 114, 159, 207, 1);
 var $MacCASOutreach$graphicsvg$GraphicSVG$makeTransparent = F2(
@@ -18146,37 +18238,6 @@ var $author$project$DrawMusic$slurIcon = function () {
 							]))))
 			]));
 }();
-var $MacCASOutreach$graphicsvg$GraphicSVG$scaleX = F2(
-	function (s, shape) {
-		return A3($MacCASOutreach$graphicsvg$GraphicSVG$Scale, s, 1, shape);
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$Polygon = function (a) {
-	return {$: 'Polygon', a: a};
-};
-var $elm$core$Basics$turns = function (angleInTurns) {
-	return (2 * $elm$core$Basics$pi) * angleInTurns;
-};
-var $MacCASOutreach$graphicsvg$GraphicSVG$ptOnCircle = F3(
-	function (r, n, cn) {
-		var angle = $elm$core$Basics$turns(cn / n);
-		return _Utils_Tuple2(
-			r * $elm$core$Basics$cos(angle),
-			r * $elm$core$Basics$sin(angle));
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$ngon = F2(
-	function (n, r) {
-		return $MacCASOutreach$graphicsvg$GraphicSVG$Polygon(
-			A2(
-				$elm$core$List$map,
-				A2(
-					$elm$core$Basics$composeL,
-					A2($MacCASOutreach$graphicsvg$GraphicSVG$ptOnCircle, r, n),
-					$elm$core$Basics$toFloat),
-				A2($elm$core$List$range, 0, n)));
-	});
-var $MacCASOutreach$graphicsvg$GraphicSVG$triangle = function (r) {
-	return A2($MacCASOutreach$graphicsvg$GraphicSVG$ngon, 3, r);
-};
 var $author$project$DrawMusic$staccatissimo = $MacCASOutreach$graphicsvg$GraphicSVG$group(
 	_List_fromArray(
 		[
